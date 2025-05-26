@@ -1,0 +1,15 @@
+{
+    "name": "ramajo/my-book-shelf_2025",
+    "autoload": {
+        "psr-4": {
+            "Api\\": "api/"
+        }
+    },
+    "authors": [
+        {
+            "name": "LacamJC",
+            "email": "joaoramajo744@gmail.com"
+        }
+    ],
+    "require": {}
+}

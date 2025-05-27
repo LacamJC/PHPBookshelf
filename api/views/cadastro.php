@@ -9,7 +9,7 @@ use Api\Core\Alert;
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faça Login</title>
+    <title>Cadastro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 
@@ -18,7 +18,7 @@ use Api\Core\Alert;
     <div class="w-50 mx-auto my-5">
 
 
-        <form action="verify" method="POST">
+        <form action="user" method="POST">
             <?php
             if (!empty($_SESSION['errorMessage'])) {
                 Alert::error($_SESSION['errorMessage']);
@@ -30,8 +30,16 @@ use Api\Core\Alert;
                 <input type="email" class="form-control" id="email" name="email" value="johndoe@gmail.com" placeholder="Digite seu email" required>
             </div>
             <div class="mb-3">
+                <label for="nome" class="form-label">Nome de usuario</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="John Doe" placeholder="Digite seu nome" required>
+            </div>
+            <div class="mb-3">
                 <label for="senha" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="password" name="password" value="123456" placeholder="Digite sua senha" required minlength="6">
+                <input type="password" class="form-control" id="password" name="senha" value="123456" placeholder="Digite sua senha" required minlength="6">
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label">Confirma senha</label>
+                <input type="password" class="form-control" id="confirm" name="confirma" value="123456" placeholder="Digite sua senha" required minlength="6">
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="show">

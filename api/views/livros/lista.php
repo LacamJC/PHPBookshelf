@@ -1,0 +1,62 @@
+<?php
+
+use Api\Core\Alert;
+use Api\Services\LivroService;
+use Api\Widgets\Card;
+use Api\Widgets\Layout;
+
+// Carrega livros
+$data = LivroService::all();
+
+$livros = $data['livros'];
+$totalPages = $data['totalPages'];
+$currentPage = $data['page'];
+
+?>
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <?= Layout::header() ?>
+
+    <!-- Livros -->
+    <div class="container pb-5">
+        <?=Alert::span() ?>
+        <?php if (empty($livros)): ?>
+            <div class="alert alert-info text-center" role="alert">
+                Nenhum livro cadastrado ainda. Que tal adicionar o primeiro?
+            </div>
+        <?php else: ?>
+            <div class="row">
+                <?php foreach ($livros as $livro): ?>
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+                        <?php
+                        $card = new Card;
+                        $card->show($livro);
+                        ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+        <?php
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $active = $i === $currentPage ? 'active' : '';
+            echo "<a href='?page=$i' class='btn btn-sm btn-primary $active'>$i</a> ";
+        }
+        ?>
+    </div>
+    <?= Layout::footer(); ?>
+    <script src="resources/js/showPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

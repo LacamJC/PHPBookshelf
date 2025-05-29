@@ -66,9 +66,9 @@ class LivroController
             Response::redirect('book', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
         }
 
-        // echo "<pre>";
-        // print_r($dados);
-        // echo "</pre>";  
-        LivroService::store($dados);
+        echo "<pre>";
+        print_r($dados);
+        echo "</pre>";  
+        // LivroService::store($dados);
     }
 }

@@ -10,6 +10,11 @@ class PageController{
         include dirname(__DIR__) . '/views/home.php';
     }
 
+    public function lista(){
+        AuthMiddleware::handle();
+        include dirname(__DIR__) . '/views/livros/lista.php';
+    }
+
     public function cadastro(){
         include dirname(__DIR__) . '/views/cadastro.php';
     }

@@ -10,6 +10,6 @@ require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
 
 $router->dispatch();
 
-echo "<div class='alert alert-primary mt-3 mx-auto w-50 text-center'>";
-echo "URL capturada: " . ($_GET['url'] ?? '/');
-echo "</div>";
+    // echo "<div class='alert alert-primary mt-3 mx-auto w-50 text-center'>";
+    // echo "URL capturada: " . ($_GET['url'] ?? '/');
+    // echo "</div>";

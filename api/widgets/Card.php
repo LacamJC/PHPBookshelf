@@ -8,13 +8,21 @@ class Card
 {
     public function show(LivroGateway $livro)
     {
-        echo "<div class='card' style='width: 18rem;'>";
-        echo "    <img src='{$livro->capa_path}' class='card-img-top' alt='Capa do livro {$livro->titulo}'>";
-        echo "    <div class='card-body'>";
-        echo "        <h5 class='card-title'>{$livro->titulo}</h5>";
-        echo "        <p class='card-text'>{$livro->descricao}</p>";
-        echo "        <a href='#' class='btn btn-primary'>Go somewhere</a>";
-        echo "    </div>";
-        echo "</div>";
+        $titulo = htmlspecialchars($livro->titulo);
+        $descricao = htmlspecialchars($livro->descricao);
+        $capa = htmlspecialchars($livro->capa_path ?? 'assets/img/placeholder.png');
+
+        echo <<<HTML
+        <div class="card h-100 shadow-sm">
+            <img src="{$capa}" class="card-img-top" alt="Capa do livro {$titulo}" style="height: 250px; object-fit: cover;">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-truncate" title="{$titulo}">{$titulo}</h5>
+                <p class="card-text text-muted" style="max-height: 4.5em; overflow: hidden; text-overflow: ellipsis;">
+                    {$descricao}
+                </p>
+                <a href="#" class="btn btn-outline-primary mt-auto"><i class="bi-eye"></i> Visualizar</a>
+            </div>
+        </div>
+        HTML;
     }
 }

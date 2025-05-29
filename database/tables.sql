@@ -19,3 +19,5 @@ CREATE TABLE IF NOT EXISTS livros (
     descricao TEXT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 )
+
+INSERT INTO livros VALUES()

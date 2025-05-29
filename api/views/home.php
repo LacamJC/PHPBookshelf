@@ -15,28 +15,30 @@ $livros = LivroService::all();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Minha Estante</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/scss/home.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <?=Layout::header() ?>
+    <?= Layout::header() ?>
 
-    <!-- Livros -->
-    <div class="container">
-        <div class="row">
-            <?php foreach ($livros as $livro): ?>
-                <div class="col-md-4 mb-4">
-                    <?php
-                    $card = new Card;
-                    $card->show($livro);
-                    ?>
-                </div>
-            <?php endforeach; ?>
+    <!-- Seção de boas-vindas -->
+    <section class="py-5 bg-white shadow-sm mb-4">
+        <div class="container text-center">
+            <h2 class="fw-bold text-primary"><i class="bi bi-book"></i> My Bookshelf</h2>
+            <p class="text-muted">O projeto My Bookshelf é uma implementação de um sistema de cadastro de livros que foi desenvolvido de ponta a ponta desde a prototipação da interface, validação do protótipo, desenvolvimento do front-end a implementação back-end.</p>
         </div>
-    </div>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+   
+
+    <?= Layout::footer() ?>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

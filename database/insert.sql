@@ -1,0 +1,16 @@
+INSERT INTO livros (id_usuario, titulo, autores, numero_paginas, genero, nacional, capa_path, editora, descricao) VALUES
+(1, 'Percy Jackson e o Ladrão de Raios', 'Rick Riordan', 377, 'Fantasia', 'N', 'uploads/placeholder.png', 'Intrínseca', 'Um garoto descobre ser filho de um deus grego e embarca em aventuras.'),
+(1, 'O Hobbit', 'J.R.R. Tolkien', 310, 'Fantasia', 'N', 'uploads/placeholder.png', 'HarperCollins', 'A jornada de Bilbo Bolseiro para recuperar um tesouro roubado.'),
+(1, '1984', 'George Orwell', 328, 'Distopia', 'N', 'uploads/placeholder.png', 'Companhia das Letras', 'Um futuro sombrio de vigilância e controle total.'),
+(1, 'Dom Casmurro', 'Machado de Assis', 256, 'Clássico', 'S', 'uploads/placeholder.png', 'Editora Ática', 'Romance sobre ciúmes e dúvidas na vida de Bentinho.'),
+(1, 'Grande Sertão: Veredas', 'João Guimarães Rosa', 496, 'Romance', 'S', 'uploads/placeholder.png', 'Editora Nova Fronteira', 'Narrativa épica sobre jagunços no sertão brasileiro.'),
+(1, 'O Pequeno Príncipe', 'Antoine de Saint-Exupéry', 96, 'Fábula', 'N', 'uploads/placeholder.png', 'Agir', 'Um príncipe viaja por planetas e aprende lições de vida.'),
+(1, 'Cem Anos de Solidão', 'Gabriel García Márquez', 417, 'Realismo Mágico', 'N', 'uploads/placeholder.png', 'Record', 'Saga da família Buendía na cidade fictícia de Macondo.'),
+(1, 'A Revolução dos Bichos', 'George Orwell', 112, 'Satírico', 'N', 'uploads/placeholder.png', 'Companhia das Letras', 'Fábula que critica regimes totalitários.'),
+(1, 'Memórias Póstumas de Brás Cubas', 'Machado de Assis', 210, 'Clássico', 'S', 'uploads/placeholder.png', 'Editora Ática', 'Narrado por um defunto, conta sua vida e reflexões.'),
+(1, 'O Alquimista', 'Paulo Coelho', 197, 'Ficção', 'S', 'uploads/placeholder.png', 'Rocco', 'Viagem de autodescoberta de um pastor em busca de seu sonho.'),
+(1, 'Harry Potter e a Pedra Filosofal', 'J.K. Rowling', 223, 'Fantasia', 'N', 'uploads/placeholder.png', 'Rocco', 'O início da saga do jovem bruxo em Hogwarts.'),
+(1, 'O Senhor dos Anéis: A Sociedade do Anel', 'J.R.R. Tolkien', 423, 'Fantasia', 'N', 'uploads/placeholder.png', 'HarperCollins', 'Formação da sociedade para destruir o anel do poder.'),
+(1, 'Sapiens: Uma Breve História da Humanidade', 'Yuval Noah Harari', 498, 'Não-ficção', 'N', 'uploads/placeholder.png', 'L&PM', 'Resumo da história da humanidade e suas transformações.'),
+(1, 'O Código Da Vinci', 'Dan Brown', 489, 'Suspense', 'N', 'uploads/placeholder.png', 'Arqueiro', 'Mistério envolvendo segredos históricos e simbologia.'),
+(1, 'A Menina que Roubava Livros', 'Markus Zusak', 552, 'Drama', 'N', 'uploads/placeholder.png', 'Intrínseca', 'História de uma jovem na Alemanha nazista.'); 

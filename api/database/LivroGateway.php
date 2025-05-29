@@ -91,4 +91,29 @@ class LivroGateway
             throw $e;
         }
     }
+
+    public static function countAll()
+    {
+        try {
+            $sql = "SELECT count(*) as max FROM livros";
+            $result = self::$conn->query($sql);
+            $data = $result->fetch(PDO::FETCH_OBJ);
+            return $data->max;
+        } catch (Exception $e) {
+            // echo $e->getMessage();
+            throw $e;
+        }
+    }
+
+    public static function paginate($limit, $offset)
+    {
+        try {
+            $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT {$limit} OFFSET {$offset}";
+
+            $result = self::$conn->query($sql);
+            return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }

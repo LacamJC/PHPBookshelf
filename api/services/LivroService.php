@@ -18,9 +18,31 @@ class LivroService
             $conn = Connection::open('database');
             LivroGateway::setConnection($conn);
 
-            $livros = LivroGateway::all();
+            // $livros = LivroGateway::all();
 
-            return $livros;
+            $total = LivroGateway::countAll(); // Corrigido aqui
+            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+
+
+            $limit = 4;
+            $offset = ($page - 1) * $limit;
+
+            $livros = LivroGateway::paginate($limit, $offset);
+            $totalPages = ceil($total / $limit);
+
+            if ($page > $totalPages) {
+                Response::redirect('livros?page=1', 'Indice de paginação não encontrado', 'warning');
+            }
+
+            return [
+                'livros' => $livros,
+                'total' => $total,
+                'page' => $page,
+                'totalPages' => $totalPages,
+                'limit' => $limit,
+                'offset' => $offset
+            ];
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -56,6 +78,14 @@ class LivroService
             if ($res) {
                 Response::redirect('book', 'Livro cadastrado com sucesso', 'success');
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function paginated($limit, $offset)
+    {
+        try {
         } catch (Exception $e) {
             echo $e->getMessage();
         }

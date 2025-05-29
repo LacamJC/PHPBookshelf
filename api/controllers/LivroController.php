@@ -42,9 +42,9 @@ class LivroController
             }
         }
 
-        echo "<pre>";
-        print_r($_FILES);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($_FILES);
+        // echo "</pre>";
         if (isset($_FILES['capa_path']) && $_FILES['capa_path']['error'] == 0) {
             $pasta = 'uploads/';
             $image_name = str_replace(' ', '-', trim($_FILES['capa_path']['name']));
@@ -60,15 +60,15 @@ class LivroController
             $dados['capa_path'] = $caminho;
         } elseif (empty($_FILES['capa_path']) || $_FILES['capa_path']['error'] == UPLOAD_ERR_NO_FILE) {
             // Nenhum arquivo enviado, usa placeholder
-            $dados['capa_path'] = 'public/uploads/placeholder.png';
+            $dados['capa_path'] = 'uploads/placeholder.png';
         } else {
             // Qualquer outro erro
             Response::redirect('book', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
         }
 
-        echo "<pre>";
-        print_r($dados);
-        echo "</pre>";  
-        // LivroService::store($dados);
+        // echo "<pre>";
+        // print_r($dados);
+        // echo "</pre>";  
+        LivroService::store($dados);
     }
 }

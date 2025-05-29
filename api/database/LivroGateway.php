@@ -79,4 +79,16 @@ class LivroGateway
             echo $e->getMessage();
         }
     }
+
+    public static function all()
+    {
+        try {
+            $sql = "SELECT * FROM livros";
+
+            $result = self::$conn->query($sql);
+            return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }

@@ -2,8 +2,11 @@
 
 namespace Api\Controllers;
 
+use Api\Middlewares\AuthMiddleware;
+
 class PageController{
     public function home(){
+        AuthMiddleware::handle();
         include dirname(__DIR__) . '/views/home.php';
     }
 

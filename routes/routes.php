@@ -10,7 +10,8 @@ $router->get('/', 'PageController@login');
 $router->get('home', 'PageController@home');
 
 $router->get('logout', 'UserController@logout');
-
+$router->get('book', 'PageController@cadastrarLivro');
+$router->post('book', 'LivroController@store');
 $router->get('login', 'PageController@login');
 $router->get('cadastro', 'PageController@cadastro');
 

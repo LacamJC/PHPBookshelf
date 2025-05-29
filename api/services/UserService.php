@@ -103,7 +103,8 @@ class UserService
 
             if (!password_verify($pass, $user['senha'])) {
                 unset($user['senha']);
-                Response::redirect('login', 'errorMessage', 'Usuário não encontrado por favor verifique as informações');
+                Response::redirect('login', 'Usuário não encontrado por favor verifique as informações', 'warning');
+                
             }
             unset($user['senha']);
 

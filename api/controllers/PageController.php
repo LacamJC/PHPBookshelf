@@ -14,6 +14,11 @@ class PageController{
         include dirname(__DIR__) . '/views/cadastro.php';
     }
 
+    public function cadastrarLivro(){
+        AuthMiddleware::handle();
+        include dirname(__DIR__) . '/views/livros/cadastro.php';
+    }
+
     public function login(){
         include dirname(__DIR__) . '/views/login.php';
     }

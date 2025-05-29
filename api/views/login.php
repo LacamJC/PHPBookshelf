@@ -20,10 +20,7 @@ use Api\Core\Alert;
 
         <form action="verify" method="POST">
             <?php
-            if (!empty($_SESSION['errorMessage'])) {
-                Alert::error($_SESSION['errorMessage']);
-                unset($_SESSION['errorMessage']);  // Limpa a mensagem após exibir (Flash Message)
-            }
+            Alert::span();
             ?>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>

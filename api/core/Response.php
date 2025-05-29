@@ -14,12 +14,13 @@ class Response
         echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
-    public static function redirect($location, $typeMessage = '', $message = '')
+    public static function redirect($location, $alertMessage = '', $alertType = '')
     {
-        if (strlen($typeMessage) > 0 and strlen($message) > 0) {
-            $_SESSION[$typeMessage] = $message;
+        if (strlen($alertMessage) > 0) {
+            $_SESSION['alertMessage'] = $alertMessage;
+            $_SESSION['alertType'] = $alertType;
         }
-        header('Location: ' . $location);   
+        header('Location: ' . $location);
         exit;
     }
 }

@@ -3,6 +3,10 @@
 use Api\Core\Alert;
 use Api\Widgets\Layout;
 
+$old = $_SESSION['form_data']; 
+
+print_r($old);
+
 ?>
 
 <!doctype html>
@@ -24,7 +28,8 @@ use Api\Widgets\Layout;
 
             <?php Alert::span(); ?>
 
-            <form action="user" method="POST">
+            <form action="usuarios" method="POST">
+                <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input
@@ -32,9 +37,9 @@ use Api\Widgets\Layout;
                         class="form-control"
                         id="email"
                         name="email"
-                        value="johndoe@gmail.com"
+                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : '' ?>"
                         placeholder="Digite seu email"
-                        required>
+                        >
                 </div>
 
                 <div class="mb-3">
@@ -44,7 +49,7 @@ use Api\Widgets\Layout;
                         class="form-control"
                         id="nome"
                         name="nome"
-                        value="John Doe"
+                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : '' ?>"
                         placeholder="Digite seu nome"
                         required>
                 </div>
@@ -56,8 +61,8 @@ use Api\Widgets\Layout;
                             type="password"
                             class="form-control"
                             id="password"
-                            name="password"
-                            value="123456"
+                            name="senha"
+                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6">
@@ -68,11 +73,11 @@ use Api\Widgets\Layout;
                     <label for="confirma" class="form-label">Confirme sua senha</label>
                     <div class="input-group">
                         <input
-                            type="password"
+                            type="senha"
                             class="form-control"
                             id="confirm"
-                            name="confirm"
-                            value="123456"
+                            name="confirma"
+                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '' ?>"
                             placeholder="Confirme sua senha"
                             required
                             minlength="6">

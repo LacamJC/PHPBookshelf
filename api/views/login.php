@@ -2,7 +2,9 @@
 
 use Api\Core\Alert;
 use Api\Widgets\Layout;
+$old = $_SESSION['form_data'];
 
+print_r($old);
 ?>
 
 <!doctype html>
@@ -26,6 +28,7 @@ use Api\Widgets\Layout;
             <?php Alert::span(); ?>
 
             <form action="login" method="POST">
+                <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input
@@ -33,9 +36,10 @@ use Api\Widgets\Layout;
                         class="form-control"
                         id="email"
                         name="email"
-                        value="johndoe@gmail.com"
+                        value="<?=isset($old['email']) ? $old['email'] : '' ?>"
                         placeholder="Digite seu email"
-                        required>
+                        required
+                        >
                 </div>
 
                 <div class="mb-3">
@@ -46,7 +50,7 @@ use Api\Widgets\Layout;
                             class="form-control"
                             id="password"
                             name="password"
-                            value="123456"
+                            value="<?=isset($old['password']) ? $old['password'] : '' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6">
@@ -59,7 +63,7 @@ use Api\Widgets\Layout;
 
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Entrar</button>
-                    <a href="cadastro" class="btn btn-outline-secondary">Faça seu cadastro</a>
+                    <a href="<?=BASE_URL?>cadastro" class="btn btn-outline-secondary">Faça seu cadastro</a>
                 </div>
             </form>
         </div>

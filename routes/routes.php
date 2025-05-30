@@ -12,14 +12,12 @@ $router->get('login', 'PageController@login');               // Exibe tela de lo
 $router->post('login', 'UserController@login');              // Processa login
 $router->get('logout', 'UserController@logout');             // Logout
 
-$router->get('registro', 'PageController@cadastro');         // Tela de cadastro
-$router->post('registro', 'UserController@store');           // Cadastra usuário
+$router->get('cadastro', 'PageController@cadastro');         // Tela de cadastro
+$router->post('usuarios', 'UserController@store');           // Cadastra usuário
 
-// Rotas protegidas / páginas do sistema
 $router->get('home', 'PageController@home');            // Página inicial após login
 $router->get('livros', 'PageController@lista');              // Lista de livros
 
-// CRUD de livros
 $router->get('livros/cadastrar', 'PageController@cadastrarLivro'); // Formulário de cadastro
 $router->post('livros', 'LivroController@store');            // Cria novo livro (POST)
 

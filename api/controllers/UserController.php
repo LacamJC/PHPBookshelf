@@ -4,6 +4,7 @@ namespace Api\Controllers;
 
 
 use Api\Core\Response;
+use Api\Middlewares\AuthMiddleware;
 use Api\Services\UserService;
 use Exception;
 
@@ -12,6 +13,8 @@ class UserController
 
     public function login()
     {
+        $_SESSION['form_data'] = $_POST;
+        AuthMiddleware::token($_POST['edit_token']);
         $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $password = trim($_POST['password']);
 
@@ -21,7 +24,7 @@ class UserController
         if (strlen($password) < 6) {
             Response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
-
+        unset($_SESSION['form_data']);
         $user = UserService::verify($email, $password);
     }
 
@@ -30,7 +33,7 @@ class UserController
         if ($_SESSION['user']) {
             unset($_SESSION['user']);
             Response::redirect('login', 'Logout efetuado com sucesso', 'warning');
-        }else{
+        } else {
             Response::redirect('login');
         }
     }
@@ -46,7 +49,8 @@ class UserController
                 'email'    => (trim($_POST['email']))   ?? '',
                 'confirma' => (trim($_POST['confirma']) ?? '')
             ];
-
+            $_SESSION['form_data'] = $_POST;
+            AuthMiddleware::token($_POST['edit_token']);
             foreach ($dados as $prop => $value) {
                 if (empty($value) or strlen($value) <= 0) {
 
@@ -59,6 +63,7 @@ class UserController
 
             try {
                 unset($dados['confirma']);
+                unset($_SESSION['form_data']);
                 $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
                 $result = UserService::store($dados);
@@ -67,7 +72,7 @@ class UserController
                     echo "Erro ao cadastrar usuario";
                 }
 
-                // Response::redirect('home');
+                Response::redirect('login');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }

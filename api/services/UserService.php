@@ -47,11 +47,13 @@ class UserService
             $conn = Connection::open('database');
             UserGateway::setConnection($conn);
             $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
-            $result = $user->save();
-            print_r($result);
+            $user->save();
+            
+            Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
         } catch (Exception $e) {
-            echo $e->getMessage();
-            return false;
+            // echo $e->getMessage();
+            Response::redirect('login', 'Email já cadastrado', 'danger');
+            // return false;
         }
     }
 

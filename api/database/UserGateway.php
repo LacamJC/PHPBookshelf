@@ -40,27 +40,35 @@ class UserGateway
     public function save()
     {
         try {
-            // print_r($this->data);
-            if (empty($this->data['id'])) {
-                // Inserção de um novo usuario
-                if (self::verifyExists($this->email, $this->senha)) {
-                    // return (['message' => 'Email ja cadastrado'], 404);
+            if (empty($this->data['id'])) {  // <- Verifica se é uma atualização ou inserção
 
+                if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
                     throw new Exception("Gateway: Email ja cadastrado");
                 }
-                $id = $this->getLastId() + 1;
-                $sql = "INSERT INTO usuarios (id, nome, email, senha) VALUES ('{$id}','{$this->nome}', '{$this->email}', '{$this->senha}')";
+                $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
+                $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
             } else {
-                // Atualização de um usuario existente
-                $sql = "UPDATE usuarios SET nome = '{$this->nome}', email = '{$this->email}', senha = '{$this->senha}' WHERE id = {$this->data['id']}";
+                $id = $this->data['id'];
+                $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
             }
 
-            // Executando o SQL
 
-            self::$conn->exec($sql);
-            return "Usuario cadastrado com sucesso";
+            $stmt = self::$conn->prepare($sql);
+
+            $nome = trim($this->nome);
+            $email = trim($this->email);
+            $senha = trim($this->senha);
+
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':email', $email);
+            if (empty($this->id)) { // <- So prepara a senha se for um novo usuario
+                $stmt->bindValue(':senha', $senha);
+            }
+
+            $stmt->execute();
         } catch (Exception $e) {
-            throw $e;   
+            throw $e;
         }
     }
 

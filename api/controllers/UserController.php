@@ -2,11 +2,11 @@
 
 namespace Api\Controllers;
 
-
+use Api\Core\LoggerTXT;
 use Api\Core\Response;
 use Api\Middlewares\AuthMiddleware;
 use Api\Services\UserService;
-use Exception;
+
 
 class UserController
 {
@@ -19,21 +19,22 @@ class UserController
         $password = trim($_POST['password']);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            Response::redirect('login', 'Email inválido', 'danger');
+            return response::redirect('login', 'Email inválido', 'danger');
         }
         if (strlen($password) < 6) {
-            Response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
+            return response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
-        $user = UserService::verify($email, $password);
+        UserService::verify($email, $password);
     }
 
     public function logout()
     {
         if ($_SESSION['user']) {
+            LoggerTXT::log("{$_SESSION['user']->nome} fez logout", 'Logout');
             unset($_SESSION['user']);
-            Response::redirect('login', 'Logout efetuado com sucesso', 'warning');
+            return response::redirect('login');
         } else {
-            Response::redirect('login');
+            return response::redirect('login');
         }
     }
 
@@ -53,24 +54,20 @@ class UserController
             foreach ($dados as $prop => $value) {
                 if (empty($value) or strlen($value) <= 0) {
 
-                    Response::redirect('cadastro', "O campo '{$prop}' nao pode ser vazio", 'danger');
+                    return response::redirect('cadastro', "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
             if ($dados['senha'] !== $dados['confirma']) {
-                Response::redirect('cadastro', 'As senhas devem ser identicas', 'danger');
+                return response::redirect('cadastro', 'As senhas devem ser identicas', 'danger');
             }
 
-            try {
-                unset($dados['confirma']);
-                unset($_SESSION['form_data']);
-                $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
+            unset($dados['confirma']);
+            unset($_SESSION['form_data']);
+            $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
-                UserService::store($dados);
+            UserService::store($dados);
 
-                // Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
+            return response::redirect('login', 'Conta cadastrada com sucesso', 'success');
         }
     }
 }

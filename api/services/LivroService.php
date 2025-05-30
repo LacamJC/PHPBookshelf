@@ -2,10 +2,10 @@
 
 namespace Api\Services;
 
+use Api\Core\LoggerTXT;
 use Api\Core\Response;
 use Api\Database\Connection;
 use Api\Database\LivroGateway;
-use Api\Middlewares\AuthMiddleware;
 use Exception;
 
 
@@ -18,13 +18,9 @@ class LivroService
             $conn = Connection::open('database');
             LivroGateway::setConnection($conn);
 
-            // $livros = LivroGateway::all();
-            
 
             $total = LivroGateway::countAll(); // Corrigido aqui
             $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-            $genero = isset($_GET['genero']) ? $_GET['genero'] : '';
-
 
 
             $limit = 4;
@@ -47,19 +43,9 @@ class LivroService
             ];
         } catch (Exception $e) {
             echo $e->getMessage();
+            LoggerTXT::log('LivroService@all: ' . $e->getMessage(), 'Error');
+            Response::redirect('home', 'Desculpe tivemos um problema, tente novamente mais tarde', 'danger');
         }
-    }
-
-    public static function show($titulo, $descricao, $autor, $editora, $imagem, $link)
-    {
-        echo "<div class='card' style='width: 18rem;'>";
-        echo "    <img src='...' class='card-img-top' alt='...'>";
-        echo "    <div class='card-body'>";
-        echo "        <h5 class='card-title'>Card title</h5>";
-        echo "        <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card’s content.</p>";
-        echo "        <a href='#' class='btn btn-primary'>Go somewhere</a>";
-        echo "    </div>";
-        echo "</div>";
     }
 
     public static function store($dados)
@@ -71,25 +57,16 @@ class LivroService
 
             foreach ($dados as $chave => $valor) {
                 $livro->$chave = $valor;
-            }
-            echo "<pre>";
-            print_r($livro);
-            echo "</pre>";
-            $res = $livro->save();
-
-            return $res;
+            };
+            $livro->save();
         } catch (Exception $e) {
             echo $e->getMessage();
+            LoggerTXT::log("LivroService@store: {$e->getMessage()}", 'Error');
+            return Response::redirect('livros/cadastrar', 'Erro ao cadastrar livro, tente novamente em instantes', 'danger');
         }
     }
 
-    public static function paginated($limit, $offset)
-    {
-        try {
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
+
 
     public static function findById($id)
     {
@@ -99,13 +76,13 @@ class LivroService
 
             $livro = LivroGateway::findById($id);
             if (!isset($livro->id)) {
-                echo "Livro não encontrado <br>";
                 Response::redirect('home', 'Desculpe, não encontramos o livro que está procurando', 'warning');
             }
 
             return $livro;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            LoggerTXT::log('LivroService@findById: ' . $e->getMessage(), 'Error');
+            Response::redirect('home', 'Desculpe, ocorreu um erro ao buscar o livro que está procurando', 'warning');
         }
     }
 
@@ -117,20 +94,20 @@ class LivroService
             $livro = self::findById($id);
             $capa_path = $livro->capa_path;
             if (LivroGateway::delete($id)) {
-                if(file_exists($capa_path) and strcmp($capa_path, 'uploads/placeholder.png')){
-                    if(unlink($capa_path)){
-                        echo "Arquivo deletado com sucesso";
-                    }else{
-                        echo "Erro ao deletar arquivo";
+                if (file_exists($capa_path) and strcmp($capa_path, 'uploads/placeholder.png')) {
+                    if (unlink($capa_path)) {
+                        LoggerTXT::log('LivroService@delete: Apagando arquivo da capa do livro', 'Success');
+                    } else {
+                        LoggerTXT::log('LivroService@delete: Erro ao apagar capa do livro', 'Error');;
                     }
-                }else{
-                    echo "Erro ao deletar arquivo";
                 }
 
-                Response::redirect('livros', 'Sucesso ao deletar livro', 'success');
+                LoggerTXT::log('LivroService@delete: Registro do livro apagado com sucesso', 'Success');
+                return true;
             }
         } catch (Exception $e) {
-            echo $e->getMessage();
+            LoggerTXT::log("LivroService@delete: {$e->getMessage()}", 'Error');
+            Response::redirect('livros', 'Erro ao deletar livro, tente novamente mais tarde', 'danger');
         }
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Api\Controllers;
 
+use Api\Core\LoggerTXT;
 use Api\Middlewares\AuthMiddleware;
 use Api\Core\Response;
 use Api\Services\LivroService;
-use Api\Services\UserService;
+
 
 class LivroController
 {
@@ -13,28 +14,27 @@ class LivroController
     {
         AuthMiddleware::handle();
         $dados = $_POST;
-        print_r($dados);
-        // Validando informações do formulario
+
         foreach ($dados as $chave => $valor) {
 
             if (is_string($valor)) {
                 $valor = trim($valor);
                 if (strlen($valor) == 0 or $valor == '') {
-                    Response::redirect('livros/cadastrar', "O campo {$chave} não pode estar vazio", 'danger');
+                    return Response::redirect('livros/cadastrar', "O campo {$chave} não pode estar vazio", 'danger');
                 }
             }
             if (is_numeric($valor)) {
                 if ($valor == 0 or $valor < 0) {
                     if ($chave == 'qtd_paginas') {
-                        Response::redirect('livros/cadastrar', "O numero de páginas não pode conter valores abaixo ou igual a zero", 'danger');
+                        return Response::redirect('livros/cadastrar', "O numero de páginas não pode conter valores abaixo ou igual a zero", 'danger');
                     } else {
-                        Response::redirect('livros/cadastrar', "O campo {$chave} não pode conter valores abaixo ou igual a zero", 'danger');
+                        return Response::redirect('livros/cadastrar', "O campo {$chave} não pode conter valores abaixo ou igual a zero", 'danger');
                     }
                 }
             }
             if ($chave == "nacional") {
                 if (!in_array($valor, ['S', 'N', 's', 'n'])) {
-                    Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
+                    return Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
                 }
             }
 
@@ -44,11 +44,9 @@ class LivroController
         }
 
         if (!isset($dados['nacional'])) {
-            Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
+            return Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
         }
-        // echo "<pre>";
-        // print_r($_FILES);
-        // echo "</pre>";
+
         if (isset($_FILES['capa_path']) && $_FILES['capa_path']['error'] == 0) {
             $pasta = 'uploads/';
             $image_name = str_replace(' ', '-', trim($_FILES['capa_path']['name']));
@@ -63,17 +61,14 @@ class LivroController
 
             $dados['capa_path'] = $caminho;
         } elseif (empty($_FILES['capa_path']) || $_FILES['capa_path']['error'] == UPLOAD_ERR_NO_FILE) {
-            // Nenhum arquivo enviado, usa placeholder
             $dados['capa_path'] = 'uploads/placeholder.png';
         } else {
-            // Qualquer outro erro
-            Response::redirect('livros/cadastrar', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
+            return Response::redirect('livros/cadastrar', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
         }
 
-        // echo "<pre>";
-        // print_r($dados);
-        // echo "</pre>";
         LivroService::store($dados);
+        LoggerTXT::log('LivroController@store: Livro "' . $dados['titulo'] . '" adicionado com sucesso', 'Success');
+        Response::redirect('livros', "Livro {$dados['titulo']} adicionado com sucesso", 'success');
     }
 
 
@@ -81,7 +76,7 @@ class LivroController
     {
         AuthMiddleware::handle();
         if (strcmp($_POST['edit_token'], $_ENV['EDIT_TOKEN']) !== 0) {
-            Response::redirect('home', 'Desculpe, você não tem acesso a esse recurso', 'warning');
+            return Response::redirect('home', 'Desculpe, você não tem acesso a esse recurso', 'warning');
         }
         $dados = $_POST;
 
@@ -91,21 +86,21 @@ class LivroController
             if (is_string($valor)) {
                 $valor = trim($valor);
                 if (strlen($valor) == 0 or $valor == '') {
-                    Response::redirect('livros/editar/' . $dados['id'], "O campo {$chave} não pode estar vazio", "danger");
+                    return Response::redirect('livros/editar/' . $dados['id'], "O campo {$chave} não pode estar vazio", "danger");
                 }
             }
             if (is_numeric($valor)) {
                 if ($valor == 0 or $valor < 0) {
                     if ($chave == 'qtd_paginas') {
-                        Response::redirect('livros/editar/' . $dados['id'], "O numero de páginas não pode conter valores abaixo ou igual a zero", 'danger');
+                        return Response::redirect('livros/editar/' . $dados['id'], "O numero de páginas não pode conter valores abaixo ou igual a zero", 'danger');
                     } else {
-                        Response::redirect('livros/editar/' . $dados['id'], "O campo {$chave} não pode conter valores abaixo ou igual a zero", 'danger');
+                        return Response::redirect('livros/editar/' . $dados['id'], "O campo {$chave} não pode conter valores abaixo ou igual a zero", 'danger');
                     }
                 }
             }
             if ($chave == "nacional") {
                 if (!in_array($valor, ['S', 'N', 's', 'n'])) {
-                    Response::redirect('livros/editar/' . $dados['id'], 'Selecione uma origem válida para o livro', 'danger');
+                    return Response::redirect('livros/editar/' . $dados['id'], 'Selecione uma origem válida para o livro', 'danger');
                 }
             }
 
@@ -115,7 +110,7 @@ class LivroController
         }
 
         if (!isset($dados['nacional'])) {
-            Response::redirect('livros/editar/' . $dados['id'], 'Selecione uma origem válida para o livro', 'danger');
+            return Response::redirect('livros/editar/' . $dados['id'], 'Selecione uma origem válida para o livro', 'danger');
         }
 
         if (!empty($_FILES['capa_path']['tmp_name'])) {
@@ -136,23 +131,20 @@ class LivroController
             $dados['capa_path'] = $_POST['capa_atual'];
         }
 
-        echo "<pre>";
-        print_r($_POST);
-        print_r($_FILES);
-        print_r($dados);
-        echo "</pre>";
-
-        if (LivroService::store($dados)) {
-            Response::redirect('livros/' . $dados['id'], 'Livro atualizado com sucesso', 'success');
-        }
+        LivroService::store($dados);
+        Response::redirect("livros/editar/{$dados['id']}", 'Alterações realizadas com sucesso', 'success');
     }
 
     public function delete($params = [])
     {
-        $id = $params['id'] ?? null;
+        $id = $params['id'] ?? 0;
         $token = $params['token'] ?? null;
         AuthMiddleware::token($token);
 
-        LivroService::delete($id);
+        if (LivroService::delete($id)) {
+            Response::redirect('livros', 'Sucesso ao deletar livro', 'success');
+        } else {
+            Response::redirect('livros', 'Erro ao deletar livro', 'error');
+        }
     }
 }

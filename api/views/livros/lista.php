@@ -38,6 +38,7 @@ $next = $selfPage <= $totalPages ? $selfPage + 1 : $totalPages;
 
     <!-- Livros -->
     <div class="container pb-5">
+        <?= Alert::span() ?> 
         <?php if (empty($livros)): ?>
             <div class="alert alert-info text-center" role="alert">
                 Nenhum livro cadastrado ainda. Que tal adicionar o primeiro?

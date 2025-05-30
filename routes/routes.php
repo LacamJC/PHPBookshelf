@@ -19,7 +19,11 @@ $router->get('home', 'PageController@home');            // Página inicial após
 $router->get('livros', 'PageController@lista');              // Lista de livros
 
 $router->get('livros/cadastrar', 'PageController@cadastrarLivro'); // Formulário de cadastro
-$router->post('livros', 'LivroController@store');            // Cria novo livro (POST)
+$router->post('livros', 'LivroController@store'); 
+
+$router->get('texto', 'LoggerController@teste');
+
+// Cria novo livro (POST)
 
 // Exemplo para futuro (edição e exclusão):
 $router->get('livros/editar/{id}', 'PageController@edit');

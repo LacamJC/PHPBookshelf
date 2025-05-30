@@ -3,6 +3,7 @@
 namespace Api\Database;
 
 use Api\Abstract\Gateway;
+use Api\Core\LoggerTXT;
 use PDO;
 use Exception;
 use PDOException;

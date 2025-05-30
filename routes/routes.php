@@ -16,7 +16,7 @@ $router->get('registro', 'PageController@cadastro');         // Tela de cadastro
 $router->post('registro', 'UserController@store');           // Cadastra usuário
 
 // Rotas protegidas / páginas do sistema
-$router->get('dashboard', 'PageController@home');            // Página inicial após login
+$router->get('home', 'PageController@home');            // Página inicial após login
 $router->get('livros', 'PageController@lista');              // Lista de livros
 
 // CRUD de livros
@@ -24,7 +24,10 @@ $router->get('livros/cadastrar', 'PageController@cadastrarLivro'); // Formulári
 $router->post('livros', 'LivroController@store');            // Cria novo livro (POST)
 
 // Exemplo para futuro (edição e exclusão):
-// $router->get('livros/{id}/editar', 'LivroController@edit');
+$router->get('livros/editar/{id}', 'PageController@edit');
+$router->post('livros/update', 'LivroController@update');
+$router->get('livros/delete/{id}/{token}', 'LivroController@delete');
+$router->get('livros/{id}', 'PageController@view');
 // $router->post('livros/{id}', 'LivroController@update');
 // $router->post('livros/{id}/excluir', 'LivroController@destroy');
 

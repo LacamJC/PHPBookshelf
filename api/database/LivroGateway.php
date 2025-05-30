@@ -92,6 +92,18 @@ class LivroGateway
         }
     }
 
+    public static function findById($id)
+    {
+        try {
+            $sql = "SELECT * FROM livros WHERE id = '$id'";
+
+            $result = self::$conn->query($sql);
+            return $result->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public static function countAll()
     {
         try {
@@ -113,6 +125,19 @@ class LivroGateway
             $result = self::$conn->query($sql);
             return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
         } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public static function delete($id){
+        try{
+          
+            $sql = "DELETE FROM livros WHERE id = '$id'";
+            
+            self::$conn->query($sql);
+
+            return true;
+        }catch(Exception $e){
             throw $e;
         }
     }

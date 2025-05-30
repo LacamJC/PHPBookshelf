@@ -75,9 +75,7 @@ class LivroService
             echo "</pre>";
             $res = $livro->save();
 
-            if ($res) {
-                Response::redirect('book', 'Livro cadastrado com sucesso', 'success');
-            }
+            return $res;
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -86,6 +84,49 @@ class LivroService
     public static function paginated($limit, $offset)
     {
         try {
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function findById($id)
+    {
+        try {
+            $conn = Connection::open('database');
+            LivroGateway::setConnection($conn);
+
+            $livro = LivroGateway::findById($id);
+            if (!isset($livro->id)) {
+                echo "Livro não encontrado <br>";
+                Response::redirect('home', 'Desculpe, não encontramos o livro que está procurando', 'warning');
+            }
+
+            return $livro;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function delete($id)
+    {
+        try {
+            $conn = Connection::open('database');
+            LivroGateway::setConnection($conn);
+            $livro = self::findById($id);
+            $capa_path = $livro->capa_path;
+            if (LivroGateway::delete($id)) {
+                if(file_exists($capa_path) and strcmp($capa_path, 'uploads/placeholder.png')){
+                    if(unlink($capa_path)){
+                        echo "Arquivo deletado com sucesso";
+                    }else{
+                        echo "Erro ao deletar arquivo";
+                    }
+                }else{
+                    echo "Erro ao deletar arquivo";
+                }
+
+                Response::redirect('livros', 'Sucesso ao deletar livro', 'success');
+            }
         } catch (Exception $e) {
             echo $e->getMessage();
         }

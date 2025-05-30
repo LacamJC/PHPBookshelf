@@ -20,12 +20,12 @@ use Api\Widgets\Layout;
     <?= Layout::header() ?>
     <div class="w-50 mx-auto my-5">
 
-        <form action="book" method="POST" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
+        <form action="<?=BASE_URL?>livros" method="POST" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
             <?php Alert::span(); ?>
 
             <input type="hidden" name="id_usuario" value="<?= $_SESSION['user']->id ?>">
 
-            <h4 class="mb-4 text-primary">📘 Cadastrar Novo Livro</h4>
+            <h4 class="mb-4 text-primary"><i class="bi bi-book"></i> Cadastrar Novo Livro</h4>
 
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título</label>
@@ -52,7 +52,7 @@ use Api\Widgets\Layout;
                 <div class="col-md-6 mb-3">
                     <label for="nacional" class="form-label">O livro é nacional?</label>
                     <select class="form-select" id="nacional" name="nacional" required>
-                        <option disabled selected>Selecione uma opção</option>
+                        <option value="D" disabled selected>Selecione uma opção</option>
                         <option value="S">Sim</option>
                         <option value="N">Não</option>
                     </select>
@@ -74,7 +74,7 @@ use Api\Widgets\Layout;
                 <textarea class="form-control" id="descricao" rows="4" name="descricao" placeholder="Fale um pouco sobre o livro">Descrição genérica do livro</textarea>
             </div>
 
-            <button type="submit" class="btn btn-success">📚 Cadastrar Livro</button>
+            <button type="submit" class="btn btn-success"><i class="bi bi-book"></i> Cadastrar Livro</button>
         </form>
     </div>
     <?= Layout::footer(); ?>

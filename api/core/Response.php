@@ -20,7 +20,7 @@ class Response
             $_SESSION['alertMessage'] = $alertMessage;
             $_SESSION['alertType'] = $alertType;
         }
-        header('Location: ' . $location);
+        header('Location: ' . BASE_URL . $location);
         exit;
     }
 }

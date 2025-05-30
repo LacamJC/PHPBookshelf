@@ -22,6 +22,10 @@ class Router
         $this->routes['DELETE'][$path] = $handler;
     }
 
+    public function put($path, $handler){
+        $this->routes['PUT'][$path] = $handler;
+    }
+
     public function dispatch()
     {
         $url = $_GET['url'] ?? '/';

@@ -29,7 +29,7 @@ $currentPage = $data['page'];
 
     <!-- Livros -->
     <div class="container pb-5">
-        <?=Alert::span() ?>
+        <?= Alert::span() ?>
         <?php if (empty($livros)): ?>
             <div class="alert alert-info text-center" role="alert">
                 Nenhum livro cadastrado ainda. Que tal adicionar o primeiro?
@@ -46,12 +46,14 @@ $currentPage = $data['page'];
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-        <?php
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $active = $i === $currentPage ? 'active' : '';
-            echo "<a href='?page=$i' class='btn btn-sm btn-primary $active'>$i</a> ";
-        }
-        ?>
+        <div class="mx-auto w-75 text-center">
+            <?php
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $active = $i === $currentPage ? 'active' : '';
+                echo "<a href='?page=$i' class='btn btn-sm btn-primary $active'>$i</a> ";
+            }
+            ?>
+        </div>
     </div>
     <?= Layout::footer(); ?>
     <script src="resources/js/showPass.js"></script>

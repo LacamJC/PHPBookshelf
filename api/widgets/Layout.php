@@ -7,12 +7,12 @@ class Layout
     public static function header()
     {
         $nome = isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']->nome) : 'Usuário';
-
+        $baseUrl = BASE_URL;
         if (isset($_SESSION['user'])) {
             echo <<<HTML
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
             <div class="container">
-                <a class="navbar-brand fw-bold text-primary" href="home"><i class="bi bi-book"></i> My Bookshelf</a>
+                <a class="navbar-brand fw-bold text-primary" href="{$baseUrl}home"><i class="bi bi-book"></i> My Bookshelf</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -22,10 +22,13 @@ class Layout
                             Bem-vindo, <strong class="text-dark">{$nome}</strong>
                         </li>
                         <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary" href="book"><i class="bi-plus-circle"></i> Cadastrar Livro</a>
+                            <a class="btn btn-outline-primary" href="{$baseUrl}livros"><i class="bi-plus-book"></i> Ver livros</a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-primary" href="{$baseUrl}livros/cadastrar"><i class="bi-plus-circle"></i> Cadastrar Livro</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-danger" href="logout"><i class="bi-box-arrow-right"></i> Sair</a>
+                            <a class="btn btn-outline-danger" href="{$baseUrl}logout"><i class="bi-box-arrow-right"></i> Sair</a>
                         </li>
                     </ul>
                 </div>
@@ -36,7 +39,7 @@ class Layout
             echo <<<HTML
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
             <div class="container">
-                <a class="navbar-brand fw-bold text-primary" href="home"><i class="bi bi-book"></i> My Bookshelf</a>
+                <a class="navbar-brand fw-bold text-primary" href="{$baseUrl}home"><i class="bi bi-book"></i> My Bookshelf</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -46,7 +49,7 @@ class Layout
                             Bem-vindo, faça login!
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-primary" href="login">Login</a>
+                            <a class="btn btn-primary" href="{$baseUrl}login">Login</a>
                         </li>
                     </ul>
                 </div>

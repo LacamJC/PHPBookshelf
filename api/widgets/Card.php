@@ -8,10 +8,11 @@ class Card
 {
     public function show(LivroGateway $livro)
     {
+        $id = $livro->id;
         $titulo = htmlspecialchars($livro->titulo);
         $descricao = htmlspecialchars($livro->descricao);
         $capa = htmlspecialchars($livro->capa_path ?? 'assets/img/placeholder.png');
-
+        $baseUrl = BASE_URL;
         echo <<<HTML
         <div class="card h-100 shadow-sm">
             <img src="{$capa}" class="card-img-top" alt="Capa do livro {$titulo}" style="height: 250px; object-fit: cover;">
@@ -20,7 +21,7 @@ class Card
                 <p class="card-text text-muted" style="max-height: 4.5em; overflow: hidden; text-overflow: ellipsis;">
                     {$descricao}
                 </p>
-                <a href="#" class="btn btn-outline-primary mt-auto"><i class="bi-eye"></i> Visualizar</a>
+                <a href="{$baseUrl}livros/{$id}" class="btn btn-outline-primary mt-auto"><i class="bi-eye"></i> Visualizar</a>
             </div>
         </div>
         HTML;

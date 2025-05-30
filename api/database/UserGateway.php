@@ -2,11 +2,12 @@
 
 namespace Api\Database;
 
+use Api\Abstract\Gateway;
 use PDO;
 use Exception;
 use PDOException;
 
-class UserGateway
+class UserGateway extends Gateway
 {
     private static $conn;
     private $data;
@@ -59,11 +60,11 @@ class UserGateway
             $email = trim($this->email);
             $senha = trim($this->senha);
 
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':nome', $nome);
-            $stmt->bindValue(':email', $email);
-            if (empty($this->id)) { // <- So prepara a senha se for um novo usuario
-                $stmt->bindValue(':senha', $senha);
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            $stmt->bindValue(':nome', $nome, self::TYPE_STR);
+            $stmt->bindValue(':email', $email, self::TYPE_STR);
+            if (empty($this->data['id'])) { // <- So prepara a senha se for um novo usuario
+                $stmt->bindValue(':senha', $senha, self::TYPE_STR);
             }
 
             $stmt->execute();
@@ -74,53 +75,79 @@ class UserGateway
 
     public static function findById($id)
     {
-        $sql = "SELECT id,nome,email FROM usuarios WHERE id = {$id}";
-        $result = self::$conn->query($sql);
-        return $result->fetch(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT id, nome, email FROM usuarios WHERE id = :id";
+            $stmt = self::$conn->prepare($sql);
+
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new Exception("Erro ao buscar usuário por ID: " . $e->getMessage());
+        }
     }
 
     public static function findByEmail($email)
     {
         try {
-            $sql = "SELECT id,nome,senha,email FROM usuarios WHERE email = '{$email}'";
-            $result = self::$conn->query($sql);
-            // echo $sql;
-            return $result->fetch(PDO::FETCH_ASSOC);
+            $sql = "SELECT id,nome,senha,email FROM usuarios WHERE email = :email";
+            $stmt = self::$conn->prepare($sql);
+
+            $email = trim($email);
+
+            $stmt->bindValue(':email', $email, self::TYPE_STR);
+
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            echo $e->getMessage();
+            throw $e;
         }
     }
 
     public static function findAll()
     {
-        $sql = "SELECT id,nome,email FROM usuarios";
-        $result = self::$conn->query($sql);
-        return $result->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT id,nome,email FROM usuarios";
+            $stmt = self::$conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public static function verifyExists($email)
     {
-        $sql = "SELECT * FROM usuarios WHERE email = '{$email}'";
+        try {
+            $sql = "SELECT id FROM usuarios WHERE email = :email";
 
-        $result = self::$conn->query($sql);
+            $stmt = self::$conn->prepare($sql);
 
-        if ($result && is_array($result->fetch(PDO::FETCH_ASSOC))) {
-            return true; // O usuario existe
-        } else {
-            return false; // O usuario não existe
+            $email = trim($email);
+
+            $stmt->bindValue(':email', $email, self::TYPE_STR);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
     public static function userExists($id)
     {
-        $sql = "SELECT * FROM usuarios WHERE id = '{$id}'";
+        try {
+            $sql = "SELECT * FROM usuarios WHERE id = :id";
+            $stmt = self::$conn->prepare($sql);
 
-        $result = self::$conn->query($sql);
-
-        if ($result && is_array($result->fetch(PDO::FETCH_ASSOC))) {
-            return true; // O usuario existe
-        } else {
-            return false; // O usuario não existe
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
@@ -132,20 +159,22 @@ class UserGateway
             $data = $result->fetch(PDO::FETCH_OBJ);
             return $data->max;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            throw $e;
         }
     }
 
     public static function delete($id)
     {
         try {
-            $sql = "DELETE FROM usuarios WHERE id = {$id}";
+            $sql = "DELETE FROM usuarios WHERE id = :id";
             if ($id == null) {
                 throw new Exception("ID inválido");
             }
-            return self::$conn->query($sql);
-        } catch (PDOException $e) {
-            return $e->getMessage();
+            $stmt = self::$conn->prepare($sql);
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 }

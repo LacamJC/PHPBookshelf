@@ -19,9 +19,11 @@ class LivroService
             LivroGateway::setConnection($conn);
 
             // $livros = LivroGateway::all();
+            
 
             $total = LivroGateway::countAll(); // Corrigido aqui
             $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+            $genero = isset($_GET['genero']) ? $_GET['genero'] : '';
 
 
 
@@ -31,7 +33,7 @@ class LivroService
             $livros = LivroGateway::paginate($limit, $offset);
             $totalPages = ceil($total / $limit);
 
-            if ($page > $totalPages) {
+            if ($page > $totalPages or $page < 1) {
                 Response::redirect('livros?page=1', 'Indice de paginação não encontrado', 'warning');
             }
 

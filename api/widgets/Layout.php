@@ -22,7 +22,7 @@ class Layout
                             Bem-vindo, <strong class="text-dark">{$nome}</strong>
                         </li>
                         <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary" href="{$baseUrl}livros"><i class="bi-plus-book"></i> Ver livros</a>
+                            <a class="btn btn-outline-primary" href="{$baseUrl}livros?page=1"><i class="bi-plus-book"></i> Ver livros</a>
                         </li>
                         <li class="nav-item me-2">
                             <a class="btn btn-outline-primary" href="{$baseUrl}livros/cadastrar"><i class="bi-plus-circle"></i> Cadastrar Livro</a>

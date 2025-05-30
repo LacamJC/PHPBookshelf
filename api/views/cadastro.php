@@ -3,9 +3,9 @@
 use Api\Core\Alert;
 use Api\Widgets\Layout;
 
-$old = $_SESSION['form_data']; 
+$old = isset($_SESSION['form_data']) ? $_SESION['form_data'] : ''; 
 
-print_r($old);
+
 
 ?>
 
@@ -37,7 +37,7 @@ print_r($old);
                         class="form-control"
                         id="email"
                         name="email"
-                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : '' ?>"
+                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : 'teste@gmail.com' ?>"
                         placeholder="Digite seu email"
                         >
                 </div>
@@ -49,7 +49,7 @@ print_r($old);
                         class="form-control"
                         id="nome"
                         name="nome"
-                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : '' ?>"
+                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : 'asd' ?>"
                         placeholder="Digite seu nome"
                         required>
                 </div>
@@ -62,7 +62,7 @@ print_r($old);
                             class="form-control"
                             id="password"
                             name="senha"
-                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '' ?>"
+                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '123123' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6">
@@ -73,11 +73,11 @@ print_r($old);
                     <label for="confirma" class="form-label">Confirme sua senha</label>
                     <div class="input-group">
                         <input
-                            type="senha"
+                            type="password"
                             class="form-control"
                             id="confirm"
                             name="confirma"
-                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '' ?>"
+                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '123123' ?>"
                             placeholder="Confirme sua senha"
                             required
                             minlength="6">

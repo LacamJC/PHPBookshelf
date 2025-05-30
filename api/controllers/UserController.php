@@ -24,7 +24,6 @@ class UserController
         if (strlen($password) < 6) {
             Response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
-        unset($_SESSION['form_data']);
         $user = UserService::verify($email, $password);
     }
 
@@ -66,13 +65,9 @@ class UserController
                 unset($_SESSION['form_data']);
                 $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
-                $result = UserService::store($dados);
+                UserService::store($dados);
 
-                if (!$result) {
-                    echo "Erro ao cadastrar usuario";
-                }
-
-                Response::redirect('login');
+                // Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }

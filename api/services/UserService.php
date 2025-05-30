@@ -48,14 +48,7 @@ class UserService
             UserGateway::setConnection($conn);
             $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
             $result = $user->save();
-            if ($result) {
-                // return Response::json(['status' => 'success', 'message' => 'Usuário criado com sucesso', 'data' => $result], 201);
-                return true;
-            } else {
-                // return Response::json(['status' => 'error', 'message' => 'Erro ao criar usuário'], 500);
-                // echo "Erro ao cadastrar";
-                return false;
-            }
+            print_r($result);
         } catch (Exception $e) {
             echo $e->getMessage();
             return false;
@@ -107,6 +100,7 @@ class UserService
                 
             }
             unset($user['senha']);
+            unset($_SESSION['form_data']);
 
             $logged = new stdClass();
             $logged->id = $user['id'];

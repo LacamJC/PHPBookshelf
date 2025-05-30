@@ -1,8 +1,9 @@
 <?php
 
 use Api\Core\Alert;
+use Api\Widgets\Layout;
 
-$capa = BASE_URL.($livro->capa_path);
+$capa = BASE_URL . ($livro->capa_path);
 $baseUrl = BASE_URL;
 ?>
 <!DOCTYPE html>
@@ -17,14 +18,14 @@ $baseUrl = BASE_URL;
 </head>
 
 <body>
-
+    <?= Layout::header() ?>
     <div class="container my-5">
-        <a href="<?=$baseUrl?>livros" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
-        <?=Alert::span()?>
+        <a href="<?= $baseUrl ?>livros" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
+        <?= Alert::span() ?>
         <div class="card shadow-lg">
             <div class="row g-0">
                 <div class="col-md-4 text-center p-4">
-                    <img src="<?=$capa?>"
+                    <img src="<?= $capa ?>"
                         alt="Capa do livro"
                         class="img-fluid rounded shadow"
                         style="max-height: 400px;" />
@@ -46,8 +47,8 @@ $baseUrl = BASE_URL;
                         <p class="card-text"><?= nl2br(htmlspecialchars($livro->descricao)) ?></p>
 
                         <div class="mt-4">
-                            <a href="<?=$baseUrl?>livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
-                            <a href="<?=$baseUrl?>livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN']?>" class="btn btn-outline-danger"
+                            <a href="<?= $baseUrl ?>livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
+                            <a href="<?= $baseUrl ?>livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN'] ?>" class="btn btn-outline-danger"
                                 onclick="return confirm('Tem certeza que deseja excluir este livro?')"><i class="bi bi-trash"></i> Excluir</a>
                         </div>
                     </div>
@@ -55,7 +56,7 @@ $baseUrl = BASE_URL;
             </div>
         </div>
     </div>
-
+    <?= Layout::footer() ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

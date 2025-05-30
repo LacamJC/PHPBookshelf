@@ -11,6 +11,7 @@ class Card
         $id = $livro->id;
         $titulo = htmlspecialchars($livro->titulo);
         $descricao = htmlspecialchars($livro->descricao);
+        $categoria = htmlspecialchars($livro->genero);
         $capa = htmlspecialchars($livro->capa_path ?? 'assets/img/placeholder.png');
         $baseUrl = BASE_URL;
         echo <<<HTML
@@ -18,6 +19,7 @@ class Card
             <img src="{$capa}" class="card-img-top" alt="Capa do livro {$titulo}" style="height: 250px; object-fit: cover;">
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title text-truncate" title="{$titulo}">{$titulo}</h5>
+                <h6 class="text-secondary">Genero: {$categoria}</h6>
                 <p class="card-text text-muted" style="max-height: 4.5em; overflow: hidden; text-overflow: ellipsis;">
                     {$descricao}
                 </p>

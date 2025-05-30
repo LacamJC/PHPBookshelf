@@ -58,10 +58,9 @@ class UserGateway
             // Executando o SQL
 
             self::$conn->exec($sql);
-            return true;
+            return "Usuario cadastrado com sucesso";
         } catch (Exception $e) {
-            echo "<br>" .   $e->getMessage() . "<br>";
-            return false;
+            throw $e;   
         }
     }
 

@@ -2,11 +2,12 @@
 
 namespace Api\Database;
 
+use Api\Abstract\Gateway;
 use PDO;
 use Exception;
 use PDOException;
 
-class LivroGateway
+class LivroGateway extends Gateway
 {
     private static $conn;
     private $data;
@@ -30,43 +31,62 @@ class LivroGateway
     public function save()
     {
         try {
-            // print_r($this->data);
             if (empty($this->data['id'])) {
+                // Inserção
                 $id = $this->getLastId() + 1;
-                $sql = "INSERT INTO livros (id, id_usuario, titulo, autores, numero_paginas, genero, nacional, capa_path, editora, descricao)
-                VALUES (
-                    '{$id}',
-                    '{$this->data['id_usuario']}',
-                    '{$this->data['titulo']}',
-                    '{$this->data['autores']}',
-                    '{$this->data['numero_paginas']}',
-                    '{$this->data['genero']}',
-                    '{$this->data['nacional']}',
-                    '{$this->data['capa_path']}',
-                    '{$this->data['editora']}',
-                    '{$this->data['descricao']}'
-                )";
-            } else {
-                $sql = "UPDATE livros 
-                SET 
-                    titulo = '{$this->data['titulo']}',
-                    autores = '{$this->data['autores']}',
-                    numero_paginas = '{$this->data['numero_paginas']}',
-                    genero = '{$this->data['genero']}',
-                    nacional = '{$this->data['nacional']}',
-                    capa_path = '{$this->data['capa_path']}',
-                    editora = '{$this->data['editora']}',
-                    descricao = '{$this->data['descricao']}'
-                    WHERE id = {$this->data['id']}";
-            }
+                $sql = "INSERT INTO livros 
+                (id, id_usuario, titulo, autores, numero_paginas, genero, nacional, capa_path, editora, descricao)
+                VALUES
+                (:id, :id_usuario, :titulo, :autores, :numero_paginas, :genero, :nacional, :capa_path, :editora, :descricao)";
 
-            self::$conn->exec($sql);
+                $stmt = self::$conn->prepare($sql);
+
+                $stmt->bindValue(':id', $id, self::TYPE_INT);
+                $stmt->bindValue(':id_usuario', $this->data['id_usuario'], self::TYPE_INT);
+                $stmt->bindValue(':titulo', $this->data['titulo'], self::TYPE_STR);
+                $stmt->bindValue(':autores', $this->data['autores'], self::TYPE_STR);
+                $stmt->bindValue(':numero_paginas', $this->data['numero_paginas'], self::TYPE_INT);
+                $stmt->bindValue(':genero', $this->data['genero'], self::TYPE_STR);
+                $stmt->bindValue(':nacional', $this->data['nacional'], self::TYPE_STR);
+                $stmt->bindValue(':capa_path', $this->data['capa_path'], self::TYPE_STR);
+                $stmt->bindValue(':editora', $this->data['editora'], self::TYPE_STR);
+                $stmt->bindValue(':descricao', $this->data['descricao'], self::TYPE_STR);
+
+                $stmt->execute();
+            } else {
+                // Atualização
+                $sql = "UPDATE livros SET 
+                titulo = :titulo,
+                autores = :autores,
+                numero_paginas = :numero_paginas,
+                genero = :genero,
+                nacional = :nacional,
+                capa_path = :capa_path,
+                editora = :editora,
+                descricao = :descricao
+                WHERE id = :id";
+
+                $stmt = self::$conn->prepare($sql);
+
+                $stmt->bindValue(':titulo', $this->data['titulo'], self::TYPE_STR);
+                $stmt->bindValue(':autores', $this->data['autores'], self::TYPE_STR);
+                $stmt->bindValue(':numero_paginas', $this->data['numero_paginas'], self::TYPE_INT);
+                $stmt->bindValue(':genero', $this->data['genero'], self::TYPE_STR);
+                $stmt->bindValue(':nacional', $this->data['nacional'], self::TYPE_STR);
+                $stmt->bindValue(':capa_path', $this->data['capa_path'], self::TYPE_STR);
+                $stmt->bindValue(':editora', $this->data['editora'], self::TYPE_STR);
+                $stmt->bindValue(':descricao', $this->data['descricao'], self::TYPE_STR);
+                $stmt->bindValue(':id', $this->data['id'], self::TYPE_INT);
+
+                $stmt->execute();
+            }
 
             return true;
         } catch (Exception $e) {
             throw $e;
         }
     }
+
 
     public function getLastId()
     {
@@ -95,10 +115,12 @@ class LivroGateway
     public static function findById($id)
     {
         try {
-            $sql = "SELECT * FROM livros WHERE id = '$id'";
+            $sql = "SELECT * FROM livros WHERE id = :id";
+            $stmt = self::$conn->prepare($sql);
 
-            $result = self::$conn->query($sql);
-            return $result->fetch(PDO::FETCH_OBJ);
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (Exception $e) {
             throw $e;
         }
@@ -120,24 +142,28 @@ class LivroGateway
     public static function paginate($limit, $offset)
     {
         try {
-            $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT {$limit} OFFSET {$offset}";
+            $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT :limit OFFSET :offset";
 
-            $result = self::$conn->query($sql);
-            return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+            $stmt = self::$conn->prepare($sql);
+            $stmt->bindValue(':limit', $limit, self::TYPE_INT);
+            $stmt->bindValue(':offset', $offset, self::TYPE_INT);
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_CLASS, __CLASS__);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public static function delete($id){
-        try{
-          
-            $sql = "DELETE FROM livros WHERE id = '$id'";
-            
-            self::$conn->query($sql);
+    public static function delete($id)
+    {
+        try {
 
-            return true;
-        }catch(Exception $e){
+            $sql = "DELETE FROM livros WHERE id = :id";
+            $stmt = self::$conn->prepare($sql);
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            return $stmt->execute();
+        } catch (Exception $e) {
             throw $e;
         }
     }

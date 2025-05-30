@@ -1,21 +1,3 @@
-2025-05-30 14-50-10 :: teste 
-2025-05-30 15-00-08 :: [Error] teste de mensagem de erro 
-2025-05-30 15-00-08 :: [Success] teste de mensagem de sucesso 
-2025-05-30 15-01-43 :: [Error] Teste 
-2025-05-30 15-05-26 :: [Login] admin fez login com sucesso 
-2025-05-30 15-07-24 :: [Error] teste de exceção 
-2025-05-30 15-07-59 :: [Error] teste de exceção 
-2025-05-30 15-09-14 :: [Error] UserService@verify: KASDPOASKODOASD 
-2025-05-30 15-12-37 :: [Logout]  fez logout 
-2025-05-30 15-13-16 :: [Logout] admin fez logout 
-2025-05-30 15-17-09 :: [Login]  fez login 
-2025-05-30 15-17-12 :: [Logout] admin fez logout 
-2025-05-30 15-18-02 :: [Login]  fez login 
-2025-05-30 15-28-03 :: [Logout] admin fez logout 
-2025-05-30 15-28-06 :: [Error] UserService@store: Teste de exceção 
-2025-05-30 15-41-12 :: [Success] Livro Percy Jackson e o Ladrão de Raios inserido no banco de dados 
-2025-05-30 15-42-11 :: [Success] Livro Percy Jackson e o Ladrão de Raios inserido no banco de dados 
-2025-05-30 15-42-38 :: [Success] Livro Percy Jackson e o Ladrão de Raios inserido no banco de dados 
-2025-05-30 15-59-56 :: [Success] Livro Percy Jackson e o Ladrão de Raios inserido/atualizado no banco de dados 
-2025-05-30 16-01-15 :: [Success] LivroController@store: Livro "Percy Jackson e o Ladrão de Raios" adicionado com sucesso 
-2025-05-30 16-02-48 :: [Success] LivroController@store: Livro "Percy Jackson e o Ladrão de Raios" adicionado com sucesso 
+2025-05-30 16-49-27 :: [Critical] Connection@open: Erro ao procurar arquivo de configurações 'database' 
+2025-05-30 16-50-32 :: [Critical] Connection@open: Erro ao procurar arquivo de configurações 'database' 
+2025-05-30 16-51-40 :: [Error] Connection@open: SQLSTATE[HY000] [14] unable to open database file 

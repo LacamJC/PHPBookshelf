@@ -2,7 +2,7 @@
 
 use Api\Core\Alert;
 use Api\Widgets\Layout;
-$old = isset($_SESSION['form_data']) ? $_SESION['form_data'] : '';
+$old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
 
 ?>
 

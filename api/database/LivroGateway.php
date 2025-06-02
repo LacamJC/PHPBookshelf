@@ -3,6 +3,7 @@
 namespace Api\Database;
 
 use Api\Abstract\Gateway;
+use Api\Core\LoggerTXT;
 use PDO;
 use Exception;
 use PDOException;
@@ -80,8 +81,6 @@ class LivroGateway extends Gateway
 
                 $stmt->execute();
             }
-
-            return true;
         } catch (Exception $e) {
             throw $e;
         }
@@ -96,7 +95,7 @@ class LivroGateway extends Gateway
             $data = $result->fetch(PDO::FETCH_OBJ);
             return $data->max;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            throw $e; 
         }
     }
 

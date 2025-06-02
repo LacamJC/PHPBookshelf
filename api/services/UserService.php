@@ -20,6 +20,7 @@ class UserService
             $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
             $user->save();
 
+            LoggerTXT::log("UserService@store: Novo usuário com o email {$dados['email']}", "Success");
             Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
@@ -53,6 +54,8 @@ class UserService
 
             $_SESSION['user'] = $logged;
 
+
+            LoggerTXT::log("UserService@verify: O usuário {$logged->email} fez login", "Success");
             Response::redirect('home');
         } catch (Exception $e) {
             LoggerTXT::log("UserService@verify: {$e->getMessage()}", 'Error');

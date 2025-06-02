@@ -42,7 +42,6 @@ class LivroService
                 'offset' => $offset
             ];
         } catch (Exception $e) {
-            echo $e->getMessage();
             LoggerTXT::log('LivroService@all: ' . $e->getMessage(), 'Error');
             Response::redirect('home', 'Desculpe tivemos um problema, tente novamente mais tarde', 'danger');
         }
@@ -59,8 +58,8 @@ class LivroService
                 $livro->$chave = $valor;
             };
             $livro->save();
+            LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
         } catch (Exception $e) {
-            echo $e->getMessage();
             LoggerTXT::log("LivroService@store: {$e->getMessage()}", 'Error');
             return Response::redirect('livros/cadastrar', 'Erro ao cadastrar livro, tente novamente em instantes', 'danger');
         }
@@ -103,7 +102,7 @@ class LivroService
                 }
 
                 LoggerTXT::log('LivroService@delete: Registro do livro apagado com sucesso', 'Success');
-                return true;
+                Response::redirect('livros', 'Livro apagado com sucesso', 'success');
             }
         } catch (Exception $e) {
             LoggerTXT::log("LivroService@delete: {$e->getMessage()}", 'Error');

@@ -21,7 +21,7 @@ class Alert
 
     public static function alert($message, $type)
     {
-        echo "<div class='alert alert-{$type} text-center mx-auto w-50'>";
+        echo "<div class='alert alert-{$type} text-center mx-auto container'>";
         echo $message;
         echo "</div>";
     }

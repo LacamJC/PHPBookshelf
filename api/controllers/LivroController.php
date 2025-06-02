@@ -138,13 +138,8 @@ class LivroController
     public function delete($params = [])
     {
         $id = $params['id'] ?? 0;
-        $token = $params['token'] ?? null;
+        $token = $params['token'] ?? '';
         AuthMiddleware::token($token);
-
-        if (LivroService::delete($id)) {
-            Response::redirect('livros', 'Sucesso ao deletar livro', 'success');
-        } else {
-            Response::redirect('livros', 'Erro ao deletar livro', 'error');
-        }
+        LivroService::delete($id);
     }
 }

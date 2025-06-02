@@ -30,7 +30,7 @@ class LivroService
             $totalPages = ceil($total / $limit);
 
             if ($page > $totalPages or $page < 1) {
-                Response::redirect('livros?page=1', 'Indice de paginação não encontrado', 'warning');
+                Response::redirect('livros?page=1', '', '');
             }
 
             return [

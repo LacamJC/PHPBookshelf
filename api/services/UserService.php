@@ -2,6 +2,7 @@
 
 namespace Api\Services;
 
+use Api\Abstract\Logger;
 use Api\Core\LoggerTXT;
 use Api\Database\UserGateway;
 use Api\Database\Connection;
@@ -24,14 +25,33 @@ class UserService
             Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
-            Response::redirect('login', 'Desculpe houve um erro ao efetuar a operação, tente novamente em instantes', 
-            'danger');
+            Response::redirect(
+                'login',
+                'Desculpe houve um erro ao efetuar a operação, tente novamente em instantes',
+                'danger'
+            );
         }
     }
 
     public static function delete($id)
     {
-        Response::redirect('login', 'servico não implementado', 'danger');
+        try {
+            if ($id == null) {
+                throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
+            }
+            $conn = Connection::open('database');
+            UserGateway::setConnection(($conn));
+            $result =  UserGateway::delete($id);
+            LoggerTXT::log("Usuário {$id} deletado com sucesso", 'Success');
+            if(isset($_SESSION['user'])){
+                unset($_SESSION['user']);
+                unset($_SESSION['form_data']);
+            }
+            Response::redirect('login', 'Conta apagada com sucesso', 'success');
+        } catch (Exception $e) {
+            LoggerTXT::log('UserService@delete: ' . $e->getMessage(), 'Error');
+            Response::redirect('login', 'Erro ao deletar usuario', 'danger');
+        }
     }
 
     public static function verify($email, $pass)

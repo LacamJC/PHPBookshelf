@@ -168,9 +168,6 @@ class UserGateway extends Gateway
     {
         try {
             $sql = "DELETE FROM usuarios WHERE id = :id";
-            if ($id == null) {
-                throw new Exception("ID inválido");
-            }
             $stmt = self::$conn->prepare($sql);
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             return $stmt->execute();

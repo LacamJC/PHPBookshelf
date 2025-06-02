@@ -13,12 +13,7 @@ $livros = LivroService::all();
 <html lang="pt-BR">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Minha Estante</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="resources/scss/home.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <?= Layout::head('Bem vindo') ?>
 
 </head>
 
@@ -35,7 +30,7 @@ $livros = LivroService::all();
         </div>
     </section>
 
-   
+
 
     <?= Layout::footer() ?>
 

@@ -38,6 +38,15 @@ class UserController
         }
     }
 
+    public function delete($params = []){
+        $id = (int) $params['id'];
+        $token = $params['token'];
+        AuthMiddleware::handle();
+        AuthMiddleware::token($token);
+        if($id <= 0 or is_string($id)){Response::redirect('login', '', '');}
+
+        UserService::delete($id);
+    }
 
 
     public function store()

@@ -2,3 +2,6 @@
 checklist.md
 logs/
 vendor/
+public/uploads/
+database/insert.sql
+database/mybookshelf.db

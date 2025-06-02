@@ -36,6 +36,7 @@ use Api\Widgets\Layout;
                 <label for="autores" class="form-label">Autor(es)</label>
                 <input type="text" class="form-control" id="autores" name="autores" value="Elisabeth Swan" placeholder="Digite o nome do(s) autor(es)" required>
             </div>
+            <p class="text-secondary">Caso o livro tenha mais de um autor, separe por ';'</p>
 
             <div class="row">
                 <div class="col-md-6 mb-3">

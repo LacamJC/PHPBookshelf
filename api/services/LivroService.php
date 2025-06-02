@@ -57,6 +57,36 @@ class LivroService
             foreach ($dados as $chave => $valor) {
                 $livro->$chave = $valor;
             };
+
+            $autoresPlain = explode(";", $livro->autores);
+            $autoresFormatados = array_map(function ($autor) {
+                return htmlspecialchars(trim($autor));
+            }, $autoresPlain);
+
+            $autores = '';
+            $maxAutores = count($autoresFormatados);
+
+            if ($maxAutores === 1) {
+                $autores = $autoresFormatados[0];
+            } else {
+                for ($i = 0; $i < $maxAutores; $i++) {
+                    if ($i === $maxAutores - 1) {
+                        $autores .= " {$autoresFormatados[$i]}.";
+                    } else {
+                        $autores .= " {$autoresFormatados[$i]},";
+                    }
+                }
+            }
+
+            $livro->autores = $autores;
+
+
+            // echo "<pre>";
+            // print_r($livro);
+            // echo "</pre";
+
+
+
             $livro->save();
             LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
         } catch (Exception $e) {

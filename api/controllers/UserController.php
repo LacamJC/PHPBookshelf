@@ -24,6 +24,7 @@ class UserController
         if (strlen($password) < 6) {
             return response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
+        unset($_SESSION['form_data']);
         UserService::verify($email, $password);
     }
 
@@ -38,12 +39,15 @@ class UserController
         }
     }
 
-    public function delete($params = []){
+    public function delete($params = [])
+    {
         $id = (int) $params['id'];
         $token = $params['token'];
         AuthMiddleware::handle();
         AuthMiddleware::token($token);
-        if($id <= 0 or is_string($id)){Response::redirect('login', '', '');}
+        if ($id <= 0 or is_string($id)) {
+            Response::redirect('login', '', '');
+        }
 
         UserService::delete($id);
     }
@@ -71,11 +75,10 @@ class UserController
             }
 
             unset($dados['confirma']);
-            unset($_SESSION['form_data']);
+
             $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
             UserService::store($dados);
-
             return response::redirect('login', 'Conta cadastrada com sucesso', 'success');
         }
     }

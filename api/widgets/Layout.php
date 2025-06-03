@@ -29,7 +29,7 @@ class Layout
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-pencil-square"></i> Editar perfil</a></li>
                                 <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-shield-exclamation"></i> Alterar senha</a></li>
-                                <li><a class="dropdown-item text-danger" href="{$baseUrl}usuarios/apagar-conta/{$id}/{$token}"><i class="bi bi-trash"></i> Deletar conta</a></li>
+                                <li><a class="dropdown-item text-danger" href="{$baseUrl}usuarios/apagar-conta/{$id}/{$token}" onclick="return confirm('Tem certeza que deseja excluir este esta conta ? <br>Aviso: Está ação não tem volta')"><i class="bi bi-trash"></i> Deletar conta</a></li>
                             </ul>
                             </div>
                         </li>            
@@ -59,7 +59,7 @@ class Layout
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item me-3 text-secondary">
-                            Bem-vindo, faça login!
+                            Para acessar as funcionalidades do site faça
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-primary" href="{$baseUrl}login">Login</a>
@@ -83,7 +83,7 @@ class Layout
 
     public static function head($title)
     {
-        $faviconPath = 'assets/img/book.svg';
+        $faviconPath = 'resources/img/book.svg';
         echo <<<HTML
                 <meta charset="utf-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">

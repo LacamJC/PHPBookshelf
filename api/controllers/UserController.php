@@ -82,4 +82,39 @@ class UserController
             return response::redirect('login', 'Conta cadastrada com sucesso', 'success');
         }
     }
+
+    public function edit($params = [])
+    {
+        $token = $params['token'];
+        $id = $params['id'];
+        AuthMiddleware::handle();
+        AuthMiddleware::token($token);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $dados = [
+                'nome'     => (trim($_POST['nome']))    ?? '',
+                'senha'    => (trim($_POST['senha']))   ?? '',
+                'email'    => (trim($_POST['email']))   ?? '',
+                'confirma' => (trim($_POST['confirma']) ?? '')
+            ];
+            foreach ($dados as $prop => $value) {
+                if (empty($value) or strlen($value) <= 0) {
+
+                    return response::redirect("usuarios/editar-conta/$id/$token", "O campo '{$prop}' nao pode ser vazio", 'danger');
+                }
+            }
+            if ($dados['senha'] !== $dados['confirma']) {
+                return response::redirect('cadastro', 'As senhas devem ser identicas', 'danger');
+            }
+            unset($dados['confirma']);
+
+            $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
+
+
+            unset($dados['edit_token']);
+            
+            $dados['id'] = $id;
+            UserService::store($dados);
+            return response::redirect('login', 'Conta cadastrada com sucesso', 'success');
+        }
+    }
 }

@@ -19,10 +19,31 @@ class UserService
             UserGateway::setConnection($conn);
 
             $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
+            if (isset($dados['id'])) {
+                $user->id = $dados['id'];
+            }
+            // echo "<pre>";
+            // print_r($dados);
+            // print_r($user);
+            // echo "</pre>";
+
             $user->save();
 
+            if (isset($dados['id'])) {
+                $logged = new stdClass();
+                $logged->id = $dados['id'];
+                $logged->nome = $dados['nome'];
+                $logged->email = $dados['email'];
+                unset($_SESSION['user']);
+                $_SESSION['user'] = $logged;
+
+   
+                LoggerTXT::log("UserService@store: Usuario com o email {$dados['email']} atualizado", "Success");
+                return Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
+            }
+
             LoggerTXT::log("UserService@store: Novo usuário com o email {$dados['email']}", "Success");
-            Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
+            return Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
             Response::redirect(
@@ -43,7 +64,7 @@ class UserService
             UserGateway::setConnection(($conn));
             $result =  UserGateway::delete($id);
             LoggerTXT::log("Usuário {$id} deletado com sucesso", 'Success');
-            if(isset($_SESSION['user'])){
+            if (isset($_SESSION['user'])) {
                 unset($_SESSION['user']);
                 unset($_SESSION['form_data']);
             }
@@ -51,6 +72,24 @@ class UserService
         } catch (Exception $e) {
             LoggerTXT::log('UserService@delete: ' . $e->getMessage(), 'Error');
             Response::redirect('login', 'Erro ao deletar usuario', 'danger');
+        }
+    }
+
+    public static function findById($id)
+    {
+        try {
+            if ($id == null) {
+                throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
+            }
+            $conn = Connection::open('database');
+            UserGateway::setConnection(($conn));
+
+            $user = UserGateway::findById($id);
+
+            return $user;
+        } catch (Exception $e) {
+            LoggerTXT::log('UserService@findById: ' . $e->getMessage(), 'Error');
+            Response::redirect('home');
         }
     }
 

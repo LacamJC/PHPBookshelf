@@ -14,6 +14,8 @@ $router->get('logout', 'UserController@logout');             // Logout
 $router->post('login', 'UserController@login');              // Processa login
 
 $router->get('usuarios/apagar-conta/{id}/{token}', 'UserController@delete');
+$router->get('usuarios/editar-conta/{id}/{token}', 'PageController@editUser');
+$router->post('usuarios/editSubmit/{id}/{token}', 'UserController@edit');
 $router->post('usuarios', 'UserController@store');           // Cadastra usuário
 $router->get('cadastro', 'PageController@cadastro');         // Tela de cadastro
 $router->get('home', 'PageController@home');            // Página inicial após login

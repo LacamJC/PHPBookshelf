@@ -27,8 +27,7 @@ class Layout
                                 Bem-vindo, <strong class="">{$nome}</strong>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-pencil-square"></i> Editar perfil</a></li>
-                                <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-shield-exclamation"></i> Alterar senha</a></li>
+                                <li><a class="dropdown-item text-secondary" href="{$baseUrl}usuarios/editar-conta/$id/$token"><i class="bi bi-pencil-square"></i> Editar perfil</a></li>
                                 <li><a class="dropdown-item text-danger" href="{$baseUrl}usuarios/apagar-conta/{$id}/{$token}" onclick="return confirm('Tem certeza que deseja excluir este esta conta ? <br>Aviso: Está ação não tem volta')"><i class="bi bi-trash"></i> Deletar conta</a></li>
                             </ul>
                             </div>

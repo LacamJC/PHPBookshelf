@@ -44,17 +44,17 @@ class UserGateway extends Gateway
         try {
             if (empty($this->data['id'])) {  // <- Verifica se é uma atualização ou inserção
 
-                if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
-                    throw new Exception("Gateway: Email ja cadastrado");
-                }
+                // if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
+                //     throw new Exception("Gateway: Email ja cadastrado");
+                // }
                 $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
                 $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
             } else {
                 $id = $this->data['id'];
                 $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
             }
-
-
+            // echo $sql;
+            // die();
             $stmt = self::$conn->prepare($sql);
 
             $nome = trim($this->nome);

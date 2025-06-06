@@ -46,7 +46,8 @@ class AvaliacaoGateway extends Gateway
                 $stmt->bindValue(':comentario', $this->data['comentario'], PDO::PARAM_STR);
                 $stmt->bindValue(':nota', $this->data['nota'], PDO::PARAM_INT);
                 $stmt->bindValue(':id', $this->data['id'], PDO::PARAM_INT);
-
+                echo $sql;
+                die();
                 return $stmt->execute();
             } else {
                 // Insere nova avaliação

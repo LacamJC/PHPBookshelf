@@ -45,12 +45,40 @@ $baseUrl = BASE_URL;
 
                         <h5 class="text-dark"><i class="bi bi-card-text"></i> Descrição</h5>
                         <p class="card-text"><?= nl2br(htmlspecialchars($livro->descricao)) ?></p>
-
                         <div class="mt-4">
                             <a href="<?= $baseUrl ?>livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
                             <a href="<?= $baseUrl ?>livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN'] ?>" class="btn btn-outline-danger"
                                 onclick="return confirm('Tem certeza que deseja excluir este livro?')"><i class="bi bi-trash"></i> Excluir</a>
                         </div>
+                        <!-- Área de avaliação -->
+                        <hr>
+                        <h4 class="mt-4">Deixe sua avaliação</h4>
+                        <form method="POST" action="<?= $baseUrl ?>avaliar" class="mt-3">
+                            <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
+                            <input type="hidden" name="id_usuario" value="<?=$_SESSION['user']->id?>">
+                            <input type="hidden" name="id_livro" value="<?= (int)$livro->id ?>" />
+
+                            <div class="mb-3">
+                                <label for="comentario" class="form-label">Comentário</label>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nota" class="form-label">Nota</label>
+                                <select class="form-select" id="nota" name="nota" required>
+                                    <option value="" selected disabled>Selecione uma nota</option>
+                                    <option value="1">1 - Péssimo</option>
+                                    <option value="2">2 - Ruim</option>
+                                    <option value="3">3 - Regular</option>
+                                    <option value="4">4 - Bom</option>
+                                    <option value="5">5 - Excelente</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-hand-thumbs-up"></i> Enviar Avaliação</button>
+                        </form>
+
+
                     </div>
                 </div>
             </div>

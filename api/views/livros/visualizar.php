@@ -1,10 +1,14 @@
 <?php
 
 use Api\Core\Alert;
+use Api\Services\AvaliacaoService;
 use Api\Widgets\Layout;
 
 $capa = BASE_URL . ($livro->capa_path);
 $baseUrl = BASE_URL;
+
+$comentarios = AvaliacaoService::comentarios($livro->id);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -29,6 +33,15 @@ $baseUrl = BASE_URL;
                         alt="Capa do livro"
                         class="img-fluid rounded shadow"
                         style="max-height: 400px;" />
+
+                    <div class="mt-5">
+                        <?php if ($comentarios != null): ?>
+                            <h2 class="mt-5 text-secondary">Avaliações</h2>
+                            <?php foreach ($comentarios as $comentario) {
+                                Layout::avaliacao($comentario->nome, $comentario->nota, $comentario->comentario);
+                            } ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
@@ -54,8 +67,8 @@ $baseUrl = BASE_URL;
                         <hr>
                         <h4 class="mt-4">Deixe sua avaliação</h4>
                         <form method="POST" action="<?= $baseUrl ?>avaliar" class="mt-3">
-                            <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
-                            <input type="hidden" name="id_usuario" value="<?=$_SESSION['user']->id?>">
+                            <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
+                            <input type="hidden" name="id_usuario" value="<?= $_SESSION['user']->id ?>">
                             <input type="hidden" name="id_livro" value="<?= (int)$livro->id ?>" />
 
                             <div class="mb-3">

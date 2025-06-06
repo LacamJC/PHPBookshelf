@@ -80,6 +80,21 @@ class Layout
         HTML;
     }
 
+    public static function avaliacao($nome = 'John doe', $nota = 5, $comentario = 'Default comments'){
+        echo <<<HTML
+
+                    <div class="card mt-5" style="width: 18rem;">
+                        <div class="card-header text-start">
+                            {$nome} - {$nota} estrelas
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">$comentario</li>
+                        </ul>
+                    </div>
+        HTML;
+   
+    }
+
     public static function head($title)
     {
         $faviconPath = 'resources/img/book.svg';

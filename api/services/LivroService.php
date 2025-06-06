@@ -97,6 +97,7 @@ class LivroService
 
 
 
+
     public static function findById($id)
     {
         try {

@@ -22,11 +22,36 @@ class AvaliacaoService
             $avaliacao->id_usuario = $dados['id_usuario'];
             $avaliacao->comentario = $dados['comentario'];
             $avaliacao->nota = $dados['nota'];
-            
+
+            $result = $avaliacao->userHasComment();
+
+            if (($result)) {
+                return Response::redirect("livros/{$avaliacao->id_livro}", 'Você já comentou este livro', 'warning');
+            }
+
             $avaliacao->save();
+            return Response::redirect("livros/{$avaliacao->id_livro}", 'Avaliação salva com sucesso', 'success');
         } catch (Exception $e) {
             LoggerTXT::log('AvaliacaoService: ' . $e->getMessage(), 'Error');
             Response::redirect('home', 'Desculpe houve um erro ao realizar o comentario', 'danger');
+        }
+    }
+
+    public static function comentarios($id)
+    {
+        try {
+            $conn = Connection::open('database');
+            AvaliacaoGateway::setConnection($conn);
+            $comentarios = AvaliacaoGateway::comentarios($id);
+
+            if($comentarios){
+                return $comentarios;
+            }else{
+                return null;
+            }
+        } catch (Exception $e) {
+            LoggerTXT::log('AvaliacaoService@comentarios: ' . $e->getMessage(), 'Error');
+            return response::redirect('livros/' . $id, 'Desculpe, houve um erro ao comentar o livro', 'danger');
         }
     }
 }

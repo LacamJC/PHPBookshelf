@@ -71,6 +71,41 @@ class AvaliacaoGateway extends Gateway
         }
     }
 
+    public function userHasComment()
+    {
+        try {
+            echo $this->id_usuario;
+            echo "<br>";
+            echo $this->id_livro;
+
+            $sql = "SELECT id FROM avaliacoes WHERE id_usuario = :id_usuario AND id_livro = :id_livro";
+            $stmt = self::$conn->prepare($sql);
+
+            $stmt->bindValue(':id_usuario', $this->id_usuario, self::TYPE_INT);
+            $stmt->bindValue(':id_livro', $this->id_livro, self::TYPE_INT);
+
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+   
+    public static function comentarios($id){
+        try{
+            $sql = "SELECT usuarios.nome, avaliacoes.comentario, avaliacoes.nota, livros.titulo FROM avaliacoes INNER JOIN usuarios ON avaliacoes.id_usuario = usuarios.id JOIN livros ON livros.id = :id_livro WHERE avaliacoes.id_livro = :id_livro";
+
+            $stmt = self::$conn->prepare($sql);
+
+            $stmt->bindValue(':id_livro', $id, self::TYPE_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e){}
+        throw $e;
+    }
+
 
     public function getLastId()
     {

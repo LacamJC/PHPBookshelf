@@ -37,7 +37,7 @@ class UserService
                 unset($_SESSION['user']);
                 $_SESSION['user'] = $logged;
 
-   
+
                 LoggerTXT::log("UserService@store: Usuario com o email {$dados['email']} atualizado", "Success");
                 return Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
             }
@@ -92,6 +92,7 @@ class UserService
             Response::redirect('home');
         }
     }
+
 
     public static function verify($email, $pass)
     {

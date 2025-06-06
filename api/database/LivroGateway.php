@@ -95,7 +95,7 @@ class LivroGateway extends Gateway
             $data = $result->fetch(PDO::FETCH_OBJ);
             return $data->max;
         } catch (Exception $e) {
-            throw $e; 
+            throw $e;
         }
     }
 
@@ -108,6 +108,15 @@ class LivroGateway extends Gateway
             return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
         } catch (Exception $e) {
             throw $e;
+        }
+    }
+
+    public function verComentarios()
+    {
+        try {
+            $sql = "SELECT usuarios.nome, avaliacoes.comentario, avaliacoes.nota FROM avaliacoes WHERE id_livro = {$this->id}";
+            echo $sql;
+        } catch (Exception $e) {
         }
     }
 

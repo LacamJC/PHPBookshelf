@@ -3,6 +3,7 @@
 namespace Api\Controllers;
 
 use Api\Middlewares\AuthMiddleware;
+use Api\Services\AvaliacaoService;
 use Api\Services\LivroService;
 use Api\Services\UserService;
 
@@ -37,6 +38,9 @@ class PageController
         $id = $params['id'] ?? null;
 
         $livro = LivroService::findById($id);
+        $comentarios = AvaliacaoService::comentarios($id);
+
+
 
         include dirname(__DIR__) . '/views/livros/visualizar.php';
     }

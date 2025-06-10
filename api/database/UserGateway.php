@@ -3,10 +3,8 @@
 namespace Api\Database;
 
 use Api\Abstract\Gateway;
-use Api\Core\LoggerTXT;
 use PDO;
 use Exception;
-use PDOException;
 
 class UserGateway extends Gateway
 {
@@ -44,9 +42,9 @@ class UserGateway extends Gateway
         try {
             if (empty($this->data['id'])) {  // <- Verifica se é uma atualização ou inserção
 
-                // if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
-                //     throw new Exception("Gateway: Email ja cadastrado");
-                // }
+                if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
+                    throw new Exception("O email já está cadastrado");
+                }
                 $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
                 $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
             } else {

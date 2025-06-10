@@ -7,7 +7,7 @@ use Api\Widgets\Layout;
 $capa = BASE_URL . ($livro->capa_path);
 $baseUrl = BASE_URL;
 
-$comentarios = AvaliacaoService::comentarios($livro->id);
+$comentarios = AvaliacaoService::buscarComentarios($livro->id);
 
 ?>
 <!DOCTYPE html>

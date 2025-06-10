@@ -39,7 +39,7 @@ class PageController
         $id = $params['id'] ?? null;
 
         $livro = LivroService::findById($id);
-        $comentarios = AvaliacaoService::comentarios($id);
+        $comentarios = AvaliacaoService::buscarComentarios($id);
 
 
 

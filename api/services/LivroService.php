@@ -77,16 +77,7 @@ class LivroService
                     }
                 }
             }
-
             $livro->autores = $autores;
-
-
-            // echo "<pre>";
-            // print_r($livro);
-            // echo "</pre";
-
-
-
             $livro->save();
             LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
         } catch (Exception $e) {
@@ -94,9 +85,6 @@ class LivroService
             return Response::redirect('livros/cadastrar', 'Erro ao cadastrar livro, tente novamente em instantes', 'danger');
         }
     }
-
-
-
 
     public static function findById($id)
     {

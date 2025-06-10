@@ -71,7 +71,7 @@ class AvaliacaoGateway extends Gateway
         }
     }
 
-    public function userHasComment()
+    public function usuarioJaComentou()
     {
         try {
             echo $this->id_usuario;

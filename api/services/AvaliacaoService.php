@@ -23,7 +23,7 @@ class AvaliacaoService
             $avaliacao->comentario = $dados['comentario'];
             $avaliacao->nota = $dados['nota'];
 
-            $result = $avaliacao->userHasComment();
+            $result = $avaliacao->usuarioJaComentou();
 
             if (($result)) {
                 return Response::redirect("livros/{$avaliacao->id_livro}", 'Você já comentou este livro', 'warning');
@@ -37,17 +37,13 @@ class AvaliacaoService
         }
     }
 
-    public static function comentarios($id)
+    public static function buscarComentarios($id)
     {
         try {
             $conn = Connection::open('database');
             AvaliacaoGateway::setConnection($conn);
             $comentarios = AvaliacaoGateway::comentarios($id);
 
-            // echo "<pre>";
-            // print_r($comentarios);
-            // echo "</pre>";
-            // die();
             if ($comentarios) {
                 return $comentarios;
             } else {
@@ -69,20 +65,20 @@ class AvaliacaoService
         try {
             $conn = Connection::open('database');
             AvaliacaoGateway::setConnection($conn);
-            
+
             $avaliacao = AvaliacaoGateway::findByIdLivro($id);
             $id_usuario_avaliacao = $avaliacao->id_usuario;
             $id_usuario = $_SESSION['user']->id;
             $livro = LivroService::findById($avaliacao->id_livro);
-            if($id_usuario_avaliacao != $id_usuario){
+            if ($id_usuario_avaliacao != $id_usuario) {
                 Response::redirect('home', 'Você não pode deletar o comentario de outro usuário');
             }
 
             $result = AvaliacaoGateway::delete($id);
 
-            if($result){
+            if ($result) {
                 Response::redirect("livros/{$livro->id}", 'Comentario apagado com suceso', 'success');
-            }else{
+            } else {
                 throw new Exception('Houve um erro ao apagar o comentario');
             }
         } catch (Exception $e) {

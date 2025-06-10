@@ -22,10 +22,7 @@ class UserService
             if (isset($dados['id'])) {
                 $user->id = $dados['id'];
             }
-            // echo "<pre>";
-            // print_r($dados);
-            // print_r($user);
-            // echo "</pre>";
+
 
             $user->save();
 

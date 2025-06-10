@@ -44,14 +44,50 @@ class AvaliacaoService
             AvaliacaoGateway::setConnection($conn);
             $comentarios = AvaliacaoGateway::comentarios($id);
 
-            if($comentarios){
+            // echo "<pre>";
+            // print_r($comentarios);
+            // echo "</pre>";
+            // die();
+            if ($comentarios) {
                 return $comentarios;
-            }else{
+            } else {
                 return null;
             }
         } catch (Exception $e) {
             LoggerTXT::log('AvaliacaoService@comentarios: ' . $e->getMessage(), 'Error');
             return response::redirect('livros/' . $id, 'Desculpe, houve um erro ao comentar o livro', 'danger');
+        }
+    }
+
+    public static function editarComentario($id)
+    {
+        echo "Editando comentario do id: $id";
+    }
+
+    public static function apagar($id)
+    {
+        try {
+            $conn = Connection::open('database');
+            AvaliacaoGateway::setConnection($conn);
+            
+            $avaliacao = AvaliacaoGateway::findByIdLivro($id);
+            $id_usuario_avaliacao = $avaliacao->id_usuario;
+            $id_usuario = $_SESSION['user']->id;
+            $livro = LivroService::findById($avaliacao->id_livro);
+            if($id_usuario_avaliacao != $id_usuario){
+                Response::redirect('home', 'Você não pode deletar o comentario de outro usuário');
+            }
+
+            $result = AvaliacaoGateway::delete($id);
+
+            if($result){
+                Response::redirect("livros/{$livro->id}", 'Comentario apagado com suceso', 'success');
+            }else{
+                throw new Exception('Houve um erro ao apagar o comentario');
+            }
+        } catch (Exception $e) {
+            LoggerTXT::log('AvaliacaoService@apagar : ' . $e->getMessage(), 'Error');
+            return response::redirect('home', 'Desculpe houve um erro ao apagar o comentario', 'danger');
         }
     }
 }

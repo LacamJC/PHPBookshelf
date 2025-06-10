@@ -32,5 +32,7 @@ $router->post('livros', 'LivroController@store');             // Cadastrar novo 
 // Rota de avaliações
 
 $router->post('avaliar', 'AvaliacaoController@avaliar');
+$router->get('avaliacao/editar/{id}', 'PageController@editarAvaliacao');
+$router->get('avaliacao/apagar/{id}', 'AvaliacaoController@apagarAvaliacao');
 
 return $router;

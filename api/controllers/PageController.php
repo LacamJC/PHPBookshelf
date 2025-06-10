@@ -2,6 +2,7 @@
 
 namespace Api\Controllers;
 
+use Api\Core\Response;
 use Api\Middlewares\AuthMiddleware;
 use Api\Services\AvaliacaoService;
 use Api\Services\LivroService;
@@ -43,6 +44,15 @@ class PageController
 
 
         include dirname(__DIR__) . '/views/livros/visualizar.php';
+    }
+
+    public function editarAvaliacao($params = []){
+        $id = $params['id'];
+        if($id == null){
+            Response::redirect("livros/{$id}", 'Erro ao acessar comentario para edição', 'warning');
+        }
+
+        $result = AvaliacaoService::editarComentario($id);
     }
 
     public function edit($params = [])

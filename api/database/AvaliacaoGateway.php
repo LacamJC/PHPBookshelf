@@ -91,10 +91,11 @@ class AvaliacaoGateway extends Gateway
         }
     }
 
-   
-    public static function comentarios($id){
-        try{
-            $sql = "SELECT usuarios.nome, avaliacoes.comentario, avaliacoes.nota, livros.titulo FROM avaliacoes INNER JOIN usuarios ON avaliacoes.id_usuario = usuarios.id JOIN livros ON livros.id = :id_livro WHERE avaliacoes.id_livro = :id_livro";
+
+    public static function comentarios($id)
+    {
+        try {
+            $sql = "SELECT avaliacoes.id, usuarios.id as id_usuario, usuarios.nome, avaliacoes.comentario, avaliacoes.nota, livros.titulo FROM avaliacoes INNER JOIN usuarios ON avaliacoes.id_usuario = usuarios.id JOIN livros ON livros.id = :id_livro WHERE avaliacoes.id_livro = :id_livro";
 
             $stmt = self::$conn->prepare($sql);
 
@@ -102,7 +103,9 @@ class AvaliacaoGateway extends Gateway
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_OBJ);
-        }catch(Exception $e){}
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
         throw $e;
     }
 
@@ -119,6 +122,7 @@ class AvaliacaoGateway extends Gateway
         }
     }
 
+
     public static function findById($id)
     {
         try {
@@ -132,6 +136,21 @@ class AvaliacaoGateway extends Gateway
             throw $e;
         }
     }
+
+    public static function findByIdLivro($id)
+    {
+        try {
+            $sql = "SELECT * FROM avaliacoes WHERE id = :id";
+            $stmt = self::$conn->prepare($sql);
+
+            $stmt->bindValue(':id', $id, self::TYPE_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
 
     public static function countAll($id)
     {

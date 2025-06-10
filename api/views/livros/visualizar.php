@@ -38,7 +38,7 @@ $comentarios = AvaliacaoService::comentarios($livro->id);
                         <?php if ($comentarios != null): ?>
                             <h2 class="mt-5 text-secondary">Avaliações</h2>
                             <?php foreach ($comentarios as $comentario) {
-                                Layout::avaliacao($comentario->nome, $comentario->nota, $comentario->comentario);
+                                Layout::avaliacao($comentario->nome, $comentario->nota, $comentario->comentario, $comentario->id, $comentario->id_usuario);
                             } ?>
                         <?php endif; ?>
                     </div>

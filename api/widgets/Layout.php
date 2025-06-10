@@ -4,6 +4,9 @@ namespace Api\Widgets;
 
 class Layout
 {
+
+    private const baseUrl = BASE_URL;
+
     public static function header()
     {
         $nome = isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']->nome) : 'Usuário';
@@ -80,12 +83,19 @@ class Layout
         HTML;
     }
 
-    public static function avaliacao($nome = 'John doe', $nota = 5, $comentario = 'Default comments'){
+    public static function avaliacao($nome, $nota, $comentario, $idComentario, $idUsuario){
+        $editComponent = "";
+        $baseUrl = BASE_URL;
+
+        if($_SESSION['user']->id == $idUsuario)
+        {
+            $editComponent = "<a href='{$baseUrl}avaliacao/apagar/$idComentario'><i class='bi bi-trash-fill text-danger' title='Apagar avaliação'></i></a>";
+        }
         echo <<<HTML
 
                     <div class="card mt-5" style="width: 18rem;">
-                        <div class="card-header text-start">
-                            {$nome} - {$nota} estrelas
+                        <div class="card-header d-flex justify-content-between">
+                            <span>{$nome} - {$nota} estrelas</span> $editComponent 
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">$comentario</li>

@@ -18,11 +18,13 @@ class Router
         $this->routes['POST'][$path] = $handler;
     }
 
-    public function delete($path, $handler){
+    public function delete($path, $handler)
+    {
         $this->routes['DELETE'][$path] = $handler;
     }
 
-    public function put($path, $handler){
+    public function put($path, $handler)
+    {
         $this->routes['PUT'][$path] = $handler;
     }
 
@@ -30,26 +32,33 @@ class Router
     {
         $url = $_GET['url'] ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
+        // echo $_GET;
+
 
         foreach ($this->routes[$method] as $route => $handler) {
             $pattern = preg_replace('/\{([a-z]+)\}/', '(?P<$1>[^/]+)', $route);
             $pattern = "@^$pattern$@";
 
             if (preg_match($pattern, $url, $matches)) {
-
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-
                 [$controllerClass, $action] = explode('@', $handler);
 
                 $fullControllerClass = "Api\\Controllers\\$controllerClass";
 
+
+
                 if (class_exists($fullControllerClass)) {
                     $controller = new $fullControllerClass();
+
                     if (method_exists($controller, $action)) {
+      
+                   
                         $controller->$action($params ?? []);
                         return;
                     }
                 }
+
+                die('nao existe');
             }
         }
 

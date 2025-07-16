@@ -41,5 +41,5 @@ CREATE TABLE IF NOT EXISTS likes_dislikes (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_avaliacao) REFERENCES avaliacoes(id),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-    UNIQUE (id_avaliacao, id_usuario) -- para garantir 1 voto por usuário por avaliação
+    UNIQUE (id_avaliacao, id_usuario) 
 );

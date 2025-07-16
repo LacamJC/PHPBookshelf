@@ -25,6 +25,7 @@ class UserController
             return response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
         unset($_SESSION['form_data']);
+
         UserService::verify($email, $password);
     }
 

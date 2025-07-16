@@ -5,7 +5,6 @@ require dirname(__DIR__, 1) . '/vendor/autoload.php';
 use Api\Core\Router;
 
 
-//die('aqui');
 $router = new Router();
 
 // Rotas de autenticação e acesso

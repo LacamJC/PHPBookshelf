@@ -15,6 +15,8 @@ class LivroController
         AuthMiddleware::handle();
         $dados = $_POST;
 
+        die('teste');
+
         foreach ($dados as $chave => $valor) {
 
             if (is_string($valor)) {

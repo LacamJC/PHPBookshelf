@@ -29,6 +29,10 @@ class LivroService
             $livros = LivroGateway::paginate($limit, $offset);
             $totalPages = ceil($total / $limit);
 
+            if ($totalPages < 1) {
+                $totalPages = 1; // para evitar divisão por zero e loop
+            }
+
             if ($page > $totalPages or $page < 1) {
                 Response::redirect('livros?page=1', '', '');
             }

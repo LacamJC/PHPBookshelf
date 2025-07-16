@@ -58,7 +58,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
 
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Entrar</button>
-                    <a href="<?=BASE_URL?>cadastro" class="btn btn-outline-secondary">Faça seu cadastro</a>
+                    <a href="/cadastro" class="btn btn-outline-secondary">Faça seu cadastro</a>
                 </div>
             </form>
         </div>

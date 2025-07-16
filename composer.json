@@ -1,8 +1,15 @@
 {
+    "scripts": {
+       "logs": [
+            "cat logs/app.log"
+       ],
+        "start": "php -S localhost:8000 -t public",
+        "test": "phpunit"
+    },
     "name": "ramajo/my-book-shelf_2025",
     "autoload": {
         "psr-4": {
-            "Api\\": "Api/"
+            "Api\\": "iApi/"
         }
     },
     "authors": [

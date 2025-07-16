@@ -1,26 +1,26 @@
 name: Deploy Bookshelf PHP App
 
 on:
-  push: 
+  push:
     branches: [main]
 
-jobs: 
+jobs:
   deploy:
-      runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Iniciando PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3.6' 
+          php-version: '8.3.6'
 
-      - name: Instalando dependencias
-        run: composer install 
+      - name: Install dependencies locally (optional)
+        run: composer install
 
-      - name: Subir para VPS
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -29,4 +29,5 @@ jobs:
           script: |
             cd /var/www/bookshelf
             git pull origin main
-            composer install 
+            composer install --no-dev --optimize-autoloader
+            chown -R www-data:www-data /var/www/bookshelf

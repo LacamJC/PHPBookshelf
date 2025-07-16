@@ -9,7 +9,7 @@
     "name": "ramajo/my-book-shelf_2025",
     "autoload": {
         "psr-4": {
-            "Api\\": "iApi/"
+            "Api\\": "Api/"
         }
     },
     "authors": [

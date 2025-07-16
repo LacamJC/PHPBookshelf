@@ -4,8 +4,8 @@ use Api\Core\Alert;
 use Api\Services\AvaliacaoService;
 use Api\Widgets\Layout;
 
-$capa = BASE_URL . ($livro->capa_path);
-$baseUrl = BASE_URL;
+$capa = '/' . ($livro->capa_path);
+$baseUrl = '/';
 
 $comentarios = AvaliacaoService::buscarComentarios($livro->id);
 

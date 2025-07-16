@@ -5,13 +5,13 @@ namespace Api\Widgets;
 class Layout
 {
 
-    private const baseUrl = BASE_URL;
+    private const baseUrl = '/';
 
     public static function header()
     {
         $nome = isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']->nome) : 'Usuário';
         $id = isset($_SESSION['user']) ? (int) $_SESSION['user']->id : '';
-        $baseUrl = BASE_URL;
+        $baseUrl = '/';
         $token = $_ENV['EDIT_TOKEN'];
         if (isset($_SESSION['user'])) {
 
@@ -85,7 +85,7 @@ class Layout
 
     public static function avaliacao($nome, $nota, $comentario, $idComentario, $idUsuario){
         $editComponent = "";
-        $baseUrl = BASE_URL;
+        $baseUrl = '/';
 
         if($_SESSION['user']->id == $idUsuario)
         {

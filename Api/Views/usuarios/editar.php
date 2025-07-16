@@ -4,7 +4,7 @@ use Api\Core\Alert;
 use Api\Widgets\Layout;
 
 $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ''; 
-$baseUrl = BASE_URL;
+$baseUrl = '/';
 $token = $_ENV['EDIT_TOKEN'];
 
 

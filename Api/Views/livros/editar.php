@@ -5,7 +5,7 @@ use Api\Services\LivroService;
 use Api\Widgets\Card;
 use Api\Widgets\Layout;
 
-$baseUrl = BASE_URL;
+$baseUrl = '/';
 
 ?>
 <!doctype html>

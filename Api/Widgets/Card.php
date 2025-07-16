@@ -13,7 +13,7 @@ class Card
         $descricao = htmlspecialchars($livro->descricao);
         $categoria = htmlspecialchars($livro->genero);
         $capa = htmlspecialchars($livro->capa_path ?? 'assets/img/placeholder.png');
-        $baseUrl = BASE_URL;
+        $baseUrl = '/';
         echo <<<HTML
         <div class="card h-100 shadow-sm livro_card">
             <img src="{$capa}" class="card-img-top" alt="Capa do livro {$titulo}" style="height: 250px; object-fit: cover;">

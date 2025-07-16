@@ -24,6 +24,10 @@ class UserController
         if (strlen($password) < 6) {
             return response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
         }
+        if (strlen($password) > 12) {
+            return response::redirect('login', 'A senha não deve conter mais que 12 caracteres', 'danger');
+        }
+
         unset($_SESSION['form_data']);
 
         UserService::verify($email, $password);
@@ -112,7 +116,7 @@ class UserController
 
 
             unset($dados['edit_token']);
-            
+
             $dados['id'] = $id;
             UserService::store($dados);
             return response::redirect('login', 'Conta cadastrada com sucesso', 'success');

@@ -30,11 +30,14 @@ class Router
 
     public function dispatch()
     {
-        $url = $_GET['url'] ?? '/';
+        $url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+	$url = $url === '' ? '/' : $url;
         $method = $_SERVER['REQUEST_METHOD'];
         // echo $_GET;
 
-
+	//echo $url . "<br>";
+	//echo $method;	
+	//die('aqui');
         foreach ($this->routes[$method] as $route => $handler) {
             $pattern = preg_replace('/\{([a-z]+)\}/', '(?P<$1>[^/]+)', $route);
             $pattern = "@^$pattern$@";
@@ -45,11 +48,15 @@ class Router
 
                 $fullControllerClass = "Api\\Controllers\\$controllerClass";
 
-
+		//echo "ESTOU AQUI";
+		//die();
 
                 if (class_exists($fullControllerClass)) {
                     $controller = new $fullControllerClass();
-
+			
+		    //echo $controller;
+		    //echo $action;
+		    //die();
                     if (method_exists($controller, $action)) {
       
                    
@@ -60,7 +67,9 @@ class Router
 
                 die('nao existe');
             }
-        }
+	}
+
+	//die('fim');
 
         header("HTTP/1.0 404 Not Found");
         echo "Página não encontrada";

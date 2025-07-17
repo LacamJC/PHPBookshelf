@@ -135,8 +135,61 @@ Após realizar a criação do arquivo de configuração, sempre será necessári
 Após isso, você terá disponível um projeto rodando em php na sua VPS
 
 
+### AUTOMAÇÃO E CI/CD
+Após ter configurado tudo corretamente, já ter meu projeto hospedado e rodando na minah *VPS*, surgiu um problema. 
+
+Alterações pequenas em um terminal podem ser feitas de maneira eficiente, o problema acontece quando você tem que realizar muitas alterações em diversos arquivos de um projeto.
+
+Isso acaba se tornando insustentavel para um terminal simples como de uma *VPS*. 
+
+Mas você realizar todas as alterações localmente, subir para o repositório remoto, após isso ter que acessar a *VPS* e realizar o *pull* desta alterações também acaba se tornando insustentavel ao longo do tempo, o mesmo trabalho repetido manualmente diversas vezes posssibilitando que pequenos erros causem problemas inimaginaveis.
 
 
+###### INTEGRAÇÃO E DEPLOY CONTINUOS CI/CD
+
+Para resolver está situação, podemos utilizar ferramentas para realizar a automação desta tarefa, podendo realizar diversas tarefas como a execução de testes, atualização de dependências e o deploy de maneira automatica. 
+
+Utiliando *Github Actions* podemos configurar arquivos de `Workflow` para iniciar um processo de ações sempre que realizarmos um push para uma branch.
+
+###### CRIANDO WORKFLOW
+
+Para isso, será necessário criar no seu projeto o arquivo `.github/workflows/deploy.yml`. 
+
+Com este arquivo podemos definir uma serie de tarefas que serão realizadas ao realizar uma ação espeficiacada.
+
+A estrutura segue este fluxo: 
+
+````yaml
+name: Deploy Automático # Nome que íra aparecer no github actions
+
+on: # Define em que momento ira ocorrer
+  push: 
+    branches:
+      - main
+    # acima define que quando ocorrer um push para a branch main ira ser executado
+
+jobs: # Define os jobs que serão executados
+  deploy:
+    runs-on: ubuntu-latest # máquina virtual que ira rodar os scripts
+
+    steps: # lista de tarefas que serão executadas
+      - name: Clonando repositório # nome da tarefa
+        uses: actions/checkout@v3 # clona o repositorio na máquina virtual
+
+      - name: Enviando arquivos via SSH 
+        uses: appleboy/scp-action@v0.1.7 # realiza o upload dos arquivos de forma segura com uma função nativa do github actions
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "."
+          target: "/var/www/bookshelf" # define qual pasta sera selecionada
+````
+
+Com este arquivo no seu projeto, e os segredos configurados no github, este script de deploy está pronto e será executado sempre que ocorrer um `push` na branch `main`.
 
 
 >Aviso: este readme foi modificado para informações relacionadas a configuração e deploy em uma VPS com esquemas de deploy continuo com o github, para entender melhor o objetivo do projeto em si recomendo ver a documentação [Deste Projeto em Laravel](https://github.com/LacamJC/Laravel_Bookshelf/tree/main)
+
+
+

@@ -1,6 +1,0 @@
-RewriteEngine On
-RewriteBase /My_Bookshelf_2025/
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L] 

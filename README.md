@@ -54,7 +54,7 @@ Antigamente a maioria dos projetos em *PHP* rodavam sobre um servidor *Apache* q
 
 Com isso veio a popularização de outro servidor web, sendo ele o  *Nginx* que se destacava por sua eficiência em lidar com múltiplas conexões no servidor onde se saia melhor onde o *Apache* falhava.
 
-###### CONFIGURAÇÃO DO NGINX COM PHP-FPM
+#### CONFIGURAÇÃO DO NGINX COM PHP-FPM
 
 A união do *Nginx* e o *php-fpm* torna um projeto extremamente eficiente, onde o servidor fica responsável pela entrega de arquivos e o interpretador pela execução dos serviços solicitados nas requisições.
 

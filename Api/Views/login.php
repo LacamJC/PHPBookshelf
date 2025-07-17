@@ -59,6 +59,11 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Entrar</button>
                     <a href="/cadastro" class="btn btn-outline-secondary">Faça seu cadastro</a>
+                    <hr>
+                    <a href="https://github.com/LacamJC/PHPBookshelf" target="_blank" class="btn btn-outline-dark d-flex justify-content-center align-items-center gap-2">
+                        <i class="bi bi-github fs-4">
+
+                        </i>Documentação</a>
                 </div>
             </form>
         </div>

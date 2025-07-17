@@ -1,6 +1,6 @@
 
-#### BOOKSHELF COM PHP 
 > Aplicação CRUD em PHP puro com deploy em VPS (Nginx + PHP-FPM) e CI/CD via GitHub Actions
+#### BOOKSHELF COM PHP 
 
 Este projeto tem como o objetivo o desenvolvimento de uma aplicação CRUD completa feita a partir do core do PHP puro sem o uso de frameworks. Após isso, utilizei como objeto de estudos para aprender sobre configuração de VPS de hospedagem de projetos em ambientes de produção.
 

@@ -1,9 +1,10 @@
 
 #### BOOKSHELF COM PHP 
+> Aplicação CRUD em PHP puro com deploy em VPS (Nginx + PHP-FPM) e CI/CD via GitHub Actions
 
-Este projeto tem como o objetivo o desenvolvimento de uma aplicação CRUD completa feita apartir do core do PHP puro sem o uso de frameworks. Após isso, utilizei como objeto de estudos para aprender sobre configuração de VPS de hospedagem de projetos em ambientes reais.
+Este projeto tem como o objetivo o desenvolvimento de uma aplicação CRUD completa feita a partir do core do PHP puro sem o uso de frameworks. Após isso, utilizei como objeto de estudos para aprender sobre configuração de VPS de hospedagem de projetos em ambientes de produção.
 
-Atualmente *16/07/2025* tenho uma VPS na Hostinger que está hospedando este projeto em um servidor nginx para web e integrado com um deploy continuo com Workflow do github. 
+Atualmente *16/07/2025* tenho uma VPS na Hostinger que está hospedando este projeto em um servidor nginx para web e integrado com um deploy continuo com Workflow do GitHub. 
 
 #### SUMÁRIO
 
@@ -16,6 +17,9 @@ Atualmente *16/07/2025* tenho uma VPS na Hostinger que está hospedando este pro
     - [3 - Configuração do Arquivo Nginx](#3---configuração-do-arquivo-nginx)
     - [6 - Ativação](#6---ativação)
     - [7 - Iniciar Nginx](#7---iniciar-nginx)
+- [Automação e CI/CD](#automação-e-cicd)
+  - [Integração e Deploy Contínuos](#integração-e-deploy-contínuos)
+  - [Criando Workflow](#criando-workflow)
 
 ### VIRTUAL PRIVATE SERVER - VPS
 
@@ -25,13 +29,13 @@ Com isso em mente, peguei uma *VPS* para aprender mais sobre como um sistema pre
 
 ###### O QUE É 
 
-Uma *VPS* é uma máquina virtual que roda em um servidor físico externo, geralmente ao usar uma você possivelmente iria assinar um serviço de alguma plataforma como a *Hostinger* que possuem diversos servidores espalhados na qual dividem eles entre várias máquinas virtuais personalizadas oferecendo acesso via *SSH* para acesso remoto.
+Uma *VPS* é uma máquina virtual que roda em um servidor físico externo, geralmente ao usar uma você geralmente você assinaria um serviço de alguma plataforma como a *Hostinger* que possuem diversos servidores espalhados na qual dividem eles entre várias máquinas virtuais personalizadas oferecendo acesso via *SSH* para acesso remoto.
 
 Com isso você tem acesso a recursos de uma máquina completa sem a necessidade e possuir um servidor em casa, podendo também aumentar os recursos que precisa ou até mesmo limitar eles.
 
 Diferente de **hospedagens compartilhadas** que você não possui acesso total ao sistema, uma *VPS* te dá uma liberdade maior em questão de controle, você decide quais serviços vão estar rodando e quais programas serão instalados.
 
-Pórem isso significa que você tem que entender o básico de sistemas *Unix* para poder realizar praticamente qualquer operação, entender como um sistema de pacotes funciona para instalar softwares externos.
+Porém isso significa que você tem que entender o básico de sistemas *Unix* para poder realizar praticamente qualquer operação, entender como um sistema de pacotes funciona para instalar softwares externos.
 
 Configuração de firewall com **UFW**, gerenciamento de permissões e usuários em sistemas *Linux* entre outras tarefas essenciais.
 
@@ -50,7 +54,7 @@ Antigamente a maioria dos projetos em *PHP* rodavam sobre um servidor *Apache* q
 
 Com isso veio a popularização de outro servidor web, sendo ele o  *Nginx* que se destacava por sua eficiência em lidar com múltiplas conexões no servidor onde se saia melhor onde o *Apache* falhava.
 
-###### CONFIGURAÇÃO DO NGINX COM PHP-FPM
+#### CONFIGURAÇÃO DO NGINX COM PHP-FPM
 
 A união do *Nginx* e o *php-fpm* torna um projeto extremamente eficiente, onde o servidor fica responsável pela entrega de arquivos e o interpretador pela execução dos serviços solicitados nas requisições.
 
@@ -135,8 +139,60 @@ Após realizar a criação do arquivo de configuração, sempre será necessári
 Após isso, você terá disponível um projeto rodando em php na sua VPS
 
 
+### AUTOMAÇÃO E CI/CD
+Após ter configurado tudo corretamente, já ter meu projeto hospedado e rodando na minha *VPS*, surgiu um problema. 
+
+Alterações pequenas em um terminal podem ser feitas de maneira eficiente, o problema acontece quando você tem que realizar muitas alterações em diversos arquivos de um projeto.
+
+Isso acaba se tornando insustentável para um terminal simples como de uma *VPS*. 
+
+Mas você realizar todas as alterações localmente, subir para o repositório remoto, após isso ter que acessar a *VPS* e realizar o *pull* desta alterações também acaba se tornando insustentável ao longo do tempo, o mesmo trabalho repetido manualmente diversas vezes possibilitando que pequenos erros causem problemas inimaginaveis.
+
+###### INTEGRAÇÃO E DEPLOY CONTINUOS CI/CD
+
+Para resolver está situação, podemos utilizar ferramentas para realizar a automação desta tarefa, podendo realizar diversas tarefas como a execução de testes, atualização de dependências e o deploy de maneira automatica. 
+
+Utiliando *GitHub Actions* podemos configurar arquivos de `Workflow` para iniciar um processo de ações sempre que realizarmos um push para uma branch.
+
+###### CRIANDO WORKFLOW
+
+Para isso, será necessário criar no seu projeto o arquivo `.github/workflows/deploy.yml`. 
+
+Com este arquivo podemos definir uma serie de tarefas que serão realizadas ao realizar uma ação especificada.
+
+A estrutura segue este fluxo: 
+
+````yaml
+name: Deploy Automático # Nome que íra aparecer no GitHub actions
+
+on: # Define em que momento ira ocorrer
+  push: 
+    branches:
+      - main
+    # acima define que quando ocorrer um push para a branch main ira ser executado
+
+jobs: # Define os jobs que serão executados
+  deploy:
+    runs-on: ubuntu-latest # máquina virtual que ira rodar os scripts
+
+    steps: # lista de tarefas que serão executadas
+      - name: Clonando repositório # nome da tarefa
+        uses: actions/checkout@v3 # clona o repositorio na máquina virtual
+
+      - name: Enviando arquivos via SSH 
+        uses: appleboy/scp-action@v0.1.7 # realiza o upload dos arquivos de forma segura com uma função nativa do GitHub actions
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "."
+          target: "/var/www/bookshelf" # define qual pasta sera selecionada
+````
+
+Com este arquivo no seu projeto, e os segredos configurados no GitHub, este script de deploy está pronto e será executado sempre que ocorrer um `push` na branch `main`.
+
+
+>Aviso: este readme foi modificado para informações relacionadas a configuração e deploy em uma VPS com esquemas de deploy continuo com o GitHub, para entender melhor o objetivo do projeto em si recomendo ver a documentação [Deste Projeto em Laravel](https://github.com/LacamJC/Laravel_Bookshelf/tree/main)
 
 
 
-
->Aviso: este readme foi modificado para informações relacionadas a configuração e deploy em uma VPS com esquemas de deploy continuo com o github, para entender melhor o objetivo do projeto em si recomendo ver a documentação [Deste Projeto em Laravel](https://github.com/LacamJC/Laravel_Bookshelf/tree/main)

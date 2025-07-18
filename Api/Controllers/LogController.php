@@ -39,7 +39,8 @@ class LogController
                 }
             }
         }
-        $data = json_encode($lines);
+
+        $data = json_encode(array_reverse($lines));
         echo $data;
     }
 

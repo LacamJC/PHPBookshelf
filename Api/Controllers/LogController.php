@@ -8,6 +8,17 @@ class LogController
 {
     public function index()
     {
+        if (
+            !isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) ||
+            $_SERVER['PHP_AUTH_USER'] !== $_ENV['PHP_AUTH_USER'] || $_SERVER['PHP_AUTH_PW'] !== $_ENV['PHP_AUTH_PW']
+        ) {
+
+            header('WWW-Authenticate: Basic realm="Área restrita"');
+            header('HTTP/1.0 401 Unauthorized');
+            echo json_encode(['error' => 'Autenticação necessária']);
+            exit;
+        }
+        header("Access-Control-Allow-Origin: *");
         header('Content-Type: application/json');
         $filepath = dirname(__DIR__, 2) . '/logs/app.log';
         $file = new SplFileObject($filepath);
@@ -35,10 +46,10 @@ class LogController
     private function getParam(string $param): ?int
     {
         $param = isset($_GET[$param]) ? $_GET[$param] : 50;
-        if($param < 0){
+        if ($param < 0) {
             $param = 50;
         }
-        
+
         return (int) $param;
     }
 }

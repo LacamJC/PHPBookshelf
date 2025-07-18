@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
@@ -35,5 +35,8 @@ $router->post('livros', 'LivroController@store');             // Cadastrar novo 
 $router->post('avaliar', 'AvaliacaoController@avaliar');
 $router->get('avaliacao/editar/{id}', 'PageController@editarAvaliacao');
 $router->get('avaliacao/apagar/{id}', 'AvaliacaoController@apagarAvaliacao');
+
+
+$router->get('log', 'LogController@index');
 
 return $router;

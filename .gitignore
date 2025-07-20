@@ -6,4 +6,9 @@ public/uploads/
 database/insert.sql
 database/data
 config/database.ini
+<<<<<<< HEAD
 phpunit.xml
+=======
+
+.phpunit.result.cache
+>>>>>>> 4dfa0f8 (chore: adicionando phpunit.xml para configuração de testes)

@@ -15,7 +15,7 @@ use Api\Widgets\Layout;
 
 <body>
     <?= Layout::header() ?>
-    <div class="w-50 mx-auto my-5">
+    <div class="container-sm mx-auto my-5">
 
         <form action="/livros" method="POST" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
             <?php Alert::span(); ?>

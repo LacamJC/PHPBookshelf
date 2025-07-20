@@ -2,19 +2,32 @@
 
 namespace Api\Controllers;
 
-use Api\Core\LoggerTXT;
 use Api\Middlewares\AuthMiddleware;
 use Api\Core\Response;
+use Api\Database\Connection;
+use Api\Database\LivroGateway;
 use Api\Services\LivroService;
-
+use Exception;
 
 class LivroController
 {
-    public function store()
+
+    private LivroService $service;
+
+    public function __construct(?LivroService $service = null)
+    {
+        if ($service === null) {
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
+            $gateway = new LivroGateway($conn);
+            $service = new LivroService($gateway);
+        }
+        $this->service = $service;
+    }
+
+    public function store(): Response
     {
         AuthMiddleware::handle();
         $dados = $_POST;
-
 
         foreach ($dados as $chave => $valor) {
 
@@ -67,13 +80,16 @@ class LivroController
             return Response::redirect('livros/cadastrar', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
         }
 
-        LivroService::store($dados);
-        LoggerTXT::log('LivroController@store: Livro "' . $dados['titulo'] . '" adicionado com sucesso', 'Success');
-        Response::redirect('livros', "Livro {$dados['titulo']} adicionado com sucesso", 'success');
+        try {
+            $this->service->store($dados);
+            return Response::redirect('livros', "Livro {$dados['titulo']} adicionado com sucesso", 'success');
+        } catch (Exception $e) {
+            return Response::redirect('livros', 'Houve um erro ao inserir o novo livro, por favor tente novamente mais tarde', 'danger');
+        }
     }
 
 
-    public function update()
+    public function update(): Response
     {
         AuthMiddleware::handle();
         if (strcmp($_POST['edit_token'], $_ENV['EDIT_TOKEN']) !== 0) {
@@ -81,7 +97,6 @@ class LivroController
         }
         $dados = $_POST;
 
-        // Validando informações do formulario
         foreach ($dados as $chave => $valor) {
 
             if (is_string($valor)) {
@@ -132,8 +147,12 @@ class LivroController
             $dados['capa_path'] = $_POST['capa_atual'];
         }
 
-        LivroService::store($dados);
-        Response::redirect("livros/editar/{$dados['id']}", 'Alterações realizadas com sucesso', 'success');
+        try {
+            $this->service->store($dados);
+            return Response::redirect("livros/editar/{$dados['id']}", 'Alterações realizadas com sucesso', 'success');
+        } catch (Exception $e) {
+            return Response::redirect("livros/editar/{$dados['id']}", 'Desculpe, houve um erro ao realizar as alterações, aguarde alguns instantes e tente novamente', 'danger');
+        }
     }
 
     public function delete($params = [])
@@ -141,6 +160,15 @@ class LivroController
         $id = $params['id'] ?? 0;
         $token = $params['token'] ?? '';
         AuthMiddleware::token($token);
-        LivroService::delete($id);
+        try {
+            $result =  $this->service->delete($id);
+            if ($result) {
+                return Response::redirect('home', 'Livro deletado com sucesso', 'success');
+            } else {
+                return Response::redirect('home', 'Desculpe, houve um erro ao deletar o livro', 'danger');
+            }
+        } catch (Exception $e) {
+            return Response::redirect('home', 'Desculpe, houve um erro ao deletar o livro', 'danger');
+        }
     }
 }

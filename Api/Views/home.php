@@ -1,12 +1,17 @@
 <?php
 
 use Api\Core\Alert;
+use Api\Database\Connection;
+use Api\Database\LivroGateway;
 use Api\Services\LivroService;
 use Api\Widgets\Card;
 use Api\Widgets\Layout;
 
 // Carrega livros
-$livros = LivroService::all();
+$conn = Connection::open($_ENV['CONNECTION_NAME']);
+$gateway = new LivroGateway($conn);
+$service = new LivroService($gateway);
+$livros = $service->all();
 ?>
 
 <!doctype html>

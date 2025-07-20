@@ -8,9 +8,9 @@ use Api\Database\LivroGateway;
 use Api\Models\Livro;
 use Exception;
 
-class LivroService
-{
-    private LivroGateway $gateway;
+    class LivroService
+    {
+        private LivroGateway $gateway;
 
     public function __construct(?LivroGateway $gateway = null)
     {

@@ -15,7 +15,7 @@ class UserService
     public static function store($dados)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             UserGateway::setConnection($conn);
 
             $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
@@ -57,7 +57,7 @@ class UserService
             if ($id == null) {
                 throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
             }
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             UserGateway::setConnection(($conn));
             $result =  UserGateway::delete($id);
             LoggerTXT::log("Usuário {$id} deletado com sucesso", 'Success');
@@ -78,7 +78,7 @@ class UserService
             if ($id == null) {
                 throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
             }
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             UserGateway::setConnection(($conn));
 
             $user = UserGateway::findById($id);
@@ -94,7 +94,7 @@ class UserService
     public static function verify($email, $pass)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             UserGateway::setConnection(($conn));
             $user = UserGateway::findByEmail($email);
 

@@ -2,15 +2,16 @@
 
 namespace Api\Services;
 
+
 use Api\Core\LoggerTXT;
 use Api\Database\Connection;
 use Api\Database\LivroGateway;
 use Api\Models\Livro;
 use Exception;
 
-    class LivroService
-    {
-        private LivroGateway $gateway;
+class LivroService
+{
+    private LivroGateway $gateway;
 
     public function __construct(?LivroGateway $gateway = null)
     {
@@ -65,7 +66,6 @@ use Exception;
             $autoresFormatados = array_map(function ($autor) {
                 return htmlspecialchars(trim($autor));
             }, $autoresPlain);
-
 
             $autores = '';
             $maxAutores = count($autoresFormatados);
@@ -130,6 +130,7 @@ use Exception;
 
                 LoggerTXT::log('LivroService@delete: Registro do livro apagado com sucesso', 'Success');
             }
+
             return $result;
         } catch (Exception $e) {
             LoggerTXT::log("LivroService@delete: {$e->getMessage()}", 'Error');

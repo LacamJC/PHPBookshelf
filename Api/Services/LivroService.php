@@ -15,7 +15,7 @@ class LivroService
     public static function all()
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             LivroGateway::setConnection($conn);
 
 
@@ -54,7 +54,7 @@ class LivroService
     public static function store($dados)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             LivroGateway::setConnection($conn);
             $livro = new LivroGateway;
 
@@ -93,7 +93,7 @@ class LivroService
     public static function findById($id)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             LivroGateway::setConnection($conn);
 
             $livro = LivroGateway::findById($id);
@@ -111,7 +111,7 @@ class LivroService
     public static function delete($id)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             LivroGateway::setConnection($conn);
             $livro = self::findById($id);
             $capa_path = $livro->capa_path;

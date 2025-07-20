@@ -6,3 +6,4 @@ public/uploads/
 database/insert.sql
 database/data
 config/database.ini
+phpunit.xml

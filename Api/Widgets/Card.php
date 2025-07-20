@@ -3,10 +3,11 @@
 namespace Api\Widgets;
 
 use Api\Database\LivroGateway;
+use Api\Models\Livro;
 
 class Card
 {
-    public function show(LivroGateway $livro)
+    public function show(Livro $livro)
     {
         $id = $livro->id;
         $titulo = htmlspecialchars($livro->titulo);

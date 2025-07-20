@@ -1,12 +1,17 @@
 <?php
 
 use Api\Core\Alert;
+use Api\Database\Connection;
+use Api\Database\LivroGateway;
 use Api\Services\LivroService;
 use Api\Widgets\Card;
 use Api\Widgets\Layout;
 
 // Carrega livros
-$livros = LivroService::all();
+$conn = Connection::open($_ENV['CONNECTION_NAME']);
+$gateway = new LivroGateway($conn);
+$service = new LivroService($gateway);
+$livros = $service->all();
 ?>
 
 <!doctype html>
@@ -27,6 +32,10 @@ $livros = LivroService::all();
         <div class="container text-center">
             <h2 class="fw-bold text-primary"><i class="bi bi-book"></i> My Bookshelf</h2>
             <p class="text-muted">O projeto My Bookshelf é uma implementação de um sistema de cadastro de livros que foi desenvolvido de ponta a ponta desde a prototipação da interface, validação do protótipo, desenvolvimento do front-end a implementação back-end.</p>
+
+            <a href="/livros" class="btn btn-outline-primary btn-lg">
+                Ver Livros
+            </a>
         </div>
     </section>
 

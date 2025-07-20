@@ -2,39 +2,39 @@
 
 namespace Api\Services;
 
+
 use Api\Core\LoggerTXT;
-use Api\Core\Response;
 use Api\Database\Connection;
 use Api\Database\LivroGateway;
+use Api\Models\Livro;
 use Exception;
-
 
 class LivroService
 {
+    private LivroGateway $gateway;
 
-    public static function all()
+    public function __construct(?LivroGateway $gateway = null)
+    {
+        if ($gateway === null) {
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
+            $gateway = new LivroGateway($conn);
+        }
+        $this->gateway = $gateway;
+    }
+
+    public function all(int $page = 1): array
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            LivroGateway::setConnection($conn);
-
-
-            $total = LivroGateway::countAll(); // Corrigido aqui
-            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
+            $total = $this->gateway->countAll();
 
             $limit = 4;
             $offset = ($page - 1) * $limit;
 
-            $livros = LivroGateway::paginate($limit, $offset);
-            $totalPages = ceil($total / $limit);
+            $livros = $this->gateway->paginate($limit, $offset);
+            $totalPages = max(1, ceil($total / $limit));
 
-            if ($totalPages < 1) {
-                $totalPages = 1; // para evitar divisão por zero e loop
-            }
-
-            if ($page > $totalPages or $page < 1) {
-                Response::redirect('livros?page=1', '', '');
+            if ($page > $totalPages || $page < 1) {
+                throw new Exception('Página de busca inválida: ' . $page);
             }
 
             return [
@@ -47,18 +47,18 @@ class LivroService
             ];
         } catch (Exception $e) {
             LoggerTXT::log('LivroService@all: ' . $e->getMessage(), 'Error');
-            Response::redirect('home', 'Desculpe tivemos um problema, tente novamente mais tarde', 'danger');
+            throw $e;
         }
     }
 
-    public static function store($dados)
+    public function store(array $dados): bool
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            LivroGateway::setConnection($conn);
-            $livro = new LivroGateway;
-
+            $livro = new Livro;
             foreach ($dados as $chave => $valor) {
+                if (!in_array($chave, ['id', 'description']) && !isset($valor)) {
+                    return false;
+                }
                 $livro->$chave = $valor;
             };
 
@@ -82,40 +82,44 @@ class LivroService
                 }
             }
             $livro->autores = $autores;
-            $livro->save();
-            LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
+
+
+            $result = $this->gateway->save($livro);
+
+            if ($result) {
+                LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
+            }
+            return $result;
         } catch (Exception $e) {
             LoggerTXT::log("LivroService@store: {$e->getMessage()}", 'Error');
-            return Response::redirect('livros/cadastrar', 'Erro ao cadastrar livro, tente novamente em instantes', 'danger');
+            throw $e;
         }
     }
 
-    public static function findById($id)
+    public function findById(int $id): Livro
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            LivroGateway::setConnection($conn);
-
-            $livro = LivroGateway::findById($id);
-            if (!isset($livro->id)) {
-                Response::redirect('home', 'Desculpe, não encontramos o livro que está procurando', 'warning');
+            $livro = $this->gateway->findById($id);
+            if (!isset($livro)) {
+                throw new Exception('Nenhum livro com o id ' . $id . ' foi encontrado.');
             }
-
             return $livro;
         } catch (Exception $e) {
             LoggerTXT::log('LivroService@findById: ' . $e->getMessage(), 'Error');
-            Response::redirect('home', 'Desculpe, ocorreu um erro ao buscar o livro que está procurando', 'warning');
+            throw $e;
         }
     }
 
-    public static function delete($id)
+    public function delete(int $id): bool
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            LivroGateway::setConnection($conn);
-            $livro = self::findById($id);
+            $livro = $this->gateway->findById($id);
+            if (!$livro) {
+                throw new Exception('Livro com o id ' . $id . ' não encontrado.');
+            }
             $capa_path = $livro->capa_path;
-            if (LivroGateway::delete($id)) {
+            $result = $this->gateway->delete($id);
+            if ($result) {
                 if (file_exists($capa_path) and strcmp($capa_path, 'uploads/placeholder.png')) {
                     if (unlink($capa_path)) {
                         LoggerTXT::log('LivroService@delete: Apagando arquivo da capa do livro', 'Success');
@@ -125,11 +129,12 @@ class LivroService
                 }
 
                 LoggerTXT::log('LivroService@delete: Registro do livro apagado com sucesso', 'Success');
-                Response::redirect('livros', 'Livro apagado com sucesso', 'success');
             }
+
+            return $result;
         } catch (Exception $e) {
             LoggerTXT::log("LivroService@delete: {$e->getMessage()}", 'Error');
-            Response::redirect('livros', 'Erro ao deletar livro, tente novamente mais tarde', 'danger');
+            throw $e;
         }
     }
 }

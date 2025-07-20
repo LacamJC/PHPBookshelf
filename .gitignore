@@ -7,3 +7,4 @@ database/insert.sql
 database/data
 config/database.ini
 phpunit.xml
+.phpunit.result.cache

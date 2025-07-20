@@ -55,6 +55,9 @@ class LivroService
         try {
             $livro = new Livro;
             foreach ($dados as $chave => $valor) {
+                if (!in_array($chave, ['id', 'description']) && !isset($valor)) {
+                    return false;
+                }
                 $livro->$chave = $valor;
             };
 

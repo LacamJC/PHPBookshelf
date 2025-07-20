@@ -14,7 +14,7 @@ class AvaliacaoService
     {
         try {
 
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             AvaliacaoGateway::setConnection($conn);
 
             $avaliacao = new AvaliacaoGateway;
@@ -40,7 +40,7 @@ class AvaliacaoService
     public static function buscarComentarios($id)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             AvaliacaoGateway::setConnection($conn);
             $comentarios = AvaliacaoGateway::comentarios($id);
 
@@ -63,7 +63,7 @@ class AvaliacaoService
     public static function apagar($id)
     {
         try {
-            $conn = Connection::open('database');
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
             AvaliacaoGateway::setConnection($conn);
 
             $avaliacao = AvaliacaoGateway::findByIdLivro($id);

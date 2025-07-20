@@ -1,1 +1,0 @@
-{"version":1,"defects":[],"times":{"LivrosServiceTest::testCadastroValido":0.002,"LivrosServiceTest::testCadastroInvalido":0,"LivrosServiceTest::testChamandoLivroPorId":0.001,"LivrosServiceTest::testChamandoLivrosComPaginacao":0,"LivrosServiceTest::testDeleteBook":0.001}}

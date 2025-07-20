@@ -2,7 +2,6 @@
 
 namespace Api\Services;
 
-
 use Api\Core\LoggerTXT;
 use Api\Database\Connection;
 use Api\Database\LivroGateway;

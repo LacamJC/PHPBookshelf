@@ -6,5 +6,5 @@ public/uploads/
 database/insert.sql
 database/mybookshelf.db
 config/database.ini
-phpunit.xml
+
 .phpunit.result.cache

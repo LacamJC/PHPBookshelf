@@ -1,12 +1,17 @@
 <?php
 
 use Api\Core\Alert;
+use Api\Database\Connection;
+use Api\Database\LivroGateway;
 use Api\Services\LivroService;
 use Api\Widgets\Card;
 use Api\Widgets\Layout;
 
 // Carrega livros
-$data = LivroService::all();
+$conn = Connection::open($_ENV['CONNECTION_NAME']);
+$gateway = new LivroGateway($conn);
+$service = new LivroService($gateway);
+$data = $service->all();
 
 $livros = $data['livros'];
 $totalPages = $data['totalPages'];
@@ -26,6 +31,7 @@ $next = $selfPage <= $totalPages ? $selfPage + 1 : $totalPages;
     <?= Layout::head('Lista de livros') ?>
     <link rel="stylesheet" href="resources/scss/card.css">
 </head>
+
 <body>
     <?= Layout::header() ?>
 

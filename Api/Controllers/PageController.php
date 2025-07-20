@@ -8,8 +8,16 @@ use Api\Services\AvaliacaoService;
 use Api\Services\LivroService;
 use Api\Services\UserService;
 
+
 class PageController
 {
+    private LivroService $LivroService;
+
+    public function __construct(?LivroService $LivroService = new LivroService)
+    {
+        $this->LivroService = $LivroService;
+    }
+
     public function home()
     {
         AuthMiddleware::handle();
@@ -33,12 +41,13 @@ class PageController
         include dirname(__DIR__) . '/Views/livros/cadastro.php';
     }
 
-    public function view($params = [])
+    public function view(array $params = [])
     {
         AuthMiddleware::handle();
         $id = $params['id'] ?? null;
 
-        $livro = LivroService::findById($id);
+        $livro = $this->LivroService->findById($id);
+
         $comentarios = AvaliacaoService::buscarComentarios($id);
 
 
@@ -46,9 +55,10 @@ class PageController
         include dirname(__DIR__) . '/Views/livros/visualizar.php';
     }
 
-    public function editarAvaliacao($params = []){
+    public function editarAvaliacao($params = [])
+    {
         $id = $params['id'];
-        if($id == null){
+        if ($id == null) {
             Response::redirect("livros/{$id}", 'Erro ao acessar comentario para edição', 'warning');
         }
 
@@ -60,7 +70,8 @@ class PageController
         AuthMiddleware::handle();
         $id = $params['id'] ?? null;
 
-        $livro = LivroService::findById($id);
+        // $livro = LivroService::findById($id);
+        $livro = $this->LivroService->findById($id);
 
         include dirname(__DIR__) . '/Views/livros/editar.php';
     }
@@ -78,7 +89,7 @@ class PageController
         AuthMiddleware::token($token);
 
         $user = UserService::findById($id);
-        
+
         $_SESSION['form_data'] = $user;
 
         include dirname(__DIR__) . '/Views/usuarios/editar.php';

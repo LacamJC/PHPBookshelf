@@ -25,17 +25,22 @@ class LivroService
     public function all(int $page = 1): array
     {
         try {
+
+            if ($page < 1) {
+                throw new Exception('Página de busca inválida: ' . $page);
+            }
             $total = $this->gateway->countAll();
 
             $limit = 4;
             $offset = ($page - 1) * $limit;
 
-            $livros = $this->gateway->paginate($limit, $offset);
             $totalPages = max(1, ceil($total / $limit));
 
-            if ($page > $totalPages || $page < 1) {
+            if ($page > $totalPages) {
                 throw new Exception('Página de busca inválida: ' . $page);
             }
+            $livros = $this->gateway->paginate($limit, $offset);
+
 
             return [
                 'livros' => $livros,

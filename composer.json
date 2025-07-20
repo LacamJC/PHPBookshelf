@@ -1,10 +1,10 @@
 {
     "scripts": {
-       "logs": [
+        "logs": [
             "cat logs/app.log"
-       ],
+        ],
         "start": "php -S localhost:8000 -t public",
-        "test": "phpunit"
+        "test": "@php vendor/bin/pest --colors=always  "
     },
     "name": "ramajo/my-book-shelf_2025",
     "autoload": {
@@ -22,6 +22,11 @@
         "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.2"
+        "pestphp/pest": "^3.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }

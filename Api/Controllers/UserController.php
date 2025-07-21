@@ -10,6 +10,7 @@ use Api\Middlewares\AuthMiddleware;
 use Api\Services\AuthService;
 use Api\Services\UserService;
 use Exception;
+use InvalidArgumentException;
 
 class UserController
 {
@@ -51,16 +52,20 @@ class UserController
             return Response::redirect('login', 'A senha não deve conter mais que 12 caracteres', 'danger');
         }
 
-        $this->auth->clearForm();
+
 
         try {
             $valid = $this->service->verify($email, $password);
+
             if ($valid) {
+                $this->auth->clearForm();
                 LoggerTXT::log("{$_SESSION['user']->nome} fez login", 'Login');
                 return Response::redirect('home');
             } else {
                 return Response::redirect('login', 'Desculpe, houve um erro ao realizar login, tente novamente mais tarde', 'warning');
             }
+        } catch (InvalidArgumentException $e) {
+            return Response::redirect('login', $e->getMessage(), 'danger');
         } catch (\Exception $e) {
             return Response::redirect('login', 'Desulpe, houve um erro interno no sistema, por favor tente novamente mais tarde');
         }
@@ -150,7 +155,7 @@ class UserController
                 }
             }
             if ($dados['senha'] !== $dados['confirma']) {
-                return Response::redirect('cadastro', 'As senhas devem ser identicas', 'danger');
+                return Response::redirect("usuarios/editar-conta/$id/$token", 'As senhas devem ser identicas', 'danger');
             }
             unset($dados['confirma']);
 
@@ -160,10 +165,16 @@ class UserController
             unset($dados['edit_token']);
 
             $dados['id'] = $id;
-            $this->service->update($dados);
-            return Response::redirect('login', 'Conta atualizada com sucesso', 'success');
+            try {
+                $this->service->update($dados);
+            } catch (InvalidArgumentException $e) {
+                return Response::redirect("usuarios/editar-conta/$id/$token", $e->getMessage(), 'warning');
+            } catch (Exception $e) {
+                return Response::redirect("usuarios/editar-conta/$id/$token", 'Houve um erro interno no servidor, por favor tente novamente mais tarde.', 'danger');
+            }
+            return Response::redirect("usuarios/editar-conta/$id/$token", 'Conta atualizada com sucesso', 'success');
         } else {
-            return Response::redirect('login', 'Método de envio inválido', 'danger');
+            return Response::redirect("usuarios/editar-conta/$id/$token", 'Método de envio inválido', 'danger');
         }
     }
 }

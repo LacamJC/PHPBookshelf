@@ -9,7 +9,7 @@ class User
     public ?string $email;
     public ?string $senha;
 
-    public function __construct(array $data)
+    public function __construct(?array $data = [])
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {

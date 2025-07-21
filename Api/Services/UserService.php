@@ -7,7 +7,7 @@ use Api\Database\UserGateway;
 use Api\Database\Connection;
 use Api\Models\User;
 use Exception;
-
+use InvalidArgumentException;
 
 class UserService
 {
@@ -53,10 +53,19 @@ class UserService
         try {
             $user = new User($dados);
             if ($user->id == null) {
-                throw new Exception('Credenciais inválidas');
+                throw new InvalidArgumentException('Credenciais inválidas');
             }
-            $result = $this->gateway->save($user);
+            // regerio@gmail.com - dados
+            $user_request = $this->gateway->findById($user->id); // adamasteu@gmail.com
+            $user_email = $this->gateway->findByEmail($user->email);
 
+            if ($user_email && $user_request->id !==  $user_email->id) {
+                throw new InvalidArgumentException('Este email não esta disponivel');
+            }
+
+
+            $result = $this->gateway->save($user);
+            $this->auth->clearForm();
             $this->auth->persistUserSession($user);
 
             if (!$result) {
@@ -126,12 +135,12 @@ class UserService
             }
 
             if (!password_verify($pass, $user->senha)) {
-                throw new Exception('Login inválido');
+                throw new InvalidArgumentException('Login inválido');
             }
+
 
             $this->auth->clearForm();
             $this->auth->persistUserSession($user);
-
 
             LoggerTXT::log("UserService@verify: O usuário {$user->email} fez login", "Success");
             return true;

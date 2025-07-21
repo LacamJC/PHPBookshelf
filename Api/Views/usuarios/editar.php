@@ -34,7 +34,7 @@ $token = $_ENV['EDIT_TOKEN'];
                         class="form-control"
                         id="email"
                         name="email"
-                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : 'teste@gmail.com' ?>"
+                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : '' ?>"
                         placeholder="Digite seu email"
                         >
                 </div>
@@ -46,7 +46,7 @@ $token = $_ENV['EDIT_TOKEN'];
                         class="form-control"
                         id="nome"
                         name="nome"
-                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : 'asd' ?>"
+                        value="<?= isset($old['name']) ? htmlspecialchars($old['name']) : '' ?>"
                         placeholder="Digite seu nome"
                         required>
                 </div>
@@ -59,7 +59,7 @@ $token = $_ENV['EDIT_TOKEN'];
                             class="form-control"
                             id="password"
                             name="senha"
-                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '123123' ?>"
+                            value="<?= isset($old['password']) ? htmlspecialchars($old['password']) : '' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6">
@@ -74,7 +74,7 @@ $token = $_ENV['EDIT_TOKEN'];
                             class="form-control"
                             id="confirm"
                             name="confirma"
-                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '123123' ?>"
+                            value="<?= isset($old['password']) ? htmlspecialchars($old['password']) : '123123' ?>"
                             placeholder="Confirme sua senha"
                             required
                             minlength="6">

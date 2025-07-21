@@ -19,13 +19,9 @@ class UserGateway extends Gateway
     public function save(User $user): bool
     {
         try {
-            if ($user->id == null) {  // <- Verifica se é uma atualização ou inserção
-
-                if ($this->verifyExists($user->email, $user->senha)) { // <- Se o email ja existir lança uma excessão
-                    throw new Exception("O email já está cadastrado");
-                }
+            if (empty($user->id)) {  // <- Verifica se é uma atualização ou inserção
                 $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
-                $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
+                $sql = "INSERT INTO usuarios(id, nome, email) VALUES (:id, :nome, :email)";
             } else {
                 $id = $user->id;
                 $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
@@ -40,7 +36,7 @@ class UserGateway extends Gateway
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             $stmt->bindValue(':nome', $nome, self::TYPE_STR);
             $stmt->bindValue(':email', $email, self::TYPE_STR);
-            if ($user->id == null) { // <- So prepara a senha se for um novo usuario
+            if (empty($user->id)) { // <- So prepara a senha se for um novo usuario
                 $stmt->bindValue(':senha', $senha, self::TYPE_STR);
             }
 

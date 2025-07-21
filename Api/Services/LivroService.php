@@ -2,6 +2,7 @@
 
 namespace Api\Services;
 
+
 use Api\Core\LoggerTXT;
 use Api\Database\Connection;
 use Api\Database\LivroGateway;
@@ -11,7 +12,6 @@ use Exception;
 class LivroService
 {
     private LivroGateway $gateway;
-    /// so para garantir
     public function __construct(?LivroGateway $gateway = null)
     {
         if ($gateway === null) {
@@ -34,6 +34,7 @@ class LivroService
             $offset = ($page - 1) * $limit;
 
             $totalPages = max(1, ceil($total / $limit));
+
 
             if ($page > $totalPages) {
                 throw new Exception('Página de busca inválida: ' . $page);
@@ -111,6 +112,7 @@ class LivroService
             return $livro;
         } catch (Exception $e) {
             LoggerTXT::log('LivroService@findById: ' . $e->getMessage(), 'Error');
+            throw $e;
             throw $e;
         }
     }

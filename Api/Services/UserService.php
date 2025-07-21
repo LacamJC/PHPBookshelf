@@ -2,121 +2,142 @@
 
 namespace Api\Services;
 
-use Api\Abstract\Logger;
 use Api\Core\LoggerTXT;
 use Api\Database\UserGateway;
 use Api\Database\Connection;
-use Api\Core\Response;
+use Api\Models\User;
 use Exception;
-use stdClass;
+
 
 class UserService
 {
-    public static function store($dados)
+
+    private UserGateway $gateway;
+    private AuthService $auth;
+    public function __construct(?UserGateway $gateway = null, ?AuthService $auth = null)
+    {
+        if ($gateway === null) {
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
+            $gateway = new UserGateway($conn);
+        }
+
+        if ($auth === null) {
+            $auth = new AuthService;
+        }
+
+        $this->gateway = $gateway;
+        $this->auth = $auth;
+    }
+
+    public function save(array $dados): bool
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            UserGateway::setConnection($conn);
 
-            $user = new UserGateway($dados['nome'], $dados['email'], $dados['senha']);
-            if (isset($dados['id'])) {
-                $user->id = $dados['id'];
-            }
+            $user = new User($dados);
+            $result = $this->gateway->save($user);
 
-
-            $user->save();
-
-            if (isset($dados['id'])) {
-                $logged = new stdClass();
-                $logged->id = $dados['id'];
-                $logged->nome = $dados['nome'];
-                $logged->email = $dados['email'];
-                unset($_SESSION['user']);
-                $_SESSION['user'] = $logged;
-
-
-                LoggerTXT::log("UserService@store: Usuario com o email {$dados['email']} atualizado", "Success");
-                return Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
+            if (!$result) {
+                throw new Exception('Houve um erro ao salvar o usuário');
             }
 
             LoggerTXT::log("UserService@store: Novo usuário com o email {$dados['email']}", "Success");
-            return Response::redirect('login', 'Cadastro efetuado com sucesso', 'success');
+            return $result;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
-            Response::redirect(
-                'login',
-                'Desculpe houve um erro ao efetuar a operação, tente novamente em instantes',
-                'danger'
-            );
+            throw $e;
         }
     }
 
-    public static function delete($id)
+    public function update(array $dados): bool
+    {
+        try {
+            $user = new User($dados);
+            if ($user->id == null) {
+                throw new Exception('Credenciais inválidas');
+            }
+            $result = $this->gateway->save($user);
+
+            $this->auth->persistUserSession($user);
+
+            if (!$result) {
+                throw new Exception('Houve um erro ao atualizar o usuário');
+            }
+
+            LoggerTXT::log("UserService@store: Usuário {$dados['email']} atualizado com sucesso", "Success");
+            return $result;
+        } catch (Exception $e) {
+            LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
+            throw $e;
+        }
+    }
+
+    public function delete(int $id): bool
     {
         try {
             if ($id == null) {
                 throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
             }
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            UserGateway::setConnection(($conn));
-            $result =  UserGateway::delete($id);
-            LoggerTXT::log("Usuário {$id} deletado com sucesso", 'Success');
-            if (isset($_SESSION['user'])) {
-                unset($_SESSION['user']);
-                unset($_SESSION['form_data']);
+
+            $result =  $this->gateway->delete($id);
+            if ($result) {
+                $this->auth->logout();
+            } else {
+                throw new Exception('Houve um erro ao deletar o usuário');
             }
-            Response::redirect('login', 'Conta apagada com sucesso', 'success');
+            return $result;
         } catch (Exception $e) {
             LoggerTXT::log('UserService@delete: ' . $e->getMessage(), 'Error');
-            Response::redirect('login', 'Erro ao deletar usuario', 'danger');
+            throw $e;
         }
     }
 
-    public static function findById($id)
+    public function findById(int $id): ?User
     {
         try {
-            if ($id == null) {
-                throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
+            if ($id === null || $id < 1) {
+                throw new Exception("ID inválido: {$id}");
             }
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            UserGateway::setConnection(($conn));
 
-            $user = UserGateway::findById($id);
+            $user = $this->gateway->findById($id);
+
+            if (!$user) {
+                throw new  Exception('Usuário não encontrado');
+            }
 
             return $user;
         } catch (Exception $e) {
             LoggerTXT::log('UserService@findById: ' . $e->getMessage(), 'Error');
-            Response::redirect('home');
+            throw $e;
         }
     }
 
 
-    public static function verify($email, $pass)
+    public function verify(string $email, string $pass): bool
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            UserGateway::setConnection(($conn));
-            $user = UserGateway::findByEmail($email);
-
-            if (!password_verify($pass, $user['senha'])) {
-                unset($user['senha']);
-                Response::redirect('login', 'Usuário não encontrado por favor verifique as informações', 'warning');
+            if (empty($email) || empty($pass)) {
+                throw new Exception('Parametros de busca inválidos');
             }
-            unset($user['senha']);
-            unset($_SESSION['form_data']);
-            $logged = new stdClass();
-            $logged->id = $user['id'];
-            $logged->nome = $user['nome'];
-            $logged->email = $user['email'];
 
-            $_SESSION['user'] = $logged;
+            $user = $this->gateway->findByEmail($email);
+
+            if (!$user) {
+                throw new Exception('Usuário não encontrado');
+            }
+
+            if (!password_verify($pass, $user->senha)) {
+                throw new Exception('Login inválido');
+            }
+
+            $this->auth->clearForm();
+            $this->auth->persistUserSession($user);
 
 
-            LoggerTXT::log("UserService@verify: O usuário {$logged->email} fez login", "Success");
-            Response::redirect('home');
+            LoggerTXT::log("UserService@verify: O usuário {$user->email} fez login", "Success");
+            return true;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@verify: {$e->getMessage()}", 'Error');
-            Response::redirect('login', 'Desculpe houve um erro ao efetuar seu login, tente novamente', 'warning');
+            throw $e;
         }
     }
 }

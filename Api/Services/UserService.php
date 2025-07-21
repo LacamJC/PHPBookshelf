@@ -45,6 +45,7 @@ class UserService
 
             $user = new User($dados);
             $result = $this->gateway->save($user);
+ 
 
             if (!$result) {
                 throw new Exception('Houve um erro ao salvar o usuário');
@@ -54,6 +55,7 @@ class UserService
             return $result;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
+            
             throw $e;
         }
     }

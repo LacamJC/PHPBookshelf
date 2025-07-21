@@ -21,7 +21,8 @@ class UserGateway extends Gateway
         try {
             if (empty($user->id)) {  // <- Verifica se é uma atualização ou inserção
                 $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
-                $sql = "INSERT INTO usuarios(id, nome, email) VALUES (:id, :nome, :email)";
+                $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
+               
             } else {
                 $id = $user->id;
                 $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
@@ -38,6 +39,7 @@ class UserGateway extends Gateway
             $stmt->bindValue(':email', $email, self::TYPE_STR);
             if (empty($user->id)) { // <- So prepara a senha se for um novo usuario
                 $stmt->bindValue(':senha', $senha, self::TYPE_STR);
+            
             }
 
             return $stmt->execute();
@@ -46,7 +48,7 @@ class UserGateway extends Gateway
         }
     }
 
-    public function findById(int $id): ?User 
+    public function findById(int $id): ?User
     {
         try {
             $sql = "SELECT id, nome, email FROM usuarios WHERE id = :id";
@@ -58,7 +60,7 @@ class UserGateway extends Gateway
 
             $user =  $stmt->fetchObject(User::class);
 
-            if(!$user){
+            if (!$user) {
                 return null;
             }
 
@@ -73,7 +75,7 @@ class UserGateway extends Gateway
     {
         try {
             $sql = "SELECT id,nome,senha,email FROM usuarios WHERE email = :email";
-            $stmt =$this->conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
             $email = trim($email);
 
@@ -83,12 +85,11 @@ class UserGateway extends Gateway
 
             $user = $stmt->fetchObject(User::class);
 
-            if(!$user){
+            if (!$user) {
                 return null;
             }
 
             return $user;
-
         } catch (Exception $e) {
             throw $e;
         }
@@ -144,13 +145,14 @@ class UserGateway extends Gateway
             $sql = "SELECT max(id) as max FROM usuarios";
             $result = $this->conn->query($sql);
             $data = $result->fetch(PDO::FETCH_OBJ);
-            return $data->max;
+
+            return isset($data->max) ? $data->max : 1;
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function delete($id): bool 
+    public function delete($id): bool
     {
         try {
             $sql = "DELETE FROM usuarios WHERE id = :id";

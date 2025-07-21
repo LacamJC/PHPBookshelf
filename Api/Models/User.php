@@ -4,10 +4,10 @@ namespace Api\Models;
 
 class User
 {
-    public ?int $id;
-    public ?string $nome;
-    public ?string $email;
-    public ?string $senha;
+    public ?int $id = null;
+    public ?string $nome = null;
+    public ?string $email = null;
+    public ?string $senha = null;
 
     public function __construct(?array $data = [])
     {
@@ -18,7 +18,8 @@ class User
         }
     }
 
-    public function sanitize(): self{
+    public function sanitize(): self
+    {
         $clone = clone $this;
         $clone->senha = null;
 

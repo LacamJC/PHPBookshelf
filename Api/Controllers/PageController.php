@@ -4,6 +4,7 @@ namespace Api\Controllers;
 
 use Api\Core\Response;
 use Api\Middlewares\AuthMiddleware;
+use Api\Services\AuthService;
 use Api\Services\AvaliacaoService;
 use Api\Services\LivroService;
 use Api\Services\UserService;
@@ -12,10 +13,14 @@ use Api\Services\UserService;
 class PageController
 {
     private LivroService $LivroService;
+    private UserService $UserService;
+    private AuthService $AuthService;
 
-    public function __construct(?LivroService $LivroService = new LivroService)
+    public function __construct(?LivroService $LivroService = new LivroService, ?UserService $UserService = new UserService, ?AuthService $AuthService = new AuthService)
     {
         $this->LivroService = $LivroService;
+        $this->UserService = $UserService;
+        $this->AuthService = $AuthService;
     }
 
     public function home()
@@ -88,9 +93,11 @@ class PageController
         AuthMiddleware::handle();
         AuthMiddleware::token($token);
 
-        $user = UserService::findById($id);
+        // $user = UserService::findById($id);
+        $user = $this->UserService->findById($id);
 
-        $_SESSION['form_data'] = $user;
+        // $_SESSION['form_data'] = $user;
+        $this->AuthService->setForm($user);
 
         include dirname(__DIR__) . '/Views/usuarios/editar.php';
     }

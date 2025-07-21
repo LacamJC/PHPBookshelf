@@ -1,10 +1,12 @@
 <?php
-session_start();
 
 
 
 require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
 require_once dirname(__DIR__, 1) . '/routes/routes.php';
+
+session_start();
+
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1));
 $dotenv->load();
 

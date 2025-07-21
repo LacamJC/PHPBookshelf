@@ -22,4 +22,8 @@ class AuthService
         unset($_SESSION['form_data']);
     }
 
+    public function setForm(array $data): void{
+        $_SESSION['form_data'] = $data;
+    }
+
 }

@@ -3,7 +3,7 @@
 use Api\Core\Alert;
 use Api\Widgets\Layout;
 
-$old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ''; 
+$old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
 $baseUrl = '/';
 $token = $_ENV['EDIT_TOKEN'];
 
@@ -14,19 +14,19 @@ $token = $_ENV['EDIT_TOKEN'];
 <html lang="pt-BR">
 
 <head>
-    <?= Layout::head('Editando dados')?>
+    <?= Layout::head('Editando dados') ?>
 </head>
 
 <body>
-    <?php Layout::header()?>
+    <?php Layout::header() ?>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
             <h3 class="text-center mb-4">Atualize seus dados</h3>
 
             <?php Alert::span(); ?>
 
-            <form action="<?=$baseUrl?>usuarios/editSubmit/<?=$old['id']?>/<?=$token?>" method="POST">
-                <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
+            <form action="<?= $baseUrl ?>usuarios/editSubmit/<?= $old['id'] ?>/<?= $token ?>" method="POST">
+                <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input
@@ -35,8 +35,7 @@ $token = $_ENV['EDIT_TOKEN'];
                         id="email"
                         name="email"
                         value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : '' ?>"
-                        placeholder="Digite seu email"
-                        >
+                        placeholder="Digite seu email">
                 </div>
 
                 <div class="mb-3">
@@ -63,6 +62,9 @@ $token = $_ENV['EDIT_TOKEN'];
                             placeholder="Digite sua senha"
                             required
                             minlength="6">
+                        <p class="text-secondary mt-3">
+                            Aqui sua senha serve apenas para identificar se a operação é realmente válida, sua senha não será atualizada.
+                        </p>
                     </div>
                 </div>
 
@@ -79,20 +81,21 @@ $token = $_ENV['EDIT_TOKEN'];
                             required
                             minlength="6">
                     </div>
+
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="show">
                     <label class="form-check-label" for="show">Mostrar senha</label>
                 </div>
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-success">Cadastrar</button>
+                    <button type="submit" class="btn btn-success">Salvar informações</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <?= Layout::footer()?>
-    <script src="<?=$baseUrl?>resources/js/showPass.js"></script>
+    <?= Layout::footer() ?>
+    <script src="<?= $baseUrl ?>resources/js/showPass.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
 </body>

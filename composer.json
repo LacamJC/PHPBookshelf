@@ -3,7 +3,7 @@
         "logs": [
             "cat logs/app.log"
         ],
-        "start": "php -S localhost:8000 -t public",
+        "dev": "php -S localhost:8080 -t public",
         "test": "@php vendor/bin/pest --colors=always  "
     },
     "name": "ramajo/my-book-shelf_2025",

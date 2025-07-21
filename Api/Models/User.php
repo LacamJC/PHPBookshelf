@@ -17,4 +17,11 @@ class User
             }
         }
     }
+
+    public function sanitize(): self{
+        $clone = clone $this;
+        $clone->senha = null;
+
+        return $clone;
+    }
 }

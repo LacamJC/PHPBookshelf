@@ -11,7 +11,7 @@ use Exception;
 class LivroService
 {
     private LivroGateway $gateway;
-
+    /// so para garantir
     public function __construct(?LivroGateway $gateway = null)
     {
         if ($gateway === null) {

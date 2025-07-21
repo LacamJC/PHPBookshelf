@@ -4,10 +4,10 @@ namespace Api\Models;
 
 class User
 {
-    private ?int $id;
-    private ?string $nome;
-    private ?string $email;
-    private ?string $senha;
+    public ?int $id;
+    public ?string $nome;
+    public ?string $email;
+    public ?string $senha;
 
     public function __construct(array $data)
     {

@@ -3,96 +3,81 @@
 namespace Api\Database;
 
 use Api\Abstract\Gateway;
+use Api\Models\User;
 use PDO;
 use Exception;
 
 class UserGateway extends Gateway
 {
-    private static $conn;
-    private $data;
-    private $nome;
-    private $email;
-    private $senha;
+    private PDO $conn;
 
-    public function __set($prop, $value)
+    public function __construct(PDO $conn)
     {
-        $this->data[$prop] = $value;
+        $this->conn = $conn;
     }
 
-    public function __get($prop)
-    {
-        return $this->data[$prop];
-    }
-
-
-    public static function setConnection(PDO $conn)
-    {
-        self::$conn = $conn;
-    }
-
-    public function __construct(string $nome, string $email, string $senha)
-    {
-        $this->nome = $nome;
-        $this->email = $email;
-        $this->senha = $senha;
-    }
-
-    public function save()
+    public function save(User $user): bool
     {
         try {
-            if (empty($this->data['id'])) {  // <- Verifica se é uma atualização ou inserção
+            if ($user->id == null) {  // <- Verifica se é uma atualização ou inserção
 
-                if (self::verifyExists($this->email, $this->senha)) { // <- Se o email ja existir lança uma excessão
+                if ($this->verifyExists($user->email, $user->senha)) { // <- Se o email ja existir lança uma excessão
                     throw new Exception("O email já está cadastrado");
                 }
                 $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
                 $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
             } else {
-                $id = $this->data['id'];
+                $id = $user->id;
                 $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
             }
-            // echo $sql;
-            // die();
-            $stmt = self::$conn->prepare($sql);
 
-            $nome = trim($this->nome);
-            $email = trim($this->email);
-            $senha = trim($this->senha);
+            $stmt = $this->conn->prepare($sql);
+
+            $nome = trim($user->nome);
+            $email = trim($user->email);
+            $senha = trim($user->senha);
 
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             $stmt->bindValue(':nome', $nome, self::TYPE_STR);
             $stmt->bindValue(':email', $email, self::TYPE_STR);
-            if (empty($this->data['id'])) { // <- So prepara a senha se for um novo usuario
+            if ($user->id == null) { // <- So prepara a senha se for um novo usuario
                 $stmt->bindValue(':senha', $senha, self::TYPE_STR);
             }
 
-            $stmt->execute();
+            return $stmt->execute();
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public static function findById($id)
+    public function findById(int $id): ?User 
     {
         try {
             $sql = "SELECT id, nome, email FROM usuarios WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
             $stmt->bindValue(':id', $id, self::TYPE_INT);
 
             $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $user =  $stmt->fetchObject(User::class);
+
+            if(!$user){
+                return null;
+            }
+
+            return $user;
         } catch (Exception $e) {
-            throw new Exception("Erro ao buscar usuário por ID: " . $e->getMessage());
+            // throw new Exception("Erro ao buscar usuário por ID: " . $e->getMessage());
+            throw $e;
         }
     }
 
-    public static function findByEmail($email)
+    public function findByEmail(string $email): ?User
     {
         try {
             $sql = "SELECT id,nome,senha,email FROM usuarios WHERE email = :email";
-            $stmt = self::$conn->prepare($sql);
+            $stmt =$this->conn->prepare($sql);
 
             $email = trim($email);
 
@@ -100,30 +85,37 @@ class UserGateway extends Gateway
 
             $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $stmt->fetchObject(User::class);
+
+            if(!$user){
+                return null;
+            }
+
+            return $user;
+
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public static function findAll()
+    public function findAll(): array
     {
         try {
             $sql = "SELECT id,nome,email FROM usuarios";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_CLASS, User::class);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public static function verifyExists($email)
+    public function verifyExists(string $email): bool
     {
         try {
             $sql = "SELECT id FROM usuarios WHERE email = :email";
 
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
             $email = trim($email);
 
@@ -136,11 +128,11 @@ class UserGateway extends Gateway
         }
     }
 
-    public static function userExists($id)
+    public function userExists(int $id): bool
     {
         try {
             $sql = "SELECT * FROM usuarios WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             $stmt->execute();
@@ -150,11 +142,11 @@ class UserGateway extends Gateway
         }
     }
 
-    public function getLastId()
+    public function getLastId(): int
     {
         try {
             $sql = "SELECT max(id) as max FROM usuarios";
-            $result = self::$conn->query($sql);
+            $result = $this->conn->query($sql);
             $data = $result->fetch(PDO::FETCH_OBJ);
             return $data->max;
         } catch (Exception $e) {
@@ -162,11 +154,11 @@ class UserGateway extends Gateway
         }
     }
 
-    public static function delete($id)
+    public function delete($id): bool 
     {
         try {
             $sql = "DELETE FROM usuarios WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             return $stmt->execute();
         } catch (Exception $e) {

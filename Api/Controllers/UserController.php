@@ -109,25 +109,17 @@ class UserController
             ];
 
             $this->auth->setForm($_POST);
-
             AuthMiddleware::token($_POST['edit_token']);
             foreach ($dados as $prop => $value) {
                 if (empty($value) or strlen($value) <= 0) {
-
                     return Response::redirect('cadastro', "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
-            if ($dados['senha'] !== $dados['confirma']) {
-                return Response::redirect('cadastro', 'As senhas devem ser identicas', 'danger');
-            }
-
-            unset($dados['confirma']);
-
-            $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
-
             try {
                 $this->service->save($dados);
                 return Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
+            } catch (InvalidArgumentException $e) {
+                return response::redirect('cadastro', $e->getMessage(), 'danger');
             } catch (\Exception $e) {
                 return Response::redirect('cadastro', 'Desculpe, houve um erro interno ao realizar o seu cadastro, tente novamente mais tarde', 'danger');
             }

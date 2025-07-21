@@ -32,6 +32,16 @@ class UserService
     public function save(array $dados): bool
     {
         try {
+            if (strlen($dados['senha']) < 6 || strlen($dados['senha']) > 12) {
+                throw new InvalidArgumentException('A senha deve ter mais de 6 caracteres e menos que 12');
+            }
+
+            if ($dados['senha'] !== $dados['confirma']) {
+                throw new InvalidArgumentException('As senhas devem ser identicas');
+            }
+            unset($dados['confirma']);
+
+            $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
             $user = new User($dados);
             $result = $this->gateway->save($user);
@@ -83,7 +93,7 @@ class UserService
     public function delete(int $id): bool
     {
         try {
-            if ($id == null) {
+            if ($id == null || $id < 1) {
                 throw new Exception("Impossivel deletar usuario com ID inválido: {$id}");
             }
 
@@ -100,7 +110,7 @@ class UserService
         }
     }
 
-    public function findById(int $id): ?User
+    public function findById(int $id): User
     {
         try {
             if ($id === null || $id < 1) {

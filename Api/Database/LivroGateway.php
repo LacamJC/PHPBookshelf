@@ -77,7 +77,7 @@ class LivroGateway extends Gateway
         try {
             $sql = "SELECT max(id) as max FROM livros";
             $result = $this->conn->query($sql);
-            $data = $result->fetch(PDO::FETCH_ASSOC);
+	    $data = $result->fetch(PDO::FETCH_ASSOC);
             return $data['max'];
         } catch (Exception $e) {
             $message = 'LivroGateway@getLastId: ' . $e->getMessage();

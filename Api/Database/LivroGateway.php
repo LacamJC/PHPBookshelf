@@ -75,13 +75,10 @@ class LivroGateway extends Gateway
     public function getLastId(): int
     {
         try {
-            $stmt = $this->conn->prepare("SELECT max(id) as max FROM livros");
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-
-            return (int) $data['max'];
+            $sql = "SELECT max(id) as max FROM livros";
+            $result = $this->conn->query($sql);
+            $data = $result->fetch(PDO::FETCH_ASSOC);
+            return $data['max'];
         } catch (Exception $e) {
             $message = 'LivroGateway@getLastId: ' . $e->getMessage();
             error_log($message);

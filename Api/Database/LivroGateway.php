@@ -3,57 +3,42 @@
 namespace Api\Database;
 
 use Api\Abstract\Gateway;
-use Api\Core\LoggerTXT;
+use Api\Models\Livro;
 use PDO;
 use Exception;
-use PDOException;
 
 class LivroGateway extends Gateway
 {
-    private static $conn;
-    private $data;
+    private PDO $conn;
 
-    public function __set($prop, $value)
+    public function __construct(PDO $conn)
     {
-        $this->data[$prop] = $value;
+        $this->conn = $conn;
     }
 
-    public function __get($prop)
-    {
-        return $this->data[$prop];
-    }
-
-
-    public static function setConnection(PDO $conn)
-    {
-        self::$conn = $conn;
-    }
-
-    public function save()
+    public function save(Livro $livro): bool
     {
         try {
-            if (empty($this->data['id'])) {
-                // Inserção
+            if (empty($livro->id)) {
                 $id = $this->getLastId() + 1;
                 $sql = "INSERT INTO livros 
                 (id, id_usuario, titulo, autores, numero_paginas, genero, nacional, capa_path, editora, descricao)
                 VALUES
                 (:id, :id_usuario, :titulo, :autores, :numero_paginas, :genero, :nacional, :capa_path, :editora, :descricao)";
+                $stmt = $this->conn->prepare($sql);
 
-                $stmt = self::$conn->prepare($sql);
+                $stmt->bindValue(':id',                 $id, self::TYPE_INT);
+                $stmt->bindValue(':id_usuario',         $livro->id_usuario, self::TYPE_INT);
+                $stmt->bindValue(':titulo',             $livro->titulo, self::TYPE_STR);
+                $stmt->bindValue(':autores',            $livro->autores, self::TYPE_STR);
+                $stmt->bindValue(':numero_paginas',     $livro->numero_paginas, self::TYPE_INT);
+                $stmt->bindValue(':genero',             $livro->genero, self::TYPE_STR);
+                $stmt->bindValue(':nacional',           $livro->nacional, self::TYPE_STR);
+                $stmt->bindValue(':capa_path',          $livro->capa_path, self::TYPE_STR);
+                $stmt->bindValue(':editora',            $livro->editora, self::TYPE_STR);
+                $stmt->bindValue(':descricao',          $livro->descricao, self::TYPE_STR);
 
-                $stmt->bindValue(':id', $id, self::TYPE_INT);
-                $stmt->bindValue(':id_usuario', $this->data['id_usuario'], self::TYPE_INT);
-                $stmt->bindValue(':titulo', $this->data['titulo'], self::TYPE_STR);
-                $stmt->bindValue(':autores', $this->data['autores'], self::TYPE_STR);
-                $stmt->bindValue(':numero_paginas', $this->data['numero_paginas'], self::TYPE_INT);
-                $stmt->bindValue(':genero', $this->data['genero'], self::TYPE_STR);
-                $stmt->bindValue(':nacional', $this->data['nacional'], self::TYPE_STR);
-                $stmt->bindValue(':capa_path', $this->data['capa_path'], self::TYPE_STR);
-                $stmt->bindValue(':editora', $this->data['editora'], self::TYPE_STR);
-                $stmt->bindValue(':descricao', $this->data['descricao'], self::TYPE_STR);
-
-                $stmt->execute();
+                return $stmt->execute();
             } else {
                 // Atualização
                 $sql = "UPDATE livros SET 
@@ -67,112 +52,113 @@ class LivroGateway extends Gateway
                 descricao = :descricao
                 WHERE id = :id";
 
-                $stmt = self::$conn->prepare($sql);
+                $stmt = $this->conn->prepare($sql);
 
-                $stmt->bindValue(':titulo', $this->data['titulo'], self::TYPE_STR);
-                $stmt->bindValue(':autores', $this->data['autores'], self::TYPE_STR);
-                $stmt->bindValue(':numero_paginas', $this->data['numero_paginas'], self::TYPE_INT);
-                $stmt->bindValue(':genero', $this->data['genero'], self::TYPE_STR);
-                $stmt->bindValue(':nacional', $this->data['nacional'], self::TYPE_STR);
-                $stmt->bindValue(':capa_path', $this->data['capa_path'], self::TYPE_STR);
-                $stmt->bindValue(':editora', $this->data['editora'], self::TYPE_STR);
-                $stmt->bindValue(':descricao', $this->data['descricao'], self::TYPE_STR);
-                $stmt->bindValue(':id', $this->data['id'], self::TYPE_INT);
+                $stmt->bindValue(':id',                 $livro->id, self::TYPE_INT);
+                $stmt->bindValue(':titulo',             $livro->titulo, self::TYPE_STR);
+                $stmt->bindValue(':descricao',          $livro->descricao, self::TYPE_STR);
+                $stmt->bindValue(':autores',            $livro->autores, self::TYPE_STR);
+                $stmt->bindValue(':nacional',           $livro->nacional, self::TYPE_STR);
+                $stmt->bindValue(':editora',            $livro->editora, self::TYPE_STR);
+                $stmt->bindValue(':capa_path',          $livro->capa_path, self::TYPE_STR);
+                $stmt->bindValue(':genero',             $livro->genero, self::TYPE_STR);
+                $stmt->bindValue(':numero_paginas',     $livro->numero_paginas, self::TYPE_INT);
 
-                $stmt->execute();
+                return $stmt->execute();
             }
         } catch (Exception $e) {
+            $message = 'LivroGateway@save: ' . $e->getMessage();
             throw $e;
         }
     }
 
-
-    public function getLastId()
+    public function getLastId(): int
     {
         try {
             $sql = "SELECT max(id) as max FROM livros";
-            $result = self::$conn->query($sql);
-            $data = $result->fetch(PDO::FETCH_OBJ);
-            return $data->max;
+            $result = $this->conn->query($sql);
+            $data = $result->fetch(PDO::FETCH_ASSOC);
+            return $data['max'];
         } catch (Exception $e) {
-            throw $e;
+            $message = 'LivroGateway@getLastId: ' . $e->getMessage();
+         throw $e;
         }
     }
 
-    public static function all()
+    public function all(): array
     {
         try {
             $sql = "SELECT * FROM livros";
-
-            $result = self::$conn->query($sql);
-            return $result->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+            $result = $this->conn->query($sql);
+            return $result->fetchAll(PDO::FETCH_CLASS, Livro::class);
         } catch (Exception $e) {
-            throw $e;
+            $message = 'LivroGateway@all: ' . $e->getMessage();
+         throw $e;
         }
     }
 
-    public function verComentarios()
-    {
-        try {
-            $sql = "SELECT usuarios.nome, avaliacoes.comentario, avaliacoes.nota FROM avaliacoes WHERE id_livro = {$this->id}";
-            echo $sql;
-        } catch (Exception $e) {
-        }
-    }
-
-    public static function findById($id)
+    public function findById(int $id): ?Livro
     {
         try {
             $sql = "SELECT * FROM livros WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
-
+            $stmt = $this->conn->prepare($sql);
+            // die($id);
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_OBJ);
+            $livro = $stmt->fetchObject(Livro::class);
+
+            if (!$livro) {
+                return null;
+            }
+
+            return $livro;
         } catch (Exception $e) {
-            throw $e;
+            $message = 'LivroGateway@findById: ' . $e->getMessage();
+         throw $e;
         }
     }
 
-    public static function countAll()
+    public function countAll(): int
     {
         try {
             $sql = "SELECT count(*) as max FROM livros";
-            $result = self::$conn->query($sql);
-            $data = $result->fetch(PDO::FETCH_OBJ);
-            return $data->max;
+            $result = $this->conn->query($sql);
+            $data = $result->fetch(PDO::FETCH_ASSOC);
+            return $data['max'];
         } catch (Exception $e) {
-            // echo $e->getMessage();
-            throw $e;
+            $message = 'LivroGateway@countAll: ' . $e->getMessage();
+         throw $e;
         }
     }
 
-    public static function paginate($limit, $offset)
+    public function paginate(int $limit, int $offset): array
     {
         try {
             $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT :limit OFFSET :offset";
 
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':limit', $limit, self::TYPE_INT);
             $stmt->bindValue(':offset', $offset, self::TYPE_INT);
 
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+            return $stmt->fetchAll(PDO::FETCH_CLASS, Livro::class);
         } catch (Exception $e) {
-            throw $e;
+            $message = 'LivroGateway@paginate: ' . $e->getMessage();
+         throw $e;
         }
     }
 
-    public static function delete($id)
+    public function delete(int $id): bool
     {
         try {
 
             $sql = "DELETE FROM livros WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             return $stmt->execute();
         } catch (Exception $e) {
-            throw $e;
+            $message = 'LivroGateway@delete: ' . $e->getMessage();
+         throw $e;
         }
     }
 }

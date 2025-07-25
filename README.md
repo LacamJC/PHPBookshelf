@@ -8,7 +8,7 @@ O projeto conta com um *frontcontroller personalizado*, implementação completa
 
 ---
 
-## Tecnologias Utilizadas
+## 💻 Tecnologias Utilizadas
 
 - PHP 8.3  
 - MySQL (produção)  
@@ -18,7 +18,7 @@ O projeto conta com um *frontcontroller personalizado*, implementação completa
 
 ---
 
-## Funcionalidades
+## ✨ Funcionalidades
 
 - Cadastro e autenticação de usuários  
 - Cadastro, edição e exclusão de livros  

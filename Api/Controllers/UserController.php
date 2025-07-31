@@ -74,8 +74,8 @@ class UserController
     public function logout(): Response
     {
 
-        $this->auth->logout();
         LoggerTXT::log("{$_SESSION['user']->nome} fez logout", 'Logout');
+        $this->auth->logout();
         return Response::redirect('login');
     }
 

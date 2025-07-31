@@ -21,12 +21,13 @@ Atualmente *16/07/2025* tenho uma VPS na Hostinger que está hospedando este pro
 - [Automação e CI/CD](#automação-e-cicd)
   - [Integração e Deploy Contínuos](#integração-e-deploy-contínuos)
   - [Criando Workflow](#criando-workflow)
+- [Docker](#docker)
 
 ### VIRTUAL PRIVATE SERVER - VPS
 
 Ao longo de todos os meus estudos e projetos, todos os deploys que fiz foram em plataformas que automatizam o processo como a *Vercel* ou a *Railway*, apesar de úteis elas facilitam tanto esta ação que todo o conhecimento necessário e essencial acaba nunca sendo necessário para quem não conhece, causando assim um grave deficit de conhecimento para alguêm que quer lidar com Desenvolvimento.
 
-Com isso em mente, peguei uma *VPS* para aprender mais sobre como um sistema precisa ser configurado para que uma aplicação fique no ar, de maneira a ser acessivel para outros usuários.
+Com isso em mente, peguei uma *VPS* para aprender mais sobre como um sistema precisa ser configurado para que uma aplicação fique no ar, de maneira a ser acessível para outros usuários.
 
 ###### O QUE É 
 
@@ -192,6 +193,25 @@ jobs: # Define os jobs que serão executados
 
 Com este arquivo no seu projeto, e os segredos configurados no GitHub, este script de deploy está pronto e será executado sempre que ocorrer um `push` na branch `main`.
 
+### Docker 
+
+Estou transformando o ambiente de desenvolvimento deste projeto para usar containers com *Docker* acredito que isso irá facilitar encontrar novos erros e facilitar a configuração do ambiente. 
+
+Para isso,
+
+Primeiro criei uma `Dockerfile` na raiz do projeto configurando um `php-fpm` para rodar o php e parti para a criação do `compose.yaml`, arquivo responsável pela orquestração dos containers. 
+
+Antes de começar a montar, criei o diretório `/nginx` para guardar os arquivos de configuração do Nginx. 
+
+Após isso, criei o `compose.yaml` e configurei devidamente seus serviços, sendo eles: 
+
+- app - aplicação rodando com o php-fpm para rodar o projeto.
+- web - servidor Nginx para controlar as requisições.
+- db - banco de dados MySQL. 
+
+Todos ligados à mesma rede de containers permitindo assim uma comunicação isolada.
+
+Todas estas configurações refletem diretamente a VPS onde este projeto está hospedado.
 
 >Aviso: este readme foi modificado para informações relacionadas a configuração e deploy em uma VPS com esquemas de deploy continuo com o GitHub, para entender melhor o objetivo do projeto em si recomendo ver a documentação [Deste Projeto em Laravel](https://github.com/LacamJC/Laravel_Bookshelf/tree/main)
 

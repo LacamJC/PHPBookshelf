@@ -17,7 +17,7 @@ describe('Teste para para inserção de novos usuários', function () {
         $user->nome = 'John Doe';
         $user->email = 'john.doe@gmail.com';
         $user->senha = password_hash('123123', PASSWORD_DEFAULT);
-
+        $user = null;
 
         $this->gateway->expects($this->once())
             ->method('save')

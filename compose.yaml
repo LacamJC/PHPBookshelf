@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  my-bookshelf:
+    build:
+      context: ./
+    volumes:
+      - C:/Users/joaor/Documents/my-bookshelf:/var/www/my-bookshelf
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mybookshelf
+      MYSQL_USER: bookshelf
+      MYSQL_PASSWORD: bookshelf
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

@@ -23,4 +23,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Instalar dependências PHP via composer
 RUN composer install
 
+RUN php ./database/migrate.php 
+
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]

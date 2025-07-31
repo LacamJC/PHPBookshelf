@@ -1,5 +1,5 @@
 # 📖 My Bookshelf PHP  
-*PHP, MySQL, SQLite, Frontcontroller, Pest*
+*PHP, MySQL, Docker, Pest*
 
 
 Um sistema de compartilhamento de livros cadastrados pelos usuários, desenvolvido **100% em PHP puro**, sem o uso de frameworks ou bibliotecas externas. Toda a estrutura foi pensada do zero, com foco em boas práticas de organização, testes e controle de versão.

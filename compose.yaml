@@ -1,15 +1,28 @@
 version: "3.8"
 
 services:
-  my-bookshelf:
+  app:
+    # PHP-FPM
     build:
-      context: ./
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
     volumes:
-      - C:/Users/joaor/Documents/my-bookshelf:/var/www/my-bookshelf
+      - .:/var/www/html
+    networks:
+      - app
+
+  web:
+    image: nginx:1.24
     ports:
-      - "8080:8080"
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - db
+      - app
+    networks:
+      - app
 
   db:
     image: mysql:8.0
@@ -23,6 +36,12 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+    networks:
+      - app
+
+networks:
+  app: 
 
 volumes:
   db_data:

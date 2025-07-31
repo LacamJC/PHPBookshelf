@@ -1,28 +1,18 @@
-FROM php:8.2-cli
+FROM php:8.3.6-fpm-alpine
 
-WORKDIR /var/www/my-bookshelf
-
-COPY . .
+WORKDIR /var/www/html
 
 # Instalar dependências para compilar extensões PHP
-RUN apt-get update && apt-get install -y \
-    libxml2-dev \
-    libsqlite3-dev \
-    default-mysql-client \
-    unzip git zip \
-    build-essential \
-    autoconf \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk --no-cache add $PHPIZE_DEPS linux-headers && \
+    pecl install xdebug && \
+    docker-php-ext-install pdo pdo_mysql && \
+    docker-php-ext-enable xdebug && \
+    apk --no-cache del $PHPIZE_DEPS
 
-RUN docker-php-ext-install xml pdo_mysql pdo_sqlite
+COPY ["composer.json", "composer.lock", "./"]
 
-# Instalar composer via instalador oficial
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --no-interaction
+# Rodar composer install já na imagem para evitar isso toda vez no container
+COPY . ./
 
-# Instalar dependências PHP via composer
-RUN composer install
-
-RUN php ./database/migrate.php 
-
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]

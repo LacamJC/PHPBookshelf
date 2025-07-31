@@ -4,8 +4,10 @@ namespace Api\Core;
 
 class Response
 {
+
     public static function json($data, $code = 200)
     {
+
         http_response_code($code); // Define o código HTTP
         header("Access-Control-Allow-Origin: http://127.0.0.1:5500");
         header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");

@@ -2,6 +2,7 @@
 
 use Api\Core\Alert;
 use Api\Widgets\Layout;
+
 $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
 
 ?>
@@ -21,7 +22,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
             <?php Alert::span(); ?>
 
             <form action="login" method="POST">
-                <input type="hidden" name="edit_token" value="<?=$_ENV['EDIT_TOKEN']?>">
+                <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input
@@ -29,10 +30,9 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                         class="form-control"
                         id="email"
                         name="email"
-                        value="<?=isset($old['email']) ? $old['email'] : '' ?>"
+                        value="<?= isset($old['email']) ? $old['email'] : '' ?>"
                         placeholder="Digite seu email"
-                        required
-                        >
+                        required>
                 </div>
 
                 <div class="mb-3">
@@ -43,12 +43,11 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                             class="form-control"
                             id="password"
                             name="password"
-                            value="<?=isset($old['password']) ? $old['password'] : '' ?>"
+                            value="<?= isset($old['password']) ? $old['password'] : '' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6"
-                            maxlength="12"
-                            >
+                            maxlength="12">
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="show">
@@ -62,7 +61,6 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                     <hr>
                     <a href="https://github.com/LacamJC/PHPBookshelf" target="_blank" class="btn btn-outline-dark d-flex justify-content-center align-items-center gap-2">
                         <i class="bi bi-github fs-4">
-
                         </i>Documentação</a>
                 </div>
             </form>

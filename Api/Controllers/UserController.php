@@ -67,7 +67,7 @@ class UserController
         } catch (InvalidArgumentException $e) {
             return Response::redirect('login', $e->getMessage(), 'danger');
         } catch (\Exception $e) {
-            return Response::redirect('login', 'Desulpe, houve um erro interno no sistema, por favor tente novamente mais tarde');
+            return Response::redirect('login', 'Desulpe, houve um erro interno no sistema, por favor tente novamente mais tarde', 'warning');
         }
     }
 

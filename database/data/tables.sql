@@ -1,23 +1,11 @@
-
-
-CREATE TABLE IF NOT EXISTS avaliacoes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_usuario INTEGER NOT NULL,
-    id_livro INTEGER NOT NULL,
-    comentario TEXT,
-    nota INTEGER CHECK(nota BETWEEN 1 AND 5),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-    FOREIGN KEY (id_livro) REFERENCES livros(id)
-)
-
 CREATE TABLE IF NOT EXISTS usuarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     senha TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+)
+
 
 CREATE TABLE IF NOT EXISTS livros (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +21,17 @@ CREATE TABLE IF NOT EXISTS livros (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 )
 
+CREATE TABLE IF NOT EXISTS avaliacoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER NOT NULL,
+    id_livro INTEGER NOT NULL,
+    comentario TEXT,
+    nota INTEGER CHECK(nota BETWEEN 1 AND 5),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_livro) REFERENCES livros(id)
+)
+
 CREATE TABLE IF NOT EXISTS likes_dislikes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_avaliacao INTEGER NOT NULL,
@@ -42,4 +41,4 @@ CREATE TABLE IF NOT EXISTS likes_dislikes (
     FOREIGN KEY (id_avaliacao) REFERENCES avaliacoes(id),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
     UNIQUE (id_avaliacao, id_usuario) 
-);
+)

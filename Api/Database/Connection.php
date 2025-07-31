@@ -21,6 +21,7 @@ final class Connection
                 $db = parse_ini_file("../config/{$name}.ini");
             } else {
                 throw new Exception("Erro ao procurar arquivo de configurações '{$name}'");
+                die('Por favor, verifique o arquivo de configurações do banco de dados');
             }
             $user = isset($db['user']) ? $db['user'] : NULL;
             $pass = isset($db['pass']) ? $db['pass'] : NULL;
@@ -48,7 +49,7 @@ final class Connection
             }
 
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         
+
             return $conn;
         } catch (Exception $e) {
             LoggerTXT::log('Connection@open: ' . $e->getMessage(), 'Error');

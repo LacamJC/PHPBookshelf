@@ -4,5 +4,5 @@ logs/
 vendor/
 public/uploads/
 database/**/*.db
-config/database.ini
+
 .phpunit.result.cache

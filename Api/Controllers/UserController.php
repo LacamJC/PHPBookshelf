@@ -52,8 +52,6 @@ class UserController
             return Response::redirect('login', 'A senha não deve conter mais que 12 caracteres', 'danger');
         }
 
-
-
         try {
             $valid = $this->service->verify($email, $password);
 
@@ -73,7 +71,6 @@ class UserController
 
     public function logout(): Response
     {
-
         LoggerTXT::log("{$_SESSION['user']->nome} fez logout", 'Logout');
         $this->auth->logout();
         return Response::redirect('login');
@@ -86,17 +83,17 @@ class UserController
         $token = $params['token'];
         AuthMiddleware::token($token);
 
-        if ($id <= 0 or is_string($id)) {
+        if ($id <= 0) {
             Response::redirect('login', '', '');
         }
         try {
             $this->service->delete($id);
             return Response::redirect('login', 'Conta apagada com sucesso', 'success');
         } catch (\Exception $e) {
+            LoggerTXT::log("Erro ao apagar usuário: {$e->getMessage()}", 'Error');
             return Response::redirect('home', 'Houve um erro interno no sistema, por favor tente novamente mais tarde', 'danger');
         }
     }
-
 
     public function store(): Response
     {
@@ -111,7 +108,7 @@ class UserController
             $this->auth->setForm($_POST);
             AuthMiddleware::token($_POST['edit_token']);
             foreach ($dados as $prop => $value) {
-                if (empty($value) or strlen($value) <= 0) {
+                if (empty($value) || strlen($value) <= 0) {
                     return Response::redirect('cadastro', "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
@@ -142,7 +139,7 @@ class UserController
                 'confirma' => (trim($_POST['confirma']) ?? '')
             ];
             foreach ($dados as $prop => $value) {
-                if (empty($value) or strlen($value) <= 0) {
+                if (empty($value) || strlen($value) <= 0) {
                     return Response::redirect("usuarios/editar-conta/$id/$token", "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
@@ -153,10 +150,10 @@ class UserController
 
             $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
-
             unset($dados['edit_token']);
 
             $dados['id'] = $id;
+
             try {
                 $this->service->update($dados);
             } catch (InvalidArgumentException $e) {

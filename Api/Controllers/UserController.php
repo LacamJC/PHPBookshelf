@@ -37,17 +37,17 @@ class UserController
     public function login(): Response
     {
         AuthMiddleware::token($_POST['edit_token']);
-
-        $this->auth->setForm($_POST);
-
-        $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-
-        $password = new Password($_POST['password']);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return Response::redirect('login', 'Email inválido', 'danger');
-        }
         try {
+            $this->auth->setForm($_POST);
+
+            $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+            $password = new Password($_POST['password']);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return Response::redirect('login', 'Email inválido', 'danger');
+            }
+
             $valid = $this->service->verify($email, $password);
 
             if ($valid) {
@@ -59,7 +59,7 @@ class UserController
             }
         } catch (InvalidArgumentException $e) {
             return Response::redirect('login', $e->getMessage(), 'danger');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Response::redirect('login', 'Desculpe, houve um erro interno no sistema, por favor tente novamente mais tarde', 'warning');
         }
     }

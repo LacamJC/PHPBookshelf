@@ -13,6 +13,9 @@ COPY ["composer.json", "composer.lock", "./"]
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --no-interaction
+RUN mkdir -p /var/www/html/logs && chown -R www-data:www-data /var/www/html/logs
 # Rodar composer install já na imagem para evitar isso toda vez no container
 COPY . ./
+
+RUN php ./database/migrate.php
 

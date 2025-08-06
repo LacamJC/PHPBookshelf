@@ -39,7 +39,6 @@ function open($name)
         }
 
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
         return $conn;
     } catch (Exception $e) {
         echo $e->getMessage();

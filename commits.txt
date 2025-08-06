@@ -1,0 +1,149 @@
+a70bb11 - joao-ramajo - 2025-08-04 - refactor: remove espaços em branco e validações redundantes em `UserController.php`
+4d28f53 - joao-ramajo - 2025-08-04 - refactor: adiciona tipagem de parametros e de retorno em `Route.php`
+4675566 - joao-ramajo - 2025-08-04 - feat: cria arquivo `bootstrap.php` para centralizar configurações de inicialização
+03ad792 - joao-ramajo - 2025-08-03 - chore: atualiza gitignore
+c5b545e - LacamJC - 2025-07-31 - chore: atualiza subtitulos do README
+db11bae - LacamJC - 2025-07-31 - test: atualiaa todos os testes de `UserServiceTest` para usar o banco de dado em memoria
+180a44e - LacamJC - 2025-07-31 - test: refataração dos testes do `UserServiceTest` para uso do banco de dados em memoria
+ff4f25e - LacamJC - 2025-07-31 - chore: atualiza README
+5c17138 - LacamJC - 2025-07-31 - chore: adiciona seção sobre docker na documentação técnica
+edd8e9e - LacamJC - 2025-07-31 - chore: normaliza os testes
+38509ff - LacamJC - 2025-07-31 - test: força um erro para verificar o deploy
+0361da4 - LacamJC - 2025-07-31 - feat: modifica o Docker compose para rodar em cima de um servidor nginx e php-fpm
+a196eb4 - LacamJC - 2025-07-31 - fix: ajusta erro do logout causado por má ordenação do `AuthService@logout`
+6910d09 - LacamJC - 2025-07-31 - feat: implementa docker compose para subir banco de dado mysql e aplicação juntos
+4dc4b91 - LacamJC - 2025-07-31 - feat: cria migração simples para tabelas e Dockerfile
+c54d0ac - João Ramajo - 2025-07-25 - Update README.md
+350a602 - João Ramajo - 2025-07-25 - Update README.md
+1152433 - LacamJC - 2025-07-24 - fix: ajusta erro ao salvar livro com a tabela vazia
+e89d1bb - LacamJC - 2025-07-24 - fix: ajustando conteudo recebido da prod
+2c738f3 - LacamJC - 2025-07-24 - chore: procurando erro em dev
+7824dd7 - LacamJC - 2025-07-24 - chore: procurando erro em prod
+a41b157 - LacamJC - 2025-07-24 - chore: adicionadno quebra de linha no readme
+6f80f92 - LacamJC - 2025-07-24 - chore: atualizando `README.md` para informações essenciais do projeto
+0d5999b - João Ramajo - 2025-07-24 - Merge pull request #18 from joao-ramajo/environment/dev
+e0a091e - LacamJC - 2025-07-21 - chore: removendo arquivos desnecessarios e atualizando gitignore
+477efb4 - LacamJC - 2025-07-21 - WIP
+2392ecf - LacamJC - 2025-07-21 - WIP
+b27607b - LacamJC - 2025-07-21 - feat: implementando testes para `UserService` e melhoria nas validações do serviço
+a5a1dea - LacamJC - 2025-07-21 - chore: ajustando descrição do formulário de atualização de dados do usuário
+a7919db - LacamJC - 2025-07-21 - fix: ajustando fluxo de usuário, refatoração nos redirecionamentos na atualização de informações e remoção de atualização de senha
+f185033 - LacamJC - 2025-07-21 - refactor: refatoração do controller `UserController`
+c8a01ea - LacamJC - 2025-07-21 - refactor: refatorando `UserService` e separando responsabilidade de gerenciamneto de sessão para `AuthService`
+dbdaa3d - LacamJC - 2025-07-21 - refactor: refatorando implementação de `UserGateway` para um melhor desacoplamento e testabilidade
+41eef95 - LacamJC - 2025-07-20 - feat: implementando model de `User`
+036fdd6 - LacamJC - 2025-07-20 - chore: testando gitignore
+270656a - LacamJC - 2025-07-20 - chore: removendo .phpunit.result.cache do repositorio remoto
+6b59e6b - LacamJC - 2025-07-20 - feat: adicionando testes utilizando o Pest, testes de caso do `LivroService` implementados
+0ba1433 - LacamJC - 2025-07-20 - chore: resolvendo conflitos
+1cc37ad - LacamJC - 2025-07-20 - Resolve conflitos entre feature/tests e environment/dev
+9d280b4 - LacamJC - 2025-07-20 - chore: ajustando gitignore
+1808926 - LacamJC - 2025-07-20 - chore: adicionando phpunit.xml para configuração de testes
+938659f - LacamJC - 2025-07-20 - chore: ajustes nas pastas
+abda3f5 - LacamJC - 2025-07-20 - feat: implementando testes básicos para `LivroService`
+fa5599f - LacamJC - 2025-07-20 - fix: ajustando toda a estrutura da entidade `Livro` para melhor organização e manutenção, implementanção de DI para as classes auxiliares, criação de um `Model` para representação da entidade `Livro`, separação de responsabilidade entre as camadas.
+5b22745 - LacamJC - 2025-07-20 - chore: refatorando `LivroGateway` para um desacoplamento mais dinamico
+361d220 - LacamJC - 2025-07-19 - feat: implementando dependencias para criação de testes
+4917f07 - João Ramajo - 2025-07-21 - Merge pull request #16 from LacamJC/refactor/User
+7653de8 - LacamJC - 2025-07-21 - feat: implementando testes para `UserService` e melhoria nas validações do serviço
+ec40079 - LacamJC - 2025-07-21 - chore: ajustando descrição do formulário de atualização de dados do usuário
+53397dd - LacamJC - 2025-07-21 - fix: ajustando fluxo de usuário, refatoração nos redirecionamentos na atualização de informações e remoção de atualização de senha
+4721c6a - LacamJC - 2025-07-21 - refactor: refatoração do controller `UserController`
+7bad0e9 - LacamJC - 2025-07-21 - refactor: refatorando `UserService` e separando responsabilidade de gerenciamneto de sessão para `AuthService`
+0fd9817 - LacamJC - 2025-07-21 - refactor: refatorando implementação de `UserGateway` para um melhor desacoplamento e testabilidade
+575e8ce - LacamJC - 2025-07-20 - feat: implementando model de `User`
+cd53592 - LacamJC - 2025-07-20 - chore: testando gitignore
+5fa37c0 - LacamJC - 2025-07-20 - chore: removendo .phpunit.result.cache do repositorio remoto
+0fe3854 - LacamJC - 2025-07-20 - feat: adicionando testes utilizando o Pest, testes de caso do `LivroService` implementados
+d937f74 - João Ramajo - 2025-07-20 - Merge pull request #15 from LacamJC/feature/tests
+4f370ca - LacamJC - 2025-07-20 - fix: ajustando conlitos entre merge
+aa84b2d - LacamJC - 2025-07-20 - chore: resolvendo conflitos
+8405949 - LacamJC - 2025-07-20 - Resolve conflitos entre feature/tests e environment/dev
+e8bb516 - LacamJC - 2025-07-20 - chore: ajustando gitignore
+4dfa0f8 - LacamJC - 2025-07-20 - chore: adicionando phpunit.xml para configuração de testes
+b6df1e3 - LacamJC - 2025-07-20 - chore: ajustes nas pastas
+84b89d5 - João Ramajo - 2025-07-20 - Merge pull request #12 from LacamJC/environment/dev
+ca22c6e - LacamJC - 2025-07-20 - chore: ajustando configurações do banco de dados centralizando configuração para o arquivo de configuração
+8fe8808 - João Ramajo - 2025-07-20 - Merge pull request #11 from LacamJC/environment/dev
+2607e3a - LacamJC - 2025-07-20 - chore: adicionando `phpunit.xml`
+29111bf - LacamJC - 2025-07-20 - feat: implementando testes básicos para `LivroService`
+005b644 - LacamJC - 2025-07-20 - fix: ajustando toda a estrutura da entidade `Livro` para melhor organização e manutenção, implementanção de DI para as classes auxiliares, criação de um `Model` para representação da entidade `Livro`, separação de responsabilidade entre as camadas.
+b97ea97 - LacamJC - 2025-07-20 - chore: refatorando `LivroGateway` para um desacoplamento mais dinamico
+d0ac84b - LacamJC - 2025-07-19 - feat: implementando dependencias para criação de testes
+4aa4e7f - LacamJC - 2025-07-19 - chore: ajustando responsividade do formulário de cadastro de livros
+20442a3 - João Ramajo - 2025-07-18 - Merge pull request #10 from LacamJC/environment/dev
+94d9f39 - LacamJC - 2025-07-18 - fix: invertendo resposta dos arrays para o mais recente estar em primeiro
+9447f6a - João Ramajo - 2025-07-18 - Merge pull request #9 from LacamJC/environment/dev
+c2590a4 - LacamJC - 2025-07-18 - fix: ajustando regex para ler todos os logs do sistema
+d971bab - João Ramajo - 2025-07-18 - Merge pull request #8 from LacamJC/environment/dev
+d3523ef - LacamJC - 2025-07-18 - feat: implementando autenticação basic para acesso a rota /log
+551dbc1 - LacamJC - 2025-07-17 - feat: implementando api para pegar as informações dos logs
+c060e16 - João Ramajo - 2025-07-17 - Merge pull request #7 from LacamJC/environment/dev
+16db556 - LacamJC - 2025-07-17 - fix: ajustando formato de horario nos logs
+7ceab19 - João Ramajo - 2025-07-17 - Merge pull request #6 from LacamJC/environment/dev
+eda7a88 - LacamJC - 2025-07-17 - chore: arrumando sintaxe da documentação
+113231c - João Ramajo - 2025-07-17 - Merge pull request #5 from LacamJC/environment/dev
+cbf4cab - LacamJC - 2025-07-17 - chore: adicionando link para repositorio no github
+02240d6 - João Ramajo - 2025-07-17 - Merge pull request #4 from LacamJC/environment/dev
+612df6e - LacamJC - 2025-07-17 - chore: atualizando hierarquia de titulo
+d50f624 - LacamJC - 2025-07-17 - chore: ajustando ortografia e consistencia de títulos
+3c0a706 - LacamJC - 2025-07-16 - chore: explicação sobre github actions
+fe84749 - João Ramajo - 2025-07-16 - Merge pull request #3 from LacamJC/environment/dev
+817575b - LacamJC - 2025-07-16 - chore: ajustando codificação
+6101584 - João Ramajo - 2025-07-16 - Atualização da documentação
+e0f307a - LacamJC - 2025-07-16 - chore: ajustando estrutura do `README.m`
+aa4d467 - LacamJC - 2025-07-16 - chore: escrevendo sobre servidores web e como iniciar um projeto com o nginx e php-fpm
+934b4e7 - João Ramajo - 2025-07-16 - Merge pull request #1 from LacamJC/environment/dev
+43d3900 - LacamJC - 2025-07-16 - chore: removendo arquivo `info.php`
+5cc6912 - LacamJC - 2025-07-16 - chore: removendo arquivos
+5156148 - LacamJC - 2025-07-16 - chore: ajustando .gitignore
+db63c27 - root - 2025-07-16 - fix: ajustando erro de renderização do autoloader
+949f844 - LacamJC - 2025-07-16 - chore: removendo teste
+0214fb2 - LacamJC - 2025-07-16 - chore: testando github actions
+0629bd3 - LacamJC - 2025-07-16 - feat: implementando workflow para deploy continuo
+2f7d27f - LacamJC - 2025-07-16 - fix: adicionando regra para formulário definiindo tamanho máximo de caracteres
+1076d86 - root - 2025-07-16 - chore: adicionando script para leitura de logs
+ff751ea - LacamJC - 2025-07-16 - chore: rotas absolutas funcionam no frontcontroller, removendo debug de `LivroController`
+0392fc7 - LacamJC - 2025-07-16 - fix: testando rota absoluta
+2586439 - LacamJC - 2025-07-16 - fix: testando fluxo
+5027c33 - LacamJC - 2025-07-16 - fix: ajustando rota de cadastro de livros
+b905120 - LacamJC - 2025-07-16 - Merge branch 'main' of https://github.com/LacamJC/My_Bookshelf_2025
+eb17c75 - LacamJC - 2025-07-16 - fix: ajustando loop infinito na home
+326bf36 - root - 2025-07-16 - feat: ajustando "BASE_URL"
+9ce57c0 - LacamJC - 2025-07-16 - fix: ajustando BASE_URL para / para evitar problemas de rotas
+c953697 - root - 2025-07-16 - feat: ajustando arquivos para funcionamento na VPS
+3782036 - root - 2025-07-16 - ajustando estruta de pastas para projeto
+22c78f3 - LacamJC - 2025-07-16 - ajustando nomes das pastas
+244f281 - LacamJC - 2025-07-16 - feat: ajustando para novo servidor
+5d617ac - LacamJC - 2025-06-10 - Alterando o nome de algumas funções para melhor entendimento
+4da0051 - LacamJC - 2025-06-09 - Adicionando funcionalidade de apagar o comentario feito pelo proprio usuario
+fac2bb4 - LacamJC - 2025-06-06 - Adicionando visualização de comentarios por livro
+6a95250 - LacamJC - 2025-06-06 - Adicionando formulario para avaliação de um livro e seu Controller e Service referente
+79dc111 - LacamJC - 2025-06-06 - Adicionando gateway para avaliacao
+95277ce - LacamJC - 2025-06-05 - Adicionando formulário de edição de dados do usuário, e implementando sistema de update  para a entidade `usuarios`
+aebcfc3 - LacamJC - 2025-06-03 - Atualizando widgets/Layout.php
+b6e0928 - LacamJC - 2025-06-02 - Adicionando novo menu para o usuário e funcionalidade de excluir perfil
+c477ec3 - LacamJC - 2025-06-02 - Adicionando suporte a multiplos autores e atualização do .gitignore
+5ff29a6 - LacamJC - 2025-06-02 - Editando gitignore
+01b5e4c - LacamJC - 2025-06-02 - Removendo arquivos e pastas sensiveis do repositorio remoto
+1a12c9d - LacamJC - 2025-06-02 - Refatorando redirecionamentos e mensagens de log
+07ef1f0 - LacamJC - 2025-05-30 - Atualizando gitignore
+ddcd4e1 - LacamJC - 2025-05-30 - Removendo arquivos do repositorio remoto
+9de214f - LacamJC - 2025-05-30 - Removendo vendor do repositorio
+fa47604 - LacamJC - 2025-05-30 - Adicionando tratamento de erros criticos como falta de conexão com o banco de dados
+82c141a - LacamJC - 2025-05-30 - Refatorando controllers e services separando responsabilidades de regras de negocio e fluxo http
+0c3dee2 - LacamJC - 2025-05-30 - Atualização no UserGateway para garantir segurança e seguir boas práticas
+57c6d4e - LacamJC - 2025-05-30 - Implementação de PS no usuario e criação de uma classe abstrata para controle de tipos nos gateways
+bfc354b - LacamJC - 2025-05-30 - Implementando prepared statements para consultas sql
+9885b87 - LacamJC - 2025-05-30 - Adicionando middlewares para uso de formularios e consistencia das informações colocadas no formulario de login e cadastro
+ce0d8ae - LacamJC - 2025-05-30 - Ajustes nos controllers, adição de edit e delete para livros e ajustes no design
+cdd7f4d - LacamJC - 2025-05-29 - Adicionando paginação para os livros exibidos
+72ce4e9 - LacamJC - 2025-05-29 - Melhorando o design das páginas e implementando lista de livros na home page
+982d01a - LacamJC - 2025-05-29 - Adicionando gateway/controller/model da entidade livro, e reestruturação do sistema de avisos
+31e89cd - LacamJC - 2025-05-29 - Adicionando middlewares e reorganizando pastas
+b8ba844 - LacamJC - 2025-05-27 - Adicionando conexão com banco de dados, services e gateway para o usuario e implementação de um sistema de login
+36e8214 - LacamJC - 2025-05-27 - Adição da view de login e validação simples de campos
+f49a64a - LacamJC - 2025-05-26 - Editando .gitignore
+19760f1 - LacamJC - 2025-05-26 - Removendo o vendor do repositorio remoto
+ee0bf75 - LacamJC - 2025-05-26 - Implementando frontcontroller
+fc3e2be - LacamJC - 2025-05-25 - first commit

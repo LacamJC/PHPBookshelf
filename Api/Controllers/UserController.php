@@ -65,7 +65,7 @@ class UserController
         } catch (InvalidArgumentException $e) {
             return Response::redirect('login', $e->getMessage(), 'danger');
         } catch (\Exception $e) {
-            return Response::redirect('login', 'Desulpe, houve um erro interno no sistema, por favor tente novamente mais tarde', 'warning');
+            return Response::redirect('login', 'Desculpe, houve um erro interno no sistema, por favor tente novamente mais tarde', 'warning');
         }
     }
 
@@ -116,7 +116,7 @@ class UserController
                 $this->service->save($dados);
                 return Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
             } catch (InvalidArgumentException $e) {
-                return response::redirect('cadastro', $e->getMessage(), 'danger');
+                return Response::redirect('cadastro', $e->getMessage(), 'danger');
             } catch (\Exception $e) {
                 return Response::redirect('cadastro', 'Desculpe, houve um erro interno ao realizar o seu cadastro, tente novamente mais tarde', 'danger');
             }

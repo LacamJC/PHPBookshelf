@@ -7,6 +7,7 @@ use Api\Core\Response;
 use Api\Database\Connection;
 use Api\Database\UserGateway;
 use Api\Middlewares\AuthMiddleware;
+use Api\Models\ValueObjects\Password;
 use Api\Services\AuthService;
 use Api\Services\UserService;
 use Exception;
@@ -40,18 +41,12 @@ class UserController
         $this->auth->setForm($_POST);
 
         $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $password = trim($_POST['password']);
+
+        $password = new Password($_POST['password']);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return Response::redirect('login', 'Email inválido', 'danger');
         }
-        if (strlen($password) < 6) {
-            return Response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
-        }
-        if (strlen($password) > 12) {
-            return Response::redirect('login', 'A senha não deve conter mais que 12 caracteres', 'danger');
-        }
-
         try {
             $valid = $this->service->verify($email, $password);
 

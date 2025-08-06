@@ -6,6 +6,7 @@ use Api\Core\LoggerTXT;
 use Api\Database\UserGateway;
 use Api\Database\Connection;
 use Api\Models\User;
+use Api\Models\ValueObjects\Password;
 use Exception;
 use InvalidArgumentException;
 
@@ -152,7 +153,7 @@ class UserService
     }
 
 
-    public function verify(string $email, string $pass): bool
+    public function verify(string $email, Password $pass): bool
     {
         try {
             if (empty($email) || empty($pass)) {
@@ -165,7 +166,7 @@ class UserService
                 throw new Exception('Usuário não encontrado');
             }
 
-            if (!password_verify($pass, $user->senha)) {
+            if (!password_verify($pass->value(), $user->senha)) {
                 throw new InvalidArgumentException('Login inválido');
             }
 

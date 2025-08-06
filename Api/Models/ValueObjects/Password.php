@@ -11,7 +11,7 @@ class Password
     public function __construct(string $password, bool $alreadyHashed  = false){
         if(!$alreadyHashed){
             $this->validate($password);
-            $password = password_hash($password, PASSWORD_BCRYPT);
+            $password = password_hash(trim($password), PASSWORD_BCRYPT);
         }
 
         $this->password = $password;

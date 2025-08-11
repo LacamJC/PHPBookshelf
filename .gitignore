@@ -5,6 +5,7 @@ vendor/
 public/uploads/
 database/**/*.db
 config/*.ini
+
 .phpunit.result.cache
 phpunit.xml.bak
 .phpunit.cache/

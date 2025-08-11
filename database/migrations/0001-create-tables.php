@@ -19,7 +19,7 @@ return function (PDO $conn) {
         autores VARCHAR(255) NOT NULL,
         numero_paginas INT,
         genero VARCHAR(100) NOT NULL,
-        nacional ENUM('S', 'N') NOT NULL, 
+        nacional ENUM('S', 'N') NOT NULL,
         capa_path VARCHAR(255),
         editora VARCHAR(255) NOT NULL,
         descricao TEXT NOT NULL,

@@ -41,7 +41,7 @@ services:
       - app
 
 networks:
-  app: 
+  app:
 
 volumes:
   db_data:

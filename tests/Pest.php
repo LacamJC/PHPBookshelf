@@ -24,6 +24,10 @@
 |
 */
 
+use Api\Database\UserGateway;
+use Api\Services\UserService;
+// use Tests\TestCase;
+
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
@@ -43,3 +47,22 @@ function something()
 {
     // ..
 }
+
+
+
+pest()->beforeEach(function () {
+    $this->pdo = new PDO('sqlite::memory:');
+    $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $this->pdo->exec("CREATE TABLE IF NOT EXISTS usuarios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    senha TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+");
+    $this->gateway = new UserGateway($this->pdo);
+    $this->service = new UserService($this->gateway);
+})->afterEach(function() {
+    $this->pdo->exec("DROP TABLE usuarios");
+})->group('feature-users-arrange');

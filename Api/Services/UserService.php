@@ -163,7 +163,7 @@ class UserService
             $user = $this->gateway->findByEmail($email);
 
             if (!$user) {
-                throw new Exception('Usuário não encontrado');
+                throw new InvalidArgumentException('Login inválido');
             }
 
             if (!password_verify($pass->value(), $user->senha)) {
@@ -177,7 +177,6 @@ class UserService
             LoggerTXT::log("UserService@verify: O usuário {$user->email} fez login", "Success");
             return true;
         } catch(InvalidArgumentException $e){
-            // die('Lidando com execção');
             throw $e;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@verify: {$e->getMessage()}", 'Error');

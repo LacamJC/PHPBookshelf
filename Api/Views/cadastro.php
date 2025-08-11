@@ -33,7 +33,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                         class="form-control"
                         id="email"
                         name="email"
-                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : 'teste@gmail.com' ?>"
+                        value="<?= isset($old['email']) ? htmlspecialchars($old['email']) : '' ?>"
                         placeholder="Digite seu email">
                 </div>
 
@@ -44,7 +44,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                         class="form-control"
                         id="nome"
                         name="nome"
-                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : 'asd' ?>"
+                        value="<?= isset($old['nome']) ? htmlspecialchars($old['nome']) : '' ?>"
                         placeholder="Digite seu nome"
                         required>
                 </div>
@@ -57,7 +57,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                             class="form-control"
                             id="password"
                             name="senha"
-                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '123123' ?>"
+                            value="<?= isset($old['senha']) ? htmlspecialchars($old['senha']) : '' ?>"
                             placeholder="Digite sua senha"
                             required
                             minlength="6"
@@ -79,7 +79,7 @@ $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
                             class="form-control"
                             id="confirm"
                             name="confirma"
-                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '123123' ?>"
+                            value="<?= isset($old['confirma']) ? htmlspecialchars($old['confirma']) : '' ?>"
                             placeholder="Confirme sua senha"
                             required
                             minlength="6"

@@ -13,7 +13,7 @@ class LoggerTXT extends Logger
 
         $time = date("Y-m-d H:i:s");
 
-        $text = "$time :: $message \n";
+        $text = "$time :: $message" . PHP_EOL;
 
             $handler = fopen($this->filename, 'a');
             fwrite($handler, $text);

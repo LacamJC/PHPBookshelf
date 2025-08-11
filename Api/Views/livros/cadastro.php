@@ -26,23 +26,23 @@ use Api\Widgets\Layout;
 
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título</label>
-                <input type="text" class="form-control" id="titulo" name="titulo" value="Percy Jackson e o Ladrão de Raios" placeholder="Digite o título do livro" required>
+                <input type="text" class="form-control" id="titulo" name="titulo" value="" placeholder="Digite o título do livro" required>
             </div>
 
             <div class="mb-3">
                 <label for="autores" class="form-label">Autor(es)</label>
-                <input type="text" class="form-control" id="autores" name="autores" value="Elisabeth Swan" placeholder="Digite o nome do(s) autor(es)" required>
+                <input type="text" class="form-control" id="autores" name="autores" value="" placeholder="Digite o nome do(s) autor(es)" required>
             </div>
             <p class="text-secondary">Caso o livro tenha mais de um autor, separe por ';'</p>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="numero_paginas" class="form-label">Número de páginas</label>
-                    <input type="number" class="form-control" id="numero_paginas" name="numero_paginas" value="200" placeholder="Quantidade de páginas" required>
+                    <input type="number" class="form-control" id="numero_paginas" name="numero_paginas" value="" placeholder="Quantidade de páginas" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="genero" class="form-label">Gênero</label>
-                    <input type="text" class="form-control" id="genero" name="genero" value="Terror" placeholder="Ex: Fantasia, Romance..." required>
+                    <input type="text" class="form-control" id="genero" name="genero" value="" placeholder="Ex: Fantasia, Romance..." required>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@ use Api\Widgets\Layout;
 
                 <div class="col-md-6 mb-3">
                     <label for="editora" class="form-label">Editora</label>
-                    <input type="text" class="form-control" id="editora" name="editora" value="Burguers Book" placeholder="Nome da editora" required>
+                    <input type="text" class="form-control" id="editora" name="editora" value="" placeholder="Nome da editora" required>
                 </div>
             </div>
 

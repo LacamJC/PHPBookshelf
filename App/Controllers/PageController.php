@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use App\Core\Response;
+use App\Database\Connection;
+use App\Database\LivroGateway;
+use App\Database\UserGateway;
 use App\Middlewares\AuthMiddleware;
 use App\Services\AuthService;
 use App\Services\AvaliacaoService;
@@ -16,8 +19,17 @@ class PageController
     private UserService $UserService;
     private AuthService $AuthService;
 
-    public function __construct(?LivroService $LivroService = new LivroService, ?UserService $UserService = new UserService, ?AuthService $AuthService = new AuthService)
+    public function __construct(?LivroService $LivroService = null, ?UserService $UserService = null, ?AuthService $AuthService = null)
     {
+        if($LivroService === null){
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
+            $userGateway = new UserGateway($conn);
+            $livroGateway = new LivroGateway($conn);
+
+            $LivroService = new LivroService($livroGateway);
+            $UserService = new UserService($userGateway);
+            $AuthService = new AuthService();
+        }
         $this->LivroService = $LivroService;
         $this->UserService = $UserService;
         $this->AuthService = $AuthService;

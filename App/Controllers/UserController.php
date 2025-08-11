@@ -27,7 +27,7 @@ class UserController
         }
 
         if ($auth === null) {
-            $auth = new AuthService;
+            $auth = new AuthService();
         }
 
         $this->service = $service;

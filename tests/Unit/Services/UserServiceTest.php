@@ -27,12 +27,6 @@ afterEach(function() {
     $this->pdo->exec("DROP TABLE usuarios");
 });
 
-test('funciona caraio', function(){
-    expect(true)->toBeTrue();
-});
-
-
-
 describe('UserService@save | Teste para para inserção de novos usuários', function () {
     test('Cadastro de um usuário válido', function () {
         $user = new User;

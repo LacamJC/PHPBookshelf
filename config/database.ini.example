@@ -1,0 +1,5 @@
+host=localhost
+name=meu-banco
+user=user
+pass=123456
+type=mysql

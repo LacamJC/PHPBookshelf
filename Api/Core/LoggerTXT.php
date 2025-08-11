@@ -15,9 +15,13 @@ class LoggerTXT extends Logger
 
         $text = "$time :: $message \n";
 
-        $handler = fopen($this->filename, 'a');
-        fwrite($handler, $text);
-        fclose($handler);
+        try{
+            // $handler = fopen($this->filename, 'a');
+            // fwrite($handler, $text);
+            // fclose($handler);
+        }catch(\Exception $e){
+
+        }
     }
 
     public static function log($message, $type)

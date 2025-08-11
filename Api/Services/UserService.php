@@ -177,7 +177,7 @@ class UserService
             LoggerTXT::log("UserService@verify: O usuário {$user->email} fez login", "Success");
             return true;
         } catch(InvalidArgumentException $e){
-            die('Lidando com execção');
+            // die('Lidando com execção');
             throw $e;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@verify: {$e->getMessage()}", 'Error');

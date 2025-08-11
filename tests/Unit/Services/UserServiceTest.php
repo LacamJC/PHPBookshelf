@@ -8,9 +8,9 @@ use Api\Services\UserService;
 
 
 beforeEach(function () {
-    $pdo = new PDO('sqlite::memory:');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->exec("CREATE TABLE IF NOT EXISTS usuarios (
+    $this->pdo = new PDO('sqlite::memory:');
+    $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $this->pdo->exec("CREATE TABLE IF NOT EXISTS usuarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
@@ -19,8 +19,16 @@ beforeEach(function () {
 )
 ");
     // $this->gateway = $this->createMock(UserGateway::class);
-    $this->gateway = new UserGateway($pdo);
+    $this->gateway = new UserGateway($this->pdo);
     $this->service = new UserService($this->gateway);
+});
+
+afterEach(function() {
+    $this->pdo->exec("DROP TABLE usuarios");
+});
+
+test('funciona caraio', function(){
+    expect(true)->toBeTrue();
 });
 
 
@@ -65,9 +73,6 @@ describe('UserService@save | Teste para para inserção de novos usuários', fun
             'senha' => '123123123123123',
             'confirma' => '123123'
         ];
-
-
-
         $this->expectException(InvalidArgumentException::class);
         $this->service->save($data);
     });
@@ -79,7 +84,6 @@ describe('UserService@save | Teste para para inserção de novos usuários', fun
             'senha' => '123123123123123',
             'confirma' => '123123'
         ];
-
 
         $this->expectException(InvalidArgumentException::class);
         $this->service->save($data);
@@ -96,29 +100,24 @@ describe('UserService@delete | Teste para remoção de um usuário', function ()
             'confirma' => '123123'
         ];
 
-        // Cria o usuário
         $this->service->save($data);
 
-        // Busca o usuário salvo
         $user = $this->gateway->findByEmail($data['email']);
         expect($user)->not->toBeNull();
 
-        // Apaga o usuário
         $result = $this->service->delete($user->id);
         expect($result)->toBeTrue();
 
-        // Garante que o usuário foi removido
         $deletedUser = $this->gateway->findByEmail($data['email']);
         expect($deletedUser)->toBeNull();
     });
-
-
 
     test('Lança uma exceção se o ID for inválido', function () {
         $id = null;
         $this->expectException(TypeError::class);
         $this->service->delete($id);
     });
+
     test('Lança uma exceção se o ID for menor que 1', function () {
         $id = 0;
         $this->expectException(Exception::class);
@@ -161,6 +160,7 @@ describe('UserService@findById | Testes para busca por ID', function () {
 });
 
 describe('UserService@verify | Testes para verificação de credenciais', function () {
+
     test('Permite o acesso das informações válidas', function () {
         $data = [
             'nome' => 'John Doe',
@@ -170,13 +170,16 @@ describe('UserService@verify | Testes para verificação de credenciais', functi
         ];
 
         $save = $this->service->save($data);
-        expect($save)->toBeTrue();
+        $password = new Password($data['senha'], true);
 
-        $this->expectException(InvalidArgumentException::class);
-        $result = $this->service->verify($data['email'], new Password($data['senha']));
+        expect($save)
+            ->toBeTrue();
 
+
+        expect($this->service->verify('john.doe@gmail.com', $password))
+            ->toBeTrue();
     });
-
+// AQUI
     test('Retorna uma exceção por email inválido', function () {
         $data = [
             'nome' => 'John Doe',

@@ -6,3 +6,5 @@ public/uploads/
 database/**/*.db
 
 .phpunit.result.cache
+phpunit.xml.bak
+.phpunit.cache/

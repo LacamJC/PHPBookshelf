@@ -6,6 +6,7 @@ use Api\Core\LoggerTXT;
 use Api\Database\UserGateway;
 use Api\Database\Connection;
 use Api\Models\User;
+use Api\Models\ValueObjects\Password;
 use Exception;
 use InvalidArgumentException;
 
@@ -45,7 +46,7 @@ class UserService
 
             $user = new User($dados);
             $result = $this->gateway->save($user);
- 
+
 
             if (!$result) {
                 throw new Exception('Houve um erro ao salvar o usuário');
@@ -55,7 +56,7 @@ class UserService
             return $result;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@store: {$e->getMessage()}", 'Error');
-            
+
             throw $e;
         }
     }
@@ -131,9 +132,28 @@ class UserService
             throw $e;
         }
     }
+    public function findByEmail(string $email): User
+    {
+        try {
+            if ($email === null || strlen($email) < 1) {
+                throw new Exception("Email inválido");
+            }
+
+            $user = $this->gateway->findByEmail($email);
+
+            if (!$user) {
+                throw new  Exception('Usuário não encontrado');
+            }
+
+            return $user;
+        } catch (Exception $e) {
+            LoggerTXT::log('UserService@findByEmail: ' . $e->getMessage(), 'Error');
+            throw $e;
+        }
+    }
 
 
-    public function verify(string $email, string $pass): bool
+    public function verify(string $email, Password $pass): bool
     {
         try {
             if (empty($email) || empty($pass)) {
@@ -146,7 +166,7 @@ class UserService
                 throw new Exception('Usuário não encontrado');
             }
 
-            if (!password_verify($pass, $user->senha)) {
+            if (!password_verify($pass->value(), $user->senha)) {
                 throw new InvalidArgumentException('Login inválido');
             }
 
@@ -156,6 +176,9 @@ class UserService
 
             LoggerTXT::log("UserService@verify: O usuário {$user->email} fez login", "Success");
             return true;
+        } catch(InvalidArgumentException $e){
+            // die('Lidando com execção');
+            throw $e;
         } catch (Exception $e) {
             LoggerTXT::log("UserService@verify: {$e->getMessage()}", 'Error');
             throw $e;

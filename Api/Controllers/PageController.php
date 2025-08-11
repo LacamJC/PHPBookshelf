@@ -23,39 +23,35 @@ class PageController
         $this->AuthService = $AuthService;
     }
 
-    public function home()
+    public function home(): Void
     {
         AuthMiddleware::handle();
         include dirname(__DIR__) . '/Views/home.php';
     }
 
-    public function lista()
+    public function lista(): Void
     {
         AuthMiddleware::handle();
         include dirname(__DIR__) . '/Views/livros/lista.php';
     }
 
-    public function cadastro()
+    public function cadastro(): Void
     {
         include dirname(__DIR__) . '/Views/cadastro.php';
     }
 
-    public function cadastrarLivro()
+    public function cadastrarLivro(): Void
     {
         AuthMiddleware::handle();
         include dirname(__DIR__) . '/Views/livros/cadastro.php';
     }
 
-    public function view(array $params = [])
+    public function view(array $params = []): Void
     {
         AuthMiddleware::handle();
         $id = $params['id'] ?? null;
-
         $livro = $this->LivroService->findById($id);
-
         $comentarios = AvaliacaoService::buscarComentarios($id);
-
-
 
         include dirname(__DIR__) . '/Views/livros/visualizar.php';
     }
@@ -68,9 +64,10 @@ class PageController
         }
 
         $result = AvaliacaoService::editarComentario($id);
+        // não desenvolvido
     }
 
-    public function edit($params = [])
+    public function edit($params = []): Void
     {
         AuthMiddleware::handle();
         $id = $params['id'] ?? null;
@@ -81,22 +78,20 @@ class PageController
         include dirname(__DIR__) . '/Views/livros/editar.php';
     }
 
-    public function login()
+    public function login(): Void
     {
         include dirname(__DIR__) . '/Views/login.php';
     }
 
-    public function editUser($params = [])
+    public function editUser($params = []): Void
     {
         $id = $params['id'];
         $token = $params['token'];
         AuthMiddleware::handle();
         AuthMiddleware::token($token);
 
-        // $user = UserService::findById($id);
         $user = $this->UserService->findById($id);
 
-        // $_SESSION['form_data'] = $user;
         $this->AuthService->setForm($user);
 
         include dirname(__DIR__) . '/Views/usuarios/editar.php';

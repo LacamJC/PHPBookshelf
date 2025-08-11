@@ -30,7 +30,6 @@ class LivroController
         $dados = $_POST;
 
         foreach ($dados as $chave => $valor) {
-
             if (is_string($valor)) {
                 $valor = trim($valor);
                 if (strlen($valor) == 0 or $valor == '') {

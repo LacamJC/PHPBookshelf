@@ -7,6 +7,7 @@ use Api\Core\Response;
 use Api\Database\Connection;
 use Api\Database\UserGateway;
 use Api\Middlewares\AuthMiddleware;
+use Api\Models\ValueObjects\Password;
 use Api\Services\AuthService;
 use Api\Services\UserService;
 use Exception;
@@ -36,25 +37,17 @@ class UserController
     public function login(): Response
     {
         AuthMiddleware::token($_POST['edit_token']);
-
-        $this->auth->setForm($_POST);
-
-        $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $password = trim($_POST['password']);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return Response::redirect('login', 'Email inválido', 'danger');
-        }
-        if (strlen($password) < 6) {
-            return Response::redirect('login', 'A senha deve conter ao menos 6 caracteres',  "danger");
-        }
-        if (strlen($password) > 12) {
-            return Response::redirect('login', 'A senha não deve conter mais que 12 caracteres', 'danger');
-        }
-
-
-
         try {
+            $this->auth->setForm($_POST);
+
+            $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+            $password = new Password($_POST['password']);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return Response::redirect('login', 'Email inválido', 'danger');
+            }
+
             $valid = $this->service->verify($email, $password);
 
             if ($valid) {
@@ -66,16 +59,15 @@ class UserController
             }
         } catch (InvalidArgumentException $e) {
             return Response::redirect('login', $e->getMessage(), 'danger');
-        } catch (\Exception $e) {
-            return Response::redirect('login', 'Desulpe, houve um erro interno no sistema, por favor tente novamente mais tarde');
+        } catch (Exception $e) {
+            return Response::redirect('login', 'Desculpe, houve um erro interno no sistema, por favor tente novamente mais tarde', 'warning');
         }
     }
 
     public function logout(): Response
     {
-
-        $this->auth->logout();
         LoggerTXT::log("{$_SESSION['user']->nome} fez logout", 'Logout');
+        $this->auth->logout();
         return Response::redirect('login');
     }
 
@@ -86,17 +78,17 @@ class UserController
         $token = $params['token'];
         AuthMiddleware::token($token);
 
-        if ($id <= 0 or is_string($id)) {
+        if ($id <= 0) {
             Response::redirect('login', '', '');
         }
         try {
             $this->service->delete($id);
             return Response::redirect('login', 'Conta apagada com sucesso', 'success');
         } catch (\Exception $e) {
+            LoggerTXT::log("Erro ao apagar usuário: {$e->getMessage()}", 'Error');
             return Response::redirect('home', 'Houve um erro interno no sistema, por favor tente novamente mais tarde', 'danger');
         }
     }
-
 
     public function store(): Response
     {
@@ -111,7 +103,7 @@ class UserController
             $this->auth->setForm($_POST);
             AuthMiddleware::token($_POST['edit_token']);
             foreach ($dados as $prop => $value) {
-                if (empty($value) or strlen($value) <= 0) {
+                if (empty($value) || strlen($value) <= 0) {
                     return Response::redirect('cadastro', "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
@@ -119,7 +111,7 @@ class UserController
                 $this->service->save($dados);
                 return Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
             } catch (InvalidArgumentException $e) {
-                return response::redirect('cadastro', $e->getMessage(), 'danger');
+                return Response::redirect('cadastro', $e->getMessage(), 'danger');
             } catch (\Exception $e) {
                 return Response::redirect('cadastro', 'Desculpe, houve um erro interno ao realizar o seu cadastro, tente novamente mais tarde', 'danger');
             }
@@ -142,7 +134,7 @@ class UserController
                 'confirma' => (trim($_POST['confirma']) ?? '')
             ];
             foreach ($dados as $prop => $value) {
-                if (empty($value) or strlen($value) <= 0) {
+                if (empty($value) || strlen($value) <= 0) {
                     return Response::redirect("usuarios/editar-conta/$id/$token", "O campo '{$prop}' nao pode ser vazio", 'danger');
                 }
             }
@@ -153,10 +145,10 @@ class UserController
 
             $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
-
             unset($dados['edit_token']);
 
             $dados['id'] = $id;
+
             try {
                 $this->service->update($dados);
             } catch (InvalidArgumentException $e) {

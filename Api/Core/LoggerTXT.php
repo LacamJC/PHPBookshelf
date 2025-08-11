@@ -15,15 +15,20 @@ class LoggerTXT extends Logger
 
         $text = "$time :: $message \n";
 
-        $handler = fopen($this->filename, 'a');
-        fwrite($handler, $text);
-        fclose($handler);
+            $handler = fopen($this->filename, 'a');
+            fwrite($handler, $text);
+            fclose($handler);
     }
 
-    public static function log($message, $type)
+    public static function log($message, $type, $logger = null)
     {
-        $logger = new LoggerTXT(__DIR__ . '/../../logs/app.log');
+        $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'production';
+        if($env == 'testing'){
+            return;
+        }
+
         $message = "[{$type}] " . $message;
+        $logger = new LoggerTXT(__DIR__ . '/../../logs/app.log');
         $logger->write($message);
     }
 }

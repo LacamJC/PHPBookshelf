@@ -4,6 +4,7 @@ logs/
 vendor/
 public/uploads/
 database/**/*.db
-database/**/*.sql
-config/database.ini
+
 .phpunit.result.cache
+phpunit.xml.bak
+.phpunit.cache/

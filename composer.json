@@ -1,4 +1,6 @@
 {
+    "name": "ramajo/my-book-shelf_2025",
+    "version": "1.0.0",
     "scripts": {
         "logs": [
             "cat logs/app.log"

@@ -78,10 +78,15 @@ class LivroGateway extends Gateway
             $sql = "SELECT max(id) as max FROM livros";
             $result = $this->conn->query($sql);
             $data = $result->fetch(PDO::FETCH_ASSOC);
+            if (!isset($data['max']) || $data['max'] === null) {
+                return 1; 
+            }
+            
             return $data['max'];
         } catch (Exception $e) {
             $message = 'LivroGateway@getLastId: ' . $e->getMessage();
-         throw $e;
+            error_log($message);
+            throw $e;
         }
     }
 
@@ -93,7 +98,7 @@ class LivroGateway extends Gateway
             return $result->fetchAll(PDO::FETCH_CLASS, Livro::class);
         } catch (Exception $e) {
             $message = 'LivroGateway@all: ' . $e->getMessage();
-         throw $e;
+            throw $e;
         }
     }
 
@@ -114,7 +119,7 @@ class LivroGateway extends Gateway
             return $livro;
         } catch (Exception $e) {
             $message = 'LivroGateway@findById: ' . $e->getMessage();
-         throw $e;
+            throw $e;
         }
     }
 
@@ -127,7 +132,7 @@ class LivroGateway extends Gateway
             return $data['max'];
         } catch (Exception $e) {
             $message = 'LivroGateway@countAll: ' . $e->getMessage();
-         throw $e;
+            throw $e;
         }
     }
 
@@ -144,7 +149,7 @@ class LivroGateway extends Gateway
             return $stmt->fetchAll(PDO::FETCH_CLASS, Livro::class);
         } catch (Exception $e) {
             $message = 'LivroGateway@paginate: ' . $e->getMessage();
-         throw $e;
+            throw $e;
         }
     }
 
@@ -158,7 +163,7 @@ class LivroGateway extends Gateway
             return $stmt->execute();
         } catch (Exception $e) {
             $message = 'LivroGateway@delete: ' . $e->getMessage();
-         throw $e;
+            throw $e;
         }
     }
 }

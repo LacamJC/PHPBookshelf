@@ -25,6 +25,8 @@
 */
 
 use Api\Database\UserGateway;
+use Api\Models\User;
+use Api\Models\ValueObjects\Password;
 use Api\Services\UserService;
 // use Tests\TestCase;
 
@@ -63,6 +65,40 @@ pest()->beforeEach(function () {
 ");
     $this->gateway = new UserGateway($this->pdo);
     $this->service = new UserService($this->gateway);
+        $this->validUser = new User([
+        'nome' => 'João',
+        'email' => 'joao@gmail.com',
+        'senha' => new Password('Aa123123')
+    ]);
+
+    $this->fiveUsersModel = [
+        new User([
+            'nome' => 'João',
+            'email' => 'joao@gmail.com',
+            'senha' => new Password('Aa123123')
+        ]),
+        new User([
+            'nome' => 'Maria',
+            'email' => 'maria@gmail.com',
+            'senha' => new Password('Bb234234')
+        ]),
+        new User([
+            'nome' => 'Carlos',
+            'email' => 'carlos@gmail.com',
+            'senha' => new Password('Cc345345')
+        ]),
+        new User([
+            'nome' => 'Ana',
+            'email' => 'ana@gmail.com',
+            'senha' => new Password('Dd456456')
+        ]),
+        new User([
+            'nome' => 'Pedro',
+            'email' => 'pedro@gmail.com',
+            'senha' => new Password('Ee567567')
+        ]),
+    ];
+
 })->afterEach(function() {
     $this->pdo->exec("DROP TABLE usuarios");
 })->group('feature-users-arrange');

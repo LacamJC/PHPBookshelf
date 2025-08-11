@@ -6,6 +6,7 @@ use Api\Abstract\Gateway;
 use Api\Models\User;
 use PDO;
 use Exception;
+use PDOException;
 
 class UserGateway extends Gateway
 {
@@ -20,9 +21,9 @@ class UserGateway extends Gateway
     {
         try {
             if (empty($user->id)) {  // <- Verifica se é uma atualização ou inserção
-                $id = $this->getLastId() + 1; // <- Busca o ultimo id do banco de dados
+                $id = $this->getLastId()+1; // <- Busca o ultimo id do banco de dados
                 $sql = "INSERT INTO usuarios(id, nome, email, senha) VALUES (:id, :nome, :email, :senha)";
-               
+
             } else {
                 $id = $user->id;
                 $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
@@ -39,7 +40,6 @@ class UserGateway extends Gateway
             $stmt->bindValue(':email', $email, self::TYPE_STR);
             if (empty($user->id)) { // <- So prepara a senha se for um novo usuario
                 $stmt->bindValue(':senha', $senha, self::TYPE_STR);
-            
             }
 
             return $stmt->execute();
@@ -146,7 +146,7 @@ class UserGateway extends Gateway
             $result = $this->conn->query($sql);
             $data = $result->fetch(PDO::FETCH_OBJ);
 
-            return isset($data->max) ? $data->max : 1;
+            return isset($data->max) ? $data->max : 0;
         } catch (Exception $e) {
             throw $e;
         }

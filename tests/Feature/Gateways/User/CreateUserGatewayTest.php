@@ -1,7 +1,7 @@
 <?php
 
-use Api\Models\User;
-use Api\Models\ValueObjects\Password;
+use App\Models\User;
+use App\Models\ValueObjects\Password;
 
 beforeEach(function() {
     $this->validUser = new User([

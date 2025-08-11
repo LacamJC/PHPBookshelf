@@ -24,10 +24,10 @@
 |
 */
 
-use Api\Database\UserGateway;
-use Api\Models\User;
-use Api\Models\ValueObjects\Password;
-use Api\Services\UserService;
+use App\Database\UserGateway;
+use App\Models\User;
+use App\Models\ValueObjects\Password;
+use App\Services\UserService;
 // use Tests\TestCase;
 
 expect()->extend('toBeOne', function () {

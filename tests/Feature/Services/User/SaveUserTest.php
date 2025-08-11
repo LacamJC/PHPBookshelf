@@ -1,6 +1,6 @@
 <?php
 
-use Api\Models\User;
+use App\Models\User;
 
 describe('UserService@save', function () {
     test('Cadastro de um usuário válido', function () {

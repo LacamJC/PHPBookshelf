@@ -1,6 +1,6 @@
 <?php
 
-use Api\Models\User;
+use App\Models\User;
 
 describe('UserGateway@findById', function() {
     test('Encontra um usuário existente e retorna uma instância de User', function() {

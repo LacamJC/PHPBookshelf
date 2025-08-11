@@ -1,6 +1,6 @@
 <?php
 
-use Api\Models\ValueObjects\Password;
+use App\Models\ValueObjects\Password;
 
 describe('UserService@verify', function () {
 

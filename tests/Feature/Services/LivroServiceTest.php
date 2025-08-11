@@ -1,8 +1,8 @@
 <?php
 
-use Api\Database\LivroGateway;
-use Api\Models\Livro;
-use Api\Services\LivroService;
+use App\Database\LivroGateway;
+use App\Models\Livro;
+use App\Services\LivroService;
 
 beforeEach(function () {
     $this->gateway = $this->createMock(LivroGateway::class);

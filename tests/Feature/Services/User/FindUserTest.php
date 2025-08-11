@@ -1,6 +1,6 @@
 <?php
 
-use Api\Models\User;
+use App\Models\User;
 
 describe('UserService@findById', function () {
     test('Buscando usuário por ID', function () {

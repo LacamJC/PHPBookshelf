@@ -31,7 +31,6 @@ final class Connection
             $port = isset($db['port']) ? $db['port'] : NULL;
             // echo "<br>" . dirname(dirname(__DIR__)) . "/$name" . "<br>";
 
-
             switch ($type) {
                 case 'sqlite':
                     $conn = new PDO("sqlite:" . dirname(dirname(__DIR__)) . "/$name");
@@ -39,16 +38,18 @@ final class Connection
                     break;
 
                 case 'mysql':
-                    $port = $port ? $port : '3306';
+		    $port = $port ? $port : '3306';
                     try {
                         $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}", $user, $pass);
                     } catch (PDOException $e) {
-                        echo $e->getMessage();
+			echo $e->getMessage();
+			die();
                     }
                     break;
             }
 
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 
             return $conn;
         } catch (Exception $e) {

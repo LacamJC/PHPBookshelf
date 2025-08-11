@@ -42,13 +42,13 @@ class UserController
 
             $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
-            $password = new Password($_POST['password']);
+            Password::allows($_POST['password']);
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return Response::redirect('login', 'Email inválido', 'danger');
             }
 
-            $valid = $this->service->verify($email, $password);
+            $valid = $this->service->verify($email, $_POST['password']);
 
             if ($valid) {
                 $this->auth->clearForm();
@@ -108,6 +108,7 @@ class UserController
                 }
             }
             try {
+                $password = new Password($dados['senha']);
                 $this->service->save($dados);
                 return Response::redirect('login', 'Conta cadastrada com sucesso', 'success');
             } catch (InvalidArgumentException $e) {

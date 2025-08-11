@@ -153,7 +153,7 @@ class UserService
     }
 
 
-    public function verify(string $email, Password $pass): bool
+    public function verify(string $email, string $pass): bool
     {
         try {
             if (empty($email) || empty($pass)) {
@@ -166,7 +166,7 @@ class UserService
                 throw new InvalidArgumentException('Login inválido');
             }
 
-            if (!password_verify($pass->value(), $user->senha)) {
+            if (!password_verify($pass, $user->senha)) {
                 throw new InvalidArgumentException('Login inválido');
             }
 

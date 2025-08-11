@@ -15,11 +15,22 @@ CREATE TABLE IF NOT EXISTS livros (
     numero_paginas INTEGER,
     genero TEXT NOT NULL,
     nacional TEXT NOT NULL CHECK(nacional IN ('S', 'N')), 
-    capa_path TEXT ,
+    capa_path TEXT,
     editora TEXT NOT NULL,
     descricao TEXT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS avaliacoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER NOT NULL,
+    id_livro INTEGER NOT NULL,
+    comentario TEXT,
+    nota INTEGER CHECK(nota BETWEEN 1 AND 5),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_livro) REFERENCES livros(id)
+);
 
 CREATE TABLE IF NOT EXISTS avaliacoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,3 +53,4 @@ CREATE TABLE IF NOT EXISTS likes_dislikes (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
     UNIQUE (id_avaliacao, id_usuario) 
 )
+

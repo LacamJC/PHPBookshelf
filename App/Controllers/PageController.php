@@ -2,16 +2,19 @@
 
 namespace App\Controllers;
 
+use App\Core\LoggerTXT;
 use App\Core\Response;
+use App\Core\View;
 use App\Database\Connection;
 use App\Database\LivroGateway;
 use App\Database\UserGateway;
+use App\Interfaces\LoggerInterface;
 use App\Middlewares\AuthMiddleware;
 use App\Services\AuthService;
 use App\Services\AvaliacaoService;
 use App\Services\LivroService;
 use App\Services\UserService;
-
+use InvalidArgumentException;
 
 class PageController
 {
@@ -35,37 +38,63 @@ class PageController
         $this->AuthService = $AuthService;
     }
 
-    public function home(): Void
+    public function home(): Response
     {
-        AuthMiddleware::handle();
-        include dirname(__DIR__) . '/Views/home.php';
+        try{
+            AuthMiddleware::handle();
+            return Response::view('home');
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@home: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 
-    public function lista(): Void
+    public function lista(): Response
     {
-        AuthMiddleware::handle();
-        include dirname(__DIR__) . '/Views/livros/lista.php';
+        try{
+            AuthMiddleware::handle();
+            return Response::view('livros/lista');
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@lista: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
+
     }
 
-    public function cadastro(): Void
+    public function cadastro(): Response
     {
-        include dirname(__DIR__) . '/Views/cadastro.php';
+        try{
+            return Response::view('cadastro');
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@cadastro: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 
-    public function cadastrarLivro(): Void
+    public function cadastrarLivro(): Response
     {
-        AuthMiddleware::handle();
-        include dirname(__DIR__) . '/Views/livros/cadastro.php';
+        try{
+            AuthMiddleware::handle();
+            return Response::view('livros/cadastro');
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@cadastrarLivro: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 
-    public function view(array $params = []): Void
+    public function view(array $params = []): Response
     {
-        AuthMiddleware::handle();
-        $id = $params['id'] ?? null;
-        $livro = $this->LivroService->findById($id);
-        $comentarios = AvaliacaoService::buscarComentarios($id);
-
-        include dirname(__DIR__) . '/Views/livros/visualizar.php';
+        try{
+            AuthMiddleware::handle();
+            $id = $params['id'] ?? null;
+            return Response::view('livros/visualizar', [
+                'livro' => $this->LivroService->findById($id),
+                'comentarios' => AvaliacaoService::buscarComentarios($id)
+            ]);
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@view: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 
     public function editarAvaliacao($params = [])
@@ -79,33 +108,40 @@ class PageController
         // não desenvolvido
     }
 
-    public function edit($params = []): Void
+    public function edit($params = []): Response
     {
-        AuthMiddleware::handle();
-        $id = $params['id'] ?? null;
-
-        // $livro = LivroService::findById($id);
-        $livro = $this->LivroService->findById($id);
-
-        include dirname(__DIR__) . '/Views/livros/editar.php';
+        try{
+            AuthMiddleware::handle();
+            $id = $params['id'] ?? null;
+            return Response::view('livros/editar', [
+                'livro' => $this->LivroService->findById($id)
+            ]);
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@edit: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 
-    public function login(): Void
+    public function login(): Response
     {
-        include dirname(__DIR__) . '/Views/login.php';
+        return Response::view('login');
     }
 
-    public function editUser($params = []): Void
+    public function editUser($params = []): Response
     {
-        $id = $params['id'];
-        $token = $params['token'];
-        AuthMiddleware::handle();
-        AuthMiddleware::token($token);
-
-        $user = $this->UserService->findById($id);
-
-        $this->AuthService->setForm($user);
-
-        include dirname(__DIR__) . '/Views/usuarios/editar.php';
+        try{
+            $id = $params['id'];
+            $token = $params['token'];
+            AuthMiddleware::handle();
+            AuthMiddleware::token($token);
+            $user = $this->UserService->findById($id);
+            $this->AuthService->setForm($user);
+            return Response::view('usuarios/editar', [
+                'user' => $user
+            ]);
+        }catch(InvalidArgumentException $e){
+            LoggerTXT::log('PageController@editUser: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+        }
     }
 }

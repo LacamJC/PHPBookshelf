@@ -1,6 +1,6 @@
 .env
 checklist.md
-logs/
+/logs/*.txt
 vendor/
 public/uploads/
 database/**/*.db

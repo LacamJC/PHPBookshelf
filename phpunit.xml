@@ -9,7 +9,7 @@
   </testsuites>
   <source>
     <include>
-      <directory suffix=".php">Api/</directory>
+      <directory suffix=".php">App/</directory>
     </include>
   </source>
 

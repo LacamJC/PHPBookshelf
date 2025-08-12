@@ -9,8 +9,8 @@
         "feature": "vendor/bin/pest tests/Feature --colors=always",
         "unit": "vendor/bin/pest tests/Unit --colors=always",
         "drop": "php database/down.php && php database/migrate.php",
-        "docker-app": "docker exec -it my-bookshelf-php-app-1 sh",
-        "docker-db": "docker exec -it my-bookshelf-php-db-1 sh"
+        "docker-app": "docker exec -it my-bookshelf-app-1 sh",
+        "docker-db": "docker exec -it my-bookshelf-db-1 sh"
     },
     "autoload": {
         "psr-4": {

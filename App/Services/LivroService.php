@@ -57,17 +57,9 @@ class LivroService
         }
     }
 
-    public function store(array $dados): bool
+    public function store(Livro $livro): bool
     {
         try {
-            $livro = new Livro;
-            foreach ($dados as $chave => $valor) {
-                if (!in_array($chave, ['id', 'description']) && !isset($valor)) {
-                    return false;
-                }
-                $livro->$chave = $valor;
-            };
-
 
             $autoresPlain = explode(";", $livro->autores);
             $autoresFormatados = array_map(function ($autor) {
@@ -91,13 +83,8 @@ class LivroService
             }
             $livro->autores = $autores;
 
-         
-
             $result = $this->gateway->save($livro);
-
-            if ($result) {
-                LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
-            }
+            LoggerTXT::log("LivroService@store: Livro '{$livro->titulo}' cadastrado com sucesso", "Success");
             return $result;
         } catch (Exception $e) {
             LoggerTXT::log("LivroService@store: {$e->getMessage()}", 'Error');

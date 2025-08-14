@@ -22,6 +22,9 @@ class Livro
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
+                if($key == 'genero'){
+                    $value = implode(',', $value);
+                }
                 $this->$key = $value;
             }
         }

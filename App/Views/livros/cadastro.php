@@ -4,35 +4,50 @@
         <?php $alert->span(); ?>
 
         <input type="hidden" name="id_usuario" value="<?= $_SESSION['user']->id ?>">
+        <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
 
         <h4 class="mb-4 text-primary"><i class="bi bi-book"></i> Cadastrar Novo Livro</h4>
 
         <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" value="" placeholder="Digite o título do livro" required>
+            <input type="text" class="form-control" id="titulo" name="titulo" value="" placeholder="Digite o título do livro" >
         </div>
 
         <div class="mb-3">
             <label for="autores" class="form-label">Autor(es)</label>
-            <input type="text" class="form-control" id="autores" name="autores" value="" placeholder="Digite o nome do(s) autor(es)" required>
+            <input type="text" class="form-control" id="autores" name="autores" value="" placeholder="Digite o nome do(s) autor(es)" >
         </div>
         <p class="text-secondary">Caso o livro tenha mais de um autor, separe por ';'</p>
 
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="numero_paginas" class="form-label">Número de páginas</label>
-                <input type="number" class="form-control" id="numero_paginas" name="numero_paginas" value="" placeholder="Quantidade de páginas" required>
+                <input type="number" class="form-control" id="numero_paginas" name="numero_paginas" value="" placeholder="Quantidade de páginas" >
             </div>
             <div class="col-md-6 mb-3">
-                <label for="genero" class="form-label">Gênero</label>
-                <input type="text" class="form-control" id="genero" name="genero" value="" placeholder="Ex: Fantasia, Romance..." required>
+                <!-- <label for="genero" class="form-label">Gênero</label> -->
+                <!-- <input type="text" class="form-control" id="genero" name="genero" value="" placeholder="Ex: Fantasia, Romance..." > -->
+
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="generos[]" value="Fantasia" id="checkDefault">
+                        <label class="form-check-label" for="checkDefault">
+                            Fantasia
+                        </label>
+                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="generos[]" value="Aventura" id="checkChecked" checked>
+                        <label class="form-check-label" for="checkChecked">
+                            Aventura
+                        </label>
+                </div>
             </div>
         </div>
 
         <div class="row">
             <!-- <div class="col-md-6 mb-3">
                 <label for="nacional" class="form-label">O livro é nacional?</label>
-                <select class="form-select" id="nacional" name="nacional" required>
+                <select class="form-select" id="nacional" name="nacional" >
                     <option value="D" disabled selected>Selecione uma opção</option>
                     <option value="S">Sim</option>
                     <option value="N">Não</option>
@@ -58,7 +73,7 @@
 
             <div class="col-md-6 mb-3">
                 <label for="editora" class="form-label">Editora</label>
-                <input type="text" class="form-control" id="editora" name="editora" value="" placeholder="Nome da editora" required>
+                <input type="text" class="form-control" id="editora" name="editora" value="" placeholder="Nome da editora" >
             </div>
         </div>
 

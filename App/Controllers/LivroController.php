@@ -2,10 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Core\LoggerTXT;
+use App\Core\Request;
 use App\Middlewares\AuthMiddleware;
 use App\Core\Response;
 use App\Database\Connection;
 use App\Database\LivroGateway;
+use App\Helpers\Dtos\LivroDTO;
+use App\Requests\LivroStoreRequest;
 use App\Services\LivroService;
 use DomainException;
 use Exception;
@@ -25,65 +29,40 @@ class LivroController
         $this->service = $service;
     }
 
-    public function store(): Response
+    public function store()//: Response
     {
-        AuthMiddleware::handle();
-        $dados = $_POST;
+        try{
+            AuthMiddleware::handle();
 
-        foreach ($dados as $chave => $valor) {
-            if (is_string($valor)) {
-                $valor = trim($valor);
-                if (strlen($valor) == 0 or $valor == '') {
-                    return Response::redirect('livros/cadastrar', "O campo {$chave} não pode estar vazio", 'danger');
+            $request = new LivroStoreRequest();
+            $file = $request->file('capa_path');
+
+            $livro = LivroDTO::fromRequest($request)->toModel();
+
+            if (isset($file) && $file->error == 0) {
+                $pasta = 'uploads/';
+                $image_name = str_replace(' ', '-', trim($file->name));
+                $filename = uniqid() . '-' . $image_name;
+                $caminho = $pasta . $filename;
+
+                if (!is_dir($pasta)) {
+                    mkdir($pasta, 0755, true); // Garante que a pasta exista
                 }
-            }
-            if (is_numeric($valor)) {
-                if ($valor == 0 or $valor < 0) {
-                    if ($chave == 'qtd_paginas') {
-                        return Response::redirect('livros/cadastrar', "O numero de páginas não pode conter valores abaixo ou igual a zero", 'danger');
-                    } else {
-                        return Response::redirect('livros/cadastrar', "O campo {$chave} não pode conter valores abaixo ou igual a zero", 'danger');
-                    }
-                }
-            }
-            if ($chave == "nacional") {
-                if (!in_array($valor, ['S', 'N', 's', 'n'])) {
-                    return Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
-                }
+
+                move_uploaded_file($file->tmp_name, $caminho);
+
+                $livro->capa_path = $caminho;
+            } elseif (empty($file) || $file->error == UPLOAD_ERR_NO_FILE) {
+                $livro->capa_path = 'uploads/placeholder.png';
             }
 
-            if (is_string($valor)) {
-                $dados[$chave] = trim($valor);
-            }
-        }
+            $this->service->store($livro);
 
-        if (!isset($dados['nacional'])) {
-            return Response::redirect('livros/cadastrar', 'Selecione uma origem válida para o livro', 'danger');
-        }
-
-        if (isset($_FILES['capa_path']) && $_FILES['capa_path']['error'] == 0) {
-            $pasta = 'uploads/';
-            $image_name = str_replace(' ', '-', trim($_FILES['capa_path']['name']));
-            $filename = uniqid() . '-' . $image_name;
-            $caminho = $pasta . $filename;
-
-            if (!is_dir($pasta)) {
-                mkdir($pasta, 0755, true); // Garante que a pasta exista
-            }
-
-            move_uploaded_file($_FILES['capa_path']['tmp_name'], $caminho);
-
-            $dados['capa_path'] = $caminho;
-        } elseif (empty($_FILES['capa_path']) || $_FILES['capa_path']['error'] == UPLOAD_ERR_NO_FILE) {
-            $dados['capa_path'] = 'uploads/placeholder.png';
-        } else {
-            return Response::redirect('livros/cadastrar', 'errorMessage', 'Erro ao salvar imagem, tente com outra');
-        }
-
-        try {
-            $this->service->store($dados);
-            return Response::redirect('livros', "Livro {$dados['titulo']} adicionado com sucesso", 'success');
+            return Response::redirect('livros', "Livro {$livro->titulo} adicionado com sucesso", 'success');
+        } catch(\InvalidArgumentException $e){
+            return Response::redirect('livros/cadastrar', $e->getMessage(), 'warning');
         } catch (Exception $e) {
+            LoggerTXT::log("LivroController@store: {$e->getMessage()} ", 'error');
             return Response::redirect('livros', 'Houve um erro ao inserir o novo livro, por favor tente novamente mais tarde', 'danger');
         }
     }

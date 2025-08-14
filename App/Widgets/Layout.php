@@ -34,7 +34,7 @@ class Layout
                                 <li><a class="dropdown-item text-danger" href="{$baseUrl}usuarios/apagar-conta/{$id}/{$token}" onclick="return confirm('Tem certeza que deseja excluir este esta conta ? <br>Aviso: Está ação não tem volta')"><i class="bi bi-trash"></i> Deletar conta</a></li>
                             </ul>
                             </div>
-                        </li>            
+                        </li>
                         <li class="nav-item me-2">
                             <a class=" my-2 btn btn-outline-primary" href="{$baseUrl}livros?page=1"><i class="bi-plus-book"></i> Ver livros</a>
                         </li>
@@ -47,7 +47,7 @@ class Layout
                         <li class="nav-item">
                             <a class=" my-2 btn btn-outline-danger" href="{$baseUrl}logout"><i class="bi-box-arrow-right"></i> Sair</a>
                         </li>
-                      
+
                     </ul>
                 </div>
             </div>
@@ -86,13 +86,13 @@ class Layout
         HTML;
     }
 
-    public static function avaliacao($nome, $nota, $comentario, $idComentario, $idUsuario){
+    public static function avaliacao($nome, $nota, $comentario, $idComentario, $idUsuario, $idLivro){
         $editComponent = "";
         $baseUrl = '/';
 
         if($_SESSION['user']->id == $idUsuario)
         {
-            $editComponent = "<a href='{$baseUrl}avaliacao/apagar/$idComentario'><i class='bi bi-trash-fill text-danger' title='Apagar avaliação'></i></a>";
+            $editComponent = "<a href='{$baseUrl}avaliacao/apagar/$idComentario/$idLivro'><i class='bi bi-trash-fill text-danger' title='Apagar avaliação'></i></a>";
         }
         echo <<<HTML
 

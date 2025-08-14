@@ -4,72 +4,58 @@ namespace App\Database;
 
 use App\Abstract\Gateway;
 use App\Core\LoggerTXT;
+use App\Models\Avaliacao;
 use PDO;
 use Exception;
 use PDOException;
+use stdClass;
 
 class AvaliacaoGateway extends Gateway
 {
-    private static $conn;
-    private $data;
+    private PDO $conn;
 
-    public function __set($prop, $value)
+    public function __construct(PDO $conn)
     {
-        $this->data[$prop] = $value;
+        $this->conn = $conn;
     }
 
-    public function __get($prop)
-    {
-        return $this->data[$prop];
-    }
-
-
-    public static function setConnection(PDO $conn)
-    {
-        self::$conn = $conn;
-    }
-
-    public function save()
+    public function save(Avaliacao $avaliacao): bool
     {
         try {
-            if (!empty($this->data['id'])) {
+            if (!empty($avaliacao->id)) {
                 // Atualiza avaliação existente
-                $sql = "UPDATE avaliacoes SET 
+                $sql = "UPDATE avaliacoes SET
                             id_usuario = :id_usuario,
                             id_livro = :id_livro,
                             comentario = :comentario,
                             nota = :nota
                         WHERE id = :id";
-                $stmt = self::$conn->prepare($sql);
-                $stmt->bindValue(':id_usuario', $this->data['id_usuario'], PDO::PARAM_INT);
-                $stmt->bindValue(':id_livro', $this->data['id_livro'], PDO::PARAM_INT);
-                $stmt->bindValue(':comentario', $this->data['comentario'], PDO::PARAM_STR);
-                $stmt->bindValue(':nota', $this->data['nota'], PDO::PARAM_INT);
-                $stmt->bindValue(':id', $this->data['id'], PDO::PARAM_INT);
-                echo $sql;
-                die();
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindValue(':id_usuario', $avaliacao->id_usuario, PDO::PARAM_INT);
+                $stmt->bindValue(':id_livro', $avaliacao->id_livro, PDO::PARAM_INT);
+                $stmt->bindValue(':comentario', $avaliacao->comentario, PDO::PARAM_STR);
+                $stmt->bindValue(':nota', $avaliacao->nota, PDO::PARAM_INT);
+                $stmt->bindValue(':id', $avaliacao->id, PDO::PARAM_INT);
+
                 return $stmt->execute();
             } else {
                 // Insere nova avaliação
                 $sql = "INSERT INTO avaliacoes (id_usuario, id_livro, comentario, nota, created_at)
                         VALUES (:id_usuario, :id_livro, :comentario, :nota, CURRENT_TIMESTAMP)";
-                $stmt = self::$conn->prepare($sql);
-                $stmt->bindValue(':id_usuario', $this->data['id_usuario'], PDO::PARAM_INT);
-                $stmt->bindValue(':id_livro', $this->data['id_livro'], PDO::PARAM_INT);
-                $stmt->bindValue(':comentario', $this->data['comentario'], PDO::PARAM_STR);
-                $stmt->bindValue(':nota', $this->data['nota'], PDO::PARAM_INT);
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindValue(':id_usuario', $avaliacao->id_usuario, PDO::PARAM_INT);
+                $stmt->bindValue(':id_livro', $avaliacao->id_livro, PDO::PARAM_INT);
+                $stmt->bindValue(':comentario', $avaliacao->comentario, PDO::PARAM_STR);
+                $stmt->bindValue(':nota', $avaliacao->nota, PDO::PARAM_INT);
 
-                $result = $stmt->execute();
-                if ($result) {
-                    $this->data['id'] = self::$conn->lastInsertId();
-                }
-                return $result;
+                return $stmt->execute();
             }
         } catch (PDOException $e) {
             LoggerTXT::log("Erro no save da avaliação: " . $e->getMessage(), 'Error');
             return false;
         }
     }
+
 
     public function usuarioJaComentou()
     {
@@ -92,21 +78,20 @@ class AvaliacaoGateway extends Gateway
     }
 
 
-    public static function comentarios($id)
+    public function comentarios($id)
     {
         try {
             $sql = "SELECT avaliacoes.id, usuarios.id as id_usuario, usuarios.nome, avaliacoes.comentario, avaliacoes.nota, livros.titulo FROM avaliacoes INNER JOIN usuarios ON avaliacoes.id_usuario = usuarios.id JOIN livros ON livros.id = :id_livro WHERE avaliacoes.id_livro = :id_livro";
 
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
             $stmt->bindValue(':id_livro', $id, self::TYPE_INT);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
-            echo $e->getMessage();
+            throw $e;
         }
-        throw $e;
     }
 
 
@@ -123,11 +108,11 @@ class AvaliacaoGateway extends Gateway
     }
 
 
-    public static function findById($id)
+    public function findById($id): stdClass | bool
     {
         try {
-            $sql = "SELECT * FROM avaliacoes WHERE id_livro = :id";
-            $stmt = self::$conn->prepare($sql);
+            $sql = "SELECT * FROM avaliacoes WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
 
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             $stmt->execute();
@@ -170,12 +155,12 @@ class AvaliacaoGateway extends Gateway
         }
     }
 
-    public static function delete($id)
+    public function delete($id): bool
     {
         try {
 
             $sql = "DELETE FROM avaliacoes WHERE id = :id";
-            $stmt = self::$conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':id', $id, self::TYPE_INT);
             return $stmt->execute();
         } catch (Exception $e) {

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\LoggerTXT;
 use App\Core\Response;
 use App\Core\View;
+use App\Database\AvaliacaoGateway;
 use App\Database\Connection;
 use App\Database\LivroGateway;
 use App\Database\UserGateway;
@@ -21,21 +22,25 @@ class PageController
     private LivroService $LivroService;
     private UserService $UserService;
     private AuthService $AuthService;
+    private AvaliacaoService $AvaliacaoService;
 
-    public function __construct(?LivroService $LivroService = null, ?UserService $UserService = null, ?AuthService $AuthService = null)
+    public function __construct(?LivroService $LivroService = null, ?UserService $UserService = null, ?AuthService $AuthService = null, ?AvaliacaoService $AvaliacaoService = null)
     {
         if($LivroService === null){
             $conn = Connection::open($_ENV['CONNECTION_NAME']);
             $userGateway = new UserGateway($conn);
             $livroGateway = new LivroGateway($conn);
+            $avaliacaoGateway = new AvaliacaoGateway($conn);
 
             $LivroService = new LivroService($livroGateway);
             $UserService = new UserService($userGateway);
+            $AvaliacaoService = new AvaliacaoService($avaliacaoGateway);
             $AuthService = new AuthService();
         }
         $this->LivroService = $LivroService;
         $this->UserService = $UserService;
         $this->AuthService = $AuthService;
+        $this->AvaliacaoService = $AvaliacaoService;
     }
 
     public function home(): Response
@@ -58,7 +63,6 @@ class PageController
             LoggerTXT::log('PageController@lista: ' . $e->getMessage(), 'error');
             return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
         }
-
     }
 
     public function cadastro(): Response
@@ -89,7 +93,7 @@ class PageController
             $id = $params['id'] ?? null;
             return Response::view('livros/visualizar', [
                 'livro' => $this->LivroService->findById($id),
-                'comentarios' => AvaliacaoService::buscarComentarios($id)
+                'comentarios' => $this->AvaliacaoService->buscarComentarios($id)
             ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@view: ' . $e->getMessage(), 'error');

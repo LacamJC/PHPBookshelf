@@ -65,7 +65,8 @@ pest()->beforeEach(function () {
 ");
     $this->gateway = new UserGateway($this->pdo);
     $this->service = new UserService($this->gateway);
-        $this->validUser = new User([
+
+    $this->validUser = new User([
         'nome' => 'João',
         'email' => 'joao@gmail.com',
         'senha' => new Password('Aa123123')
@@ -100,5 +101,5 @@ pest()->beforeEach(function () {
     ];
 
 })->afterEach(function() {
-    $this->pdo->exec("DROP TABLE usuarios");
+    $this->pdo->exec("DELETE FROM usuarios");
 })->group('feature-users-arrange');

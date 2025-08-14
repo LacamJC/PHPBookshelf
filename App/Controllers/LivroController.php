@@ -7,6 +7,7 @@ use App\Core\Response;
 use App\Database\Connection;
 use App\Database\LivroGateway;
 use App\Services\LivroService;
+use DomainException;
 use Exception;
 
 class LivroController
@@ -135,10 +136,10 @@ class LivroController
             $caminho = $pasta . $filename;
 
             if (!is_dir($pasta)) {
-                mkdir($pasta, 0755, true); // Garante que a pasta exista
+                // mkdir($pasta, 0755, true); // Garante que a pasta exista
+                // throw new DomainException('A pasta de uploads não existe ' . $pasta);
             }
-
-            move_uploaded_file($_FILES['capa_path']['tmp_name'], $caminho);
+            move_uploaded_file($_FILES['capa_path']['tmp_name'], "/var/www/html/public/".$caminho);
 
             $dados['capa_path'] = $caminho;
         } else {
@@ -147,6 +148,7 @@ class LivroController
         }
 
         try {
+
             $this->service->store($dados);
             return Response::redirect("livros/editar/{$dados['id']}", 'Alterações realizadas com sucesso', 'success');
         } catch (Exception $e) {

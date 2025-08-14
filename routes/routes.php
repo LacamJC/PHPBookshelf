@@ -31,7 +31,7 @@ $router->post('livros', 'LivroController@store');
 
 $router->post('avaliar', 'AvaliacaoController@avaliar');
 $router->get('avaliacao/editar/{id}', 'PageController@editarAvaliacao');
-$router->get('avaliacao/apagar/{id}', 'AvaliacaoController@apagarAvaliacao');
+$router->get('avaliacao/apagar/{id}/{idlivro}', 'AvaliacaoController@apagarAvaliacao');
 
 
 $router->get('log', 'LogController@index');

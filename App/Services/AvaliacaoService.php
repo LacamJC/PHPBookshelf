@@ -6,49 +6,43 @@ use App\Core\LoggerTXT;
 use App\Core\Response;
 use App\Database\AvaliacaoGateway;
 use App\Database\Connection;
+use App\Database\LivroGateway;
+use App\Database\UserGateway;
+use App\Helpers\Dtos\AvaliacaoDTO;
+use App\Models\Avaliacao;
 use Exception;
+use InvalidArgumentException;
 
 class AvaliacaoService
 {
-    public static function avaliar($dados)
+    private AvaliacaoGateway $avaliacaoGateway;
+
+    public function __construct(?AvaliacaoGateway $avaliacaoGateway = null)
     {
-        try {
-
+        if(is_null($avaliacaoGateway)){
             $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            AvaliacaoGateway::setConnection($conn);
-
-            $avaliacao = new AvaliacaoGateway;
-            $avaliacao->id_livro = $dados['id_livro'];
-            $avaliacao->id_usuario = $dados['id_usuario'];
-            $avaliacao->comentario = $dados['comentario'];
-            $avaliacao->nota = $dados['nota'];
-
-            $result = $avaliacao->usuarioJaComentou();
-
-            if (($result)) {
-                return Response::redirect("livros/{$avaliacao->id_livro}", 'Você já comentou este livro', 'warning');
-            }
-
-            $avaliacao->save();
-            return Response::redirect("livros/{$avaliacao->id_livro}", 'Avaliação salva com sucesso', 'success');
-        } catch (Exception $e) {
-            LoggerTXT::log('AvaliacaoService: ' . $e->getMessage(), 'Error');
-            Response::redirect('home', 'Desculpe houve um erro ao realizar o comentario', 'danger');
+            $avaliacaoGateway = new AvaliacaoGateway($conn);
         }
+        $this->avaliacaoGateway = $avaliacaoGateway;
+        
     }
 
-    public static function buscarComentarios($id)
+
+    public function avaliar(Avaliacao $avaliacao): bool
+    {
+        return $this->avaliacaoGateway->save($avaliacao);
+    }
+
+    public function buscarComentarios($id)
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            AvaliacaoGateway::setConnection($conn);
-            $comentarios = AvaliacaoGateway::comentarios($id);
+            $comentarios = $this->avaliacaoGateway->comentarios($id);
 
-            if ($comentarios) {
-                return $comentarios;
-            } else {
+            if(!$comentarios){
                 return null;
             }
+
+            return $comentarios;
         } catch (Exception $e) {
             LoggerTXT::log('AvaliacaoService@comentarios: ' . $e->getMessage(), 'Error');
             return response::redirect('livros/' . $id, 'Desculpe, houve um erro ao comentar o livro', 'danger');
@@ -60,30 +54,26 @@ class AvaliacaoService
         echo "Editando comentario do id: $id";
     }
 
-    public static function apagar($id)
+    public function apagar($id): void
     {
         try {
-            $conn = Connection::open($_ENV['CONNECTION_NAME']);
-            AvaliacaoGateway::setConnection($conn);
-
-            $avaliacao = AvaliacaoGateway::findByIdLivro($id);
-            $id_usuario_avaliacao = $avaliacao->id_usuario;
-            $id_usuario = $_SESSION['user']->id;
-            $livro = LivroService::findById($avaliacao->id_livro);
-            if ($id_usuario_avaliacao != $id_usuario) {
-                Response::redirect('home', 'Você não pode deletar o comentario de outro usuário');
+            // buscar comentario
+            $comentario = $this->avaliacaoGateway->findById($id);
+            if(!$comentario){
+                throw new InvalidArgumentException('Comentário nao encontrado');
+            }
+            $comentarioModel = AvaliacaoDTO::fromObj($comentario)->toModel();
+            $user = $this->userService->findById($comentarioModel->id_usuario);
+            $valid = $comentarioModel->id_usuario === $user->id;
+            if(!$valid){
+                throw new InvalidArgumentException('Você não pode apagar este comentário');
             }
 
-            $result = AvaliacaoGateway::delete($id);
+             $this->avaliacaoGateway->delete($comentarioModel->id);
 
-            if ($result) {
-                Response::redirect("livros/{$livro->id}", 'Comentario apagado com suceso', 'success');
-            } else {
-                throw new Exception('Houve um erro ao apagar o comentario');
-            }
         } catch (Exception $e) {
             LoggerTXT::log('AvaliacaoService@apagar : ' . $e->getMessage(), 'Error');
-            return response::redirect('home', 'Desculpe houve um erro ao apagar o comentario', 'danger');
+            throw $e;
         }
     }
 }

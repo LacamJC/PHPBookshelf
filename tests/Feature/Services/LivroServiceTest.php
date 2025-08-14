@@ -188,10 +188,10 @@ test('Lança uma exceção se o livro  não for encontrado ao tentar deletar', f
         ->method('findById')
         ->with(1)
         ->willReturn(null);
-    
+
     $this->gateway->expects($this->never())
         ->method('delete');
-    
+
     $this->expectException(\Exception::class);
     $this->service->delete(1);
 });

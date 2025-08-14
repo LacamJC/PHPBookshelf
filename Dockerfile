@@ -16,6 +16,9 @@ RUN composer install --no-dev --no-interaction
 RUN mkdir -p /var/www/html/logs && chown -R www-data:www-data /var/www/html/logs
 # Rodar composer install já na imagem para evitar isso toda vez no container
 COPY . ./
+RUN mkdir -p /var/www/html/public/uploads \
+    && chown -R www-data:www-data /var/www/html/public/uploads \
+    && chmod -R 755 /var/www/html/public/uploads
 
 RUN php ./database/migrate.php
 

@@ -66,6 +66,8 @@ class LivroService
                 }
                 $livro->$chave = $valor;
             };
+
+
             $autoresPlain = explode(";", $livro->autores);
             $autoresFormatados = array_map(function ($autor) {
                 return htmlspecialchars(trim($autor));
@@ -88,6 +90,7 @@ class LivroService
             }
             $livro->autores = $autores;
 
+         
 
             $result = $this->gateway->save($livro);
 

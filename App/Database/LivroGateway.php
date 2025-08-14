@@ -21,7 +21,7 @@ class LivroGateway extends Gateway
         try {
             if (empty($livro->id)) {
                 $id = $this->getLastId() + 1;
-                $sql = "INSERT INTO livros 
+                $sql = "INSERT INTO livros
                 (id, id_usuario, titulo, autores, numero_paginas, genero, nacional, capa_path, editora, descricao)
                 VALUES
                 (:id, :id_usuario, :titulo, :autores, :numero_paginas, :genero, :nacional, :capa_path, :editora, :descricao)";

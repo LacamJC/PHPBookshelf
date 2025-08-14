@@ -1,13 +1,9 @@
 <?php
 
 use App\Core\Alert;
-use App\Services\AvaliacaoService;
 use App\Widgets\Layout;
 
 $capa = '/' . ($livro->capa_path);
-$baseUrl = '/';
-
-$comentarios = AvaliacaoService::buscarComentarios($livro->id);
 
 ?>
 <!DOCTYPE html>
@@ -24,7 +20,7 @@ $comentarios = AvaliacaoService::buscarComentarios($livro->id);
 <body>
     <?= Layout::header() ?>
     <div class="container my-5">
-        <a href="<?= $baseUrl ?>livros" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
+        <a href="/livros" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
         <?= Alert::span() ?>
         <div class="card shadow-lg">
             <div class="row g-0">
@@ -38,7 +34,7 @@ $comentarios = AvaliacaoService::buscarComentarios($livro->id);
                         <?php if ($comentarios != null): ?>
                             <h2 class="mt-5 text-secondary">Avaliações</h2>
                             <?php foreach ($comentarios as $comentario) {
-                                Layout::avaliacao($comentario->nome, $comentario->nota, $comentario->comentario, $comentario->id, $comentario->id_usuario);
+                                Layout::avaliacao($comentario->nome, $comentario->nota, $comentario->comentario, $comentario->id, $comentario->id_usuario, $livro->id);
                             } ?>
                         <?php endif; ?>
                     </div>
@@ -59,14 +55,14 @@ $comentarios = AvaliacaoService::buscarComentarios($livro->id);
                         <h5 class="text-dark"><i class="bi bi-card-text"></i> Descrição</h5>
                         <p class="card-text"><?= nl2br(htmlspecialchars($livro->descricao)) ?></p>
                         <div class="mt-4">
-                            <a href="<?= $baseUrl ?>livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
-                            <a href="<?= $baseUrl ?>livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN'] ?>" class="btn btn-outline-danger"
+                            <a href="/livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
+                            <a href="/livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN'] ?>" class="btn btn-outline-danger"
                                 onclick="return confirm('Tem certeza que deseja excluir este livro?')"><i class="bi bi-trash"></i> Excluir</a>
                         </div>
                         <!-- Área de avaliação -->
                         <hr>
                         <h4 class="mt-4">Deixe sua avaliação</h4>
-                        <form method="POST" action="<?= $baseUrl ?>avaliar" class="mt-3">
+                        <form method="POST" action="/avaliar" class="mt-3">
                             <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
                             <input type="hidden" name="id_usuario" value="<?= $_SESSION['user']->id ?>">
                             <input type="hidden" name="id_livro" value="<?= (int)$livro->id ?>" />

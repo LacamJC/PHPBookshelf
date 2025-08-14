@@ -15,6 +15,7 @@ class UserService
 
     private UserGateway $gateway;
     private AuthService $auth;
+
     public function __construct(?UserGateway $gateway = null, ?AuthService $auth = null)
     {
         if ($gateway === null) {

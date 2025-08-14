@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use PhpParser\Node\Expr\Instanceof_;
+use stdClass;
 
 class AuthService
 {
@@ -42,5 +43,10 @@ class AuthService
 
         $data['password'] = '';
         $_SESSION['form_data'] = $data;
+    }
+
+    public static function getUser(): User
+    {
+        return ($_SESSION['user']);
     }
 }

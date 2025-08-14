@@ -14,6 +14,8 @@ class Livro
     public ?string $capa_path = null;
     public ?string $editora = null;
     public ?string $descricao = null;
+    public ?string $edit_token = null;
+    public ?string $capa_atual = null;
 
     public function __construct(array $data = [])
     {

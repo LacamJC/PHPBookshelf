@@ -11,6 +11,11 @@
     <include>
       <directory suffix=".php">App/</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">App/Views/</directory>
+      <directory suffix=".php">App/Widgets/</directory>
+      <directory>App/Abstract/</directory>
+    </exclude>
   </source>
 
   <php>

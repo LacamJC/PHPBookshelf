@@ -66,24 +66,21 @@ class PageController
     {
         try{
             AuthMiddleware::handle();
+
             $conn = Connection::open($_ENV['CONNECTION_NAME']);
             $gateway = new LivroGateway($conn);
             $service = new LivroService($gateway);
             $selfPage = isset($_GET['page']) ? $_GET['page'] : 1;
             $data = $service->all($selfPage);
+            $lastPageValue = $selfPage > 1 ? $selfPage - 1 : 1;
+            $nextPageValue = $selfPage < $data['totalPages'] ? $selfPage + 1 : $data['totalPages'];
 
-            $livros = $data['livros'];
-            $totalPages = $data['totalPages'];
-            $currentPage = $data['page'];
-
-            $ant = $selfPage > 1 ? $selfPage - 1 : 1;
-            $next = $selfPage < $totalPages ? $selfPage + 1 : $totalPages;
             return Response::view('livros/lista', [
-                'livros' => $livros,
-                'ant' => $ant,
-                'next' => $next,
-                'totalPages' => $totalPages,
-                'currentPage' => $currentPage,
+                'livros' => $data['livros'],
+                'ant' => $lastPageValue,
+                'next' => $nextPageValue,
+                'totalPages' => $data['totalPages'],
+                'currentPage' => $data['page'],
                 'pageTitle' => 'Livros',
                 'card' => new Card()
             ]);

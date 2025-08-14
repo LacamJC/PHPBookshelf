@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\LoggerTXT;
+use App\Core\Request;
 use App\Core\Response;
 use App\Database\Connection;
 use App\Database\UserGateway;
@@ -36,27 +37,13 @@ class UserController
 
     public function login(): Response
     {
-        AuthMiddleware::token($_POST['edit_token']);
         try {
-            $this->auth->setForm($_POST);
-
-            $email  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-
-            Password::allows($_POST['password']);
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return Response::redirect('login', 'Email inválido', 'danger');
-            }
-
-            $valid = $this->service->verify($email, $_POST['password']);
-
-            if ($valid) {
-                $this->auth->clearForm();
-                LoggerTXT::log("{$_SESSION['user']->nome} fez login", 'Login');
-                return Response::redirect('home');
-            } else {
-                return Response::redirect('login', 'Desculpe, houve um erro ao realizar login, tente novamente mais tarde', 'warning');
-            }
+            $request = new Request();
+            AuthMiddleware::token($request->input('edit_token'));
+            $this->auth->setForm($request->data());
+            $this->service->verify($request->input('email'), $request->input('password'));
+            LoggerTXT::log("{$_SESSION['user']->nome} fez login", 'Login');
+            return Response::redirect('home');
         } catch (InvalidArgumentException $e) {
             return Response::redirect('login', $e->getMessage(), 'danger');
         } catch (Exception $e) {

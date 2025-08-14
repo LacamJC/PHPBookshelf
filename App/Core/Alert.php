@@ -4,12 +4,10 @@ namespace App\Core;
 
 class Alert
 {
-    public static function span()
+    public function span()
     {
         if (!empty($_SESSION['alertType']) and !empty($_SESSION['alertMessage'])) {
-            Alert::alert($_SESSION['alertMessage'], $_SESSION['alertType']);
-            echo $_SESSION['alertMessage'];
-            // die("CEHGA AQUI");
+            $this->alert($_SESSION['alertMessage'], $_SESSION['alertType']);
             unset($_SESSION['alertMessage']);
             unset($_SESSION['alertType']);
         }
@@ -21,12 +19,10 @@ class Alert
         echo "</div>";
     }
 
-    public static function alert($message, $type)
+    public function alert($message, $type)
     {
         echo "<div class='alert alert-{$type} text-center mx-auto container'>";
         echo $message;
         echo "</div>";
     }
-
-
 }

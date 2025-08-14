@@ -28,11 +28,13 @@
 
                     <h5 class="text-dark"><i class="bi bi-card-text"></i> Descrição</h5>
                     <p class="card-text"><?= nl2br(htmlspecialchars($livro->descricao)) ?></p>
+                    <?php if($livro->id_usuario === $_SESSION['user']->id): ?>
                     <div class="mt-4">
                         <a href="/livros/editar/<?= $livro->id ?>" class="btn btn-outline-primary me-2"><i class="bi bi-pencil-square"></i> Editar</a>
                         <a href="/livros/delete/<?= $livro->id ?>/<?= $_ENV['EDIT_TOKEN'] ?>" class="btn btn-outline-danger"
                             onclick="return confirm('Tem certeza que deseja excluir este livro?')"><i class="bi bi-trash"></i> Excluir</a>
                     </div>
+                    <?php endif?>
                     <!-- Área de avaliação -->
                     <hr>
                     <!-- <h4 class="mt-4">Deixe sua avaliação</h4>

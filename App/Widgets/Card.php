@@ -13,6 +13,7 @@ class Card
         $titulo = htmlspecialchars($livro->titulo);
         $descricao = htmlspecialchars($livro->descricao);
         $categoria = htmlspecialchars($livro->genero);
+        $nome_usuario = htmlspecialchars($livro->nome_usuario);
         $capa = htmlspecialchars($livro->capa_path ?? 'assets/img/placeholder.png');
         $baseUrl = '/';
         echo <<<HTML
@@ -25,6 +26,7 @@ class Card
                     {$descricao}
                 </p>
                 <a href="{$baseUrl}livros/{$id}" class="btn btn-outline-primary mt-auto"><i class="bi-eye"></i> Visualizar</a>
+                <p class="text-secondary mt-3">Cadastrado por: {$nome_usuario}</p>
             </div>
         </div>
         HTML;

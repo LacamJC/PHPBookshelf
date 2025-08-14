@@ -16,6 +16,7 @@ class Livro
     public ?string $descricao = null;
     public ?string $edit_token = null;
     public ?string $capa_atual = null;
+    public ?string $nome_usuario = null;
 
     public function __construct(array $data = [])
     {

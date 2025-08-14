@@ -139,13 +139,15 @@ class LivroGateway extends Gateway
     public function paginate(int $limit, int $offset): array
     {
         try {
-            $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT :limit OFFSET :offset";
-
+            // $sql = "SELECT * FROM livros ORDER BY id DESC LIMIT :limit OFFSET :offset";
+            $sql = "SELECT livros.*, usuarios.nome as nome_usuario FROM livros LEFT JOIN usuarios ON livros.id_usuario = usuarios.id ORDER BY livros.id DESC LIMIT :limit OFFSET :offset";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':limit', $limit, self::TYPE_INT);
             $stmt->bindValue(':offset', $offset, self::TYPE_INT);
 
             $stmt->execute();
+            // $livros = $stmt->fetchAll(PDO::FETCH_CLASS, Livro::class);
+            // die();
             return $stmt->fetchAll(PDO::FETCH_CLASS, Livro::class);
         } catch (Exception $e) {
             $message = 'LivroGateway@paginate: ' . $e->getMessage();

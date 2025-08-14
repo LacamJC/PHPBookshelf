@@ -172,7 +172,8 @@ class PageController
             $user = $this->UserService->findById($id);
             $this->AuthService->setForm($user);
             return Response::view('usuarios/editar', [
-                'user' => $user
+                'user' => $user,
+                'token' => $_ENV['EDIT_TOKEN']
             ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@editUser: ' . $e->getMessage(), 'error');

@@ -26,7 +26,8 @@ class LivroService
         try {
 
             if ($page < 1) {
-                throw new Exception('Página de busca inválida: ' . $page);
+                // throw new Exception('Página de busca inválida: ' . $page);
+                $page = 1;
             }
             $total = $this->gateway->countAll();
 

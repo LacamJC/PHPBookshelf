@@ -11,16 +11,20 @@ use App\Widgets\Layout;
 $conn = Connection::open($_ENV['CONNECTION_NAME']);
 $gateway = new LivroGateway($conn);
 $service = new LivroService($gateway);
-$data = $service->all();
+$selfPage = isset($_GET['page']) ? $_GET['page'] : 1;
+$data = $service->all($selfPage);
 
 $livros = $data['livros'];
 $totalPages = $data['totalPages'];
 $currentPage = $data['page'];
-$selfPage = isset($_GET['page']) ? $_GET['page'] : 1;
+
+// echo "<pre>";
+// print_r($data);
+// die();
 
 
-$ant = $selfPage >= 1 ? $selfPage - 1 : 1;
-$next = $selfPage <= $totalPages ? $selfPage + 1 : $totalPages;
+$ant = $selfPage > 1 ? $selfPage - 1 : 1;
+$next = $selfPage < $totalPages ? $selfPage + 1 : $totalPages;
 
 
 ?>

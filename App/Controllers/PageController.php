@@ -151,7 +151,8 @@ class PageController
             AuthMiddleware::handle();
             $id = $params['id'] ?? null;
             return Response::view('livros/editar', [
-                'livro' => $this->LivroService->findById($id)
+                'livro' => $this->LivroService->findById($id),
+                'pageTitle' => 'Editar Livro'
             ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@edit: ' . $e->getMessage(), 'error');

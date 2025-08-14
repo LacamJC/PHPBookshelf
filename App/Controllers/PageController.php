@@ -44,6 +44,10 @@ class PageController
         $this->AvaliacaoService = $AvaliacaoService;
     }
 
+    public function teste(): Response{
+        return Response::view('teste', ['nome' => 'joao']);
+    }
+
     public function home(): Response
     {
         try{
@@ -149,7 +153,9 @@ class PageController
 
     public function login(): Response
     {
-        return Response::view('login');
+        return Response::view('login', [
+            'pageTitle' => 'Login'
+        ]);
     }
 
     public function editUser($params = []): Response

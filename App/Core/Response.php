@@ -30,11 +30,16 @@ class Response
     public static function view(string $templatePath, array $data = []): never
     {
         extract($data);
+        $layout = dirname(__DIR__, 1) . '/Views/Layouts/main_layout.php';
         $path = dirname(__DIR__, 1) . '/Views/' . $templatePath . '.php';
         if(!file_exists($path)){
             throw new \InvalidArgumentException('Arquivo "' . $path . '" não encontrado' );
         }
-        include $path;
+        // include $path;
+        $alert = new Alert();
+        $old = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : '';
+        $content = $path;
+        include $layout;
        exit;
     }
 }

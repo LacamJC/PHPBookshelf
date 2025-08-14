@@ -5,6 +5,7 @@ use App\Core\Router;
 $router = new Router();
 
 // Rotas de autenticação e acesso
+$router->get('teste', 'PageController@teste');
 $router->get('/', 'PageController@login');
 $router->get('login', 'PageController@login');
 $router->post('login', 'UserController@login');

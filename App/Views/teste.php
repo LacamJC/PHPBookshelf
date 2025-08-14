@@ -1,8 +1,6 @@
-
 <div class="container d-flex justify-content-center align-items-center my-5">
     <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
         <h3 class="text-center mb-4">Login</h3>
-            <?= $alert->span() ?>
         <form action="login" method="POST">
             <input type="hidden" name="edit_token" value="<?= $_ENV['EDIT_TOKEN'] ?>">
             <div class="mb-3">

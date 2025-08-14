@@ -8,6 +8,8 @@ class Alert
     {
         if (!empty($_SESSION['alertType']) and !empty($_SESSION['alertMessage'])) {
             Alert::alert($_SESSION['alertMessage'], $_SESSION['alertType']);
+            echo $_SESSION['alertMessage'];
+            // die("CEHGA AQUI");
             unset($_SESSION['alertMessage']);
             unset($_SESSION['alertType']);
         }
@@ -25,4 +27,6 @@ class Alert
         echo $message;
         echo "</div>";
     }
+
+
 }

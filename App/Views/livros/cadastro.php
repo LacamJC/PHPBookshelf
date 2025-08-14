@@ -30,14 +30,31 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <!-- <div class="col-md-6 mb-3">
                 <label for="nacional" class="form-label">O livro é nacional?</label>
                 <select class="form-select" id="nacional" name="nacional" required>
                     <option value="D" disabled selected>Selecione uma opção</option>
                     <option value="S">Sim</option>
                     <option value="N">Não</option>
                 </select>
+            </div> -->
+
+            <div class="col-md-6 mb-3">
+                 <label for="nacional" class="form-label">O livro é nacional?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="nacional" id="nacionalSim" value="S">
+                    <label class="form-check-label" for="nacionalSim">
+                        Sim
+                    </label>
+                </div>
+                 <div class="form-check">
+                    <input class="form-check-input" type="radio" name="nacional" id="nacionalNao" value="N">
+                    <label class="form-check-label" for="nacionalNao">
+                        Não
+                    </label>
+                </div>
             </div>
+
 
             <div class="col-md-6 mb-3">
                 <label for="editora" class="form-label">Editora</label>

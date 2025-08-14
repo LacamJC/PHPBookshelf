@@ -19,6 +19,7 @@ $router->get('cadastro', 'PageController@cadastro');
 $router->get('home', 'PageController@home');
 
 // Rotas de livros
+$router->get('livros', 'PageController@home');
 $router->get('livros/cadastrar', 'PageController@cadastrarLivro');
 $router->get('livros/editar/{id}', 'PageController@edit');
 $router->post('livros/update', 'LivroController@update');

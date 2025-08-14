@@ -15,6 +15,7 @@ use App\Services\AuthService;
 use App\Services\AvaliacaoService;
 use App\Services\LivroService;
 use App\Services\UserService;
+use DomainException;
 use InvalidArgumentException;
 
 class PageController
@@ -58,9 +59,6 @@ class PageController
     {
         try{
             AuthMiddleware::handle();
-
-
-                        // Carrega livros
             $conn = Connection::open($_ENV['CONNECTION_NAME']);
             $gateway = new LivroGateway($conn);
             $service = new LivroService($gateway);
@@ -81,8 +79,10 @@ class PageController
                 'currentPage' => $currentPage
             ]);
         }catch(InvalidArgumentException $e){
+            return Response::redirect('home', $e->getMessage(), 'warning');
+        } catch(\Exception $e){
             LoggerTXT::log('PageController@lista: ' . $e->getMessage(), 'error');
-            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
+            return Response::redirect('home', 'Desculpe houve um erro interno no sistema', 'danger');
         }
     }
 

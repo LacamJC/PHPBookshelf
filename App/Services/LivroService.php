@@ -8,6 +8,7 @@ use App\Database\Connection;
 use App\Database\LivroGateway;
 use App\Models\Livro;
 use Exception;
+use InvalidArgumentException;
 
 class LivroService
 {
@@ -26,8 +27,7 @@ class LivroService
         try {
 
             if ($page < 1) {
-                // throw new Exception('Página de busca inválida: ' . $page);
-                $page = 1;
+                throw new InvalidArgumentException('Página de busca inválida: ' . $page);
             }
             $total = $this->gateway->countAll();
 
@@ -38,7 +38,7 @@ class LivroService
 
 
             if ($page > $totalPages) {
-                throw new Exception('Página de busca inválida: ' . $page);
+                throw new InvalidArgumentException('Página de busca inválida: ' . $page);
             }
             $livros = $this->gateway->paginate($limit, $offset);
 

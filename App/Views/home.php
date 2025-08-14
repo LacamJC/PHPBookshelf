@@ -1,34 +1,7 @@
-<?php
-
-use App\Core\Alert;
-use App\Database\Connection;
-use App\Database\LivroGateway;
-use App\Services\LivroService;
-use App\Widgets\Card;
-use App\Widgets\Layout;
-
-// Carrega livros
-$conn = Connection::open($_ENV['CONNECTION_NAME']);
-$gateway = new LivroGateway($conn);
-$service = new LivroService($gateway);
-$livros = $service->all();
-?>
-
-<!doctype html>
-<html lang="pt-BR">
-
-<head>
-    <?= Layout::head('Bem vindo') ?>
-
-</head>
-
-<body class="bg-light">
-
-    <?= Layout::header() ?>
-
+<main class="bg-light">
     <!-- Seção de boas-vindas -->
     <section class="py-5 bg-white shadow-sm mb-4">
-        <?= Alert::span() ?>
+        <?= $alert->span() ?>
         <div class="container text-center">
             <h2 class="fw-bold text-primary"><i class="bi bi-book"></i> My Bookshelf</h2>
             <p class="text-muted">O projeto My Bookshelf é uma implementação de um sistema de cadastro de livros que foi desenvolvido de ponta a ponta desde a prototipação da interface, validação do protótipo, desenvolvimento do front-end a implementação back-end.</p>
@@ -38,13 +11,6 @@ $livros = $service->all();
             </a>
         </div>
     </section>
-
-
-
-    <?= Layout::footer() ?>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</main>
 
-</html>

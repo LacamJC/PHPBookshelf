@@ -52,7 +52,9 @@ class PageController
     {
         try{
             AuthMiddleware::handle();
-            return Response::view('home');
+            return Response::view('home', [
+                'pageTitle' => 'Home'
+            ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@home: ' . $e->getMessage(), 'error');
             return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');

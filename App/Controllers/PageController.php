@@ -53,20 +53,6 @@ class PageController
     {
         try{
             AuthMiddleware::handle();
-            return Response::view('home', [
-                'pageTitle' => 'Home'
-            ]);
-        }catch(InvalidArgumentException $e){
-            LoggerTXT::log('PageController@home: ' . $e->getMessage(), 'error');
-            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
-        }
-    }
-
-    public function lista(): Response
-    {
-        try{
-            AuthMiddleware::handle();
-
             $conn = Connection::open($_ENV['CONNECTION_NAME']);
             $gateway = new LivroGateway($conn);
             $service = new LivroService($gateway);
@@ -75,7 +61,7 @@ class PageController
             $lastPageValue = $selfPage > 1 ? $selfPage - 1 : 1;
             $nextPageValue = $selfPage < $data['totalPages'] ? $selfPage + 1 : $data['totalPages'];
 
-            return Response::view('livros/lista', [
+            return Response::view('home', [
                 'livros' => $data['livros'],
                 'ant' => $lastPageValue,
                 'next' => $nextPageValue,
@@ -85,10 +71,8 @@ class PageController
                 'card' => new Card()
             ]);
         }catch(InvalidArgumentException $e){
-            return Response::redirect('home', $e->getMessage(), 'warning');
-        } catch(\Exception $e){
-            LoggerTXT::log('PageController@lista: ' . $e->getMessage(), 'error');
-            return Response::redirect('home', 'Desculpe houve um erro interno no sistema', 'danger');
+            LoggerTXT::log('PageController@home: ' . $e->getMessage(), 'error');
+            return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');
         }
     }
 

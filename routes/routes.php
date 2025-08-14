@@ -5,7 +5,6 @@ use App\Core\Router;
 $router = new Router();
 
 // Rotas de autenticação e acesso
-$router->get('teste', 'PageController@teste');
 $router->get('/', 'PageController@login');
 $router->get('login', 'PageController@login');
 $router->post('login', 'UserController@login');
@@ -20,7 +19,6 @@ $router->get('cadastro', 'PageController@cadastro');
 $router->get('home', 'PageController@home');
 
 // Rotas de livros
-$router->get('livros', 'PageController@lista');
 $router->get('livros/cadastrar', 'PageController@cadastrarLivro');
 $router->get('livros/editar/{id}', 'PageController@edit');
 $router->post('livros/update', 'LivroController@update');

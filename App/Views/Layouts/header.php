@@ -14,6 +14,9 @@ if (isset($_SESSION['user'])) {
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav align-items-center">
+                        <li class="nav-item me-2">
+                            <a href="https://github.com/LacamJC/PHPBookshelf" target="_blank" class="my-2 btn btn-outline-dark"><i class="bi bi-github"></i> Github</a>
+                        </li>
                         <li class="nav-item me-3 text-secondary">
                             <div class="dropdown ">
                             <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,12 +28,7 @@ if (isset($_SESSION['user'])) {
                             </ul>
                             </div>
                         </li>
-                        <li class="nav-item me-2">
-                            <a class=" my-2 btn btn-outline-primary" href="{$baseUrl}livros?page=1"><i class="bi-plus-book"></i> Ver livros</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a href="https://github.com/LacamJC/PHPBookshelf" target="_blank" class="my-2 btn btn-outline-dark"><i class="bi bi-github"></i> Github</a>
-                        </li>
+
                         <li class="nav-item me-2">
                             <a class=" my-2 btn btn-outline-primary" href="{$baseUrl}livros/cadastrar"><i class="bi-plus-circle"></i> Cadastrar Livro</a>
                         </li>

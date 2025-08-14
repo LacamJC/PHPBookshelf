@@ -1,5 +1,5 @@
 <div class="container my-5">
-    <a href="/livros" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
+    <a href="#" onclick="history.back(); return false;" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar à Lista</a>
     <?= $alert->span() ?>
     <div class="card shadow-lg">
         <div class="row g-0">

@@ -58,7 +58,28 @@ class PageController
     {
         try{
             AuthMiddleware::handle();
-            return Response::view('livros/lista');
+
+
+                        // Carrega livros
+            $conn = Connection::open($_ENV['CONNECTION_NAME']);
+            $gateway = new LivroGateway($conn);
+            $service = new LivroService($gateway);
+            $selfPage = isset($_GET['page']) ? $_GET['page'] : 1;
+            $data = $service->all($selfPage);
+
+            $livros = $data['livros'];
+            $totalPages = $data['totalPages'];
+            $currentPage = $data['page'];
+
+            $ant = $selfPage > 1 ? $selfPage - 1 : 1;
+            $next = $selfPage < $totalPages ? $selfPage + 1 : $totalPages;
+            return Response::view('livros/lista', [
+                'livros' => $livros,
+                'ant' => $ant,
+                'next' => $next,
+                'totalPages' => $totalPages,
+                'currentPage' => $currentPage
+            ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@lista: ' . $e->getMessage(), 'error');
             return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');

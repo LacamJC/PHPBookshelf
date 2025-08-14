@@ -1,31 +1,8 @@
 <?php
 
 use App\Core\Alert;
-use App\Database\Connection;
-use App\Database\LivroGateway;
-use App\Services\LivroService;
 use App\Widgets\Card;
 use App\Widgets\Layout;
-
-// Carrega livros
-$conn = Connection::open($_ENV['CONNECTION_NAME']);
-$gateway = new LivroGateway($conn);
-$service = new LivroService($gateway);
-$selfPage = isset($_GET['page']) ? $_GET['page'] : 1;
-$data = $service->all($selfPage);
-
-$livros = $data['livros'];
-$totalPages = $data['totalPages'];
-$currentPage = $data['page'];
-
-// echo "<pre>";
-// print_r($data);
-// die();
-
-
-$ant = $selfPage > 1 ? $selfPage - 1 : 1;
-$next = $selfPage < $totalPages ? $selfPage + 1 : $totalPages;
-
 
 ?>
 <!doctype html>

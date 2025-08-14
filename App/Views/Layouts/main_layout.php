@@ -9,9 +9,9 @@
     <title><?= $pageTitle ?? 'Bem vindo' ?> | My Bookshelf</title>
 </head>
 <body>
-    <? require_once __DIR__ . '/header.php' ?>
+    <?php require_once __DIR__ . '/header.php' ?>
     <?php include $content ?>
-    <? require_once __DIR__ . '/footer.php' ?>
+    <?php require_once __DIR__ . '/footer.php' ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>

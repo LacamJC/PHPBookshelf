@@ -120,9 +120,10 @@ class PageController
         try{
             AuthMiddleware::handle();
             $id = $params['id'] ?? null;
+            $livro = $this->LivroService->findById($id);
             return Response::view('livros/visualizar', [
-                'livro' => $this->LivroService->findById($id),
-                'comentarios' => $this->AvaliacaoService->buscarComentarios($id)
+                'livro' => $livro,
+                'capa' => '/' . ($livro->capa_path)
             ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@view: ' . $e->getMessage(), 'error');

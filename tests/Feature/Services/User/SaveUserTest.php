@@ -14,6 +14,9 @@ describe('UserService@save', function () {
             'senha' => '123123',
             'confirma' => '123123'
         ];
+
+        // var_dump($data);
+        // die();
         $result = $this->service->save($data);
         expect($result)->toBe(true);
 

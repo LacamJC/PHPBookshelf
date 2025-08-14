@@ -9,9 +9,10 @@ use stdClass;
 class Request
 {
     protected array $data;
+    protected array $files;
     protected readonly string $method;
 
-    public function __construct(?string $method = null, ?array $data = null)
+    public function __construct(?string $method = null, ?array $data = null, ?array $files = null)
     {
         if(is_null($method)){
             $method = $_SERVER['REQUEST_METHOD'];
@@ -20,9 +21,10 @@ class Request
         if(is_null($data)){
             $data = $_POST;
         }
+
         $this->method = $method;
         $this->data = $data;
-
+        $this->files = $files ?? $_FILES;
     }
 
     public function input(string $key): string | array | null{
@@ -36,13 +38,18 @@ class Request
         return null;
     }
 
+    public function method(): string
+    {
+        return $this->method;
+    }
+
     public function file(string $name): ?stdClass
     {
-        if (!isset($_FILES[$name])) {
-            return null;
+        if (!isset($this->files[$name])) {
+            throw new \InvalidArgumentException("Informações sobre o arquivo '$name' não encontradas");
         }
 
-        $fileArray = $_FILES[$name];
+        $fileArray = $this->files[$name];
         $fileObject = new stdClass();
         $fileObject->name = $fileArray['name'] ?? null;
         $fileObject->type = $fileArray['type'] ?? null;
@@ -63,14 +70,6 @@ class Request
 
     protected function validate(): void
     {
-        if (isset($this->data['email']) && !filter_var($this->data['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('Email inválido');
-        }
-
-        if (isset($this->data['password'])) {
-            Password::allows($this->data['password']);
-        }
-
     }
 
     protected function transfer()

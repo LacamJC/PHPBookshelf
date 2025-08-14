@@ -5,7 +5,7 @@
         "logs": "cat logs/app.log",
         "start": "docker compose up -d",
         "stop": "docker compose down",
-        "test": "php vendor/bin/pest --colors=always",
+        "test": "php vendor/bin/pest --colors=always --coverage",
         "feature": "vendor/bin/pest tests/Feature --colors=always",
         "unit": "vendor/bin/pest tests/Unit --colors=always",
         "drop": "php database/down.php && php database/migrate.php",

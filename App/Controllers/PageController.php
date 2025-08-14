@@ -15,6 +15,7 @@ use App\Services\AuthService;
 use App\Services\AvaliacaoService;
 use App\Services\LivroService;
 use App\Services\UserService;
+use App\Widgets\Card;
 use DomainException;
 use InvalidArgumentException;
 
@@ -82,7 +83,9 @@ class PageController
                 'ant' => $ant,
                 'next' => $next,
                 'totalPages' => $totalPages,
-                'currentPage' => $currentPage
+                'currentPage' => $currentPage,
+                'pageTitle' => 'Livros',
+                'card' => new Card()
             ]);
         }catch(InvalidArgumentException $e){
             return Response::redirect('home', $e->getMessage(), 'warning');

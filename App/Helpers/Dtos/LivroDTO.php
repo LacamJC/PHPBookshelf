@@ -33,7 +33,7 @@ class LivroDTO
             descricao: $request->input('descricao'),
             nacional: $request->input('nacional'),
             capa_path: $request->file('capa_path')?->name,
-            capa_atual: $request->file('capa_atual')?->name,
+            capa_atual: $request?->file('capa_atual')?->name,
             editora: $request->input('editora'),
             edit_token: $request->input('edit_token'),
             id_usuario: $request->input('id_usuario'),

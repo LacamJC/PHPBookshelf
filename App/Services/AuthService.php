@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Request;
 use App\Models\User;
 use PhpParser\Node\Expr\Instanceof_;
 use stdClass;
@@ -29,13 +30,18 @@ class AuthService
         unset($_SESSION['form_data']);
     }
 
-    public function setForm(array|User $data): void
+    public function setForm(Request|User|array $request): void
     {
-        if (($data instanceof User)) {
+        // echo "<pre>";
+
+        // print_R($request);
+        // die();
+        if($request instanceof Request){
+
             $data = [
-                'id' => $data->id,
-                'email' => $data->email,
-                'name' => $data->nome,
+                // 'id' => $request->input('id') ?? ''??,
+                'email' => $request->input('email'),
+                // 'name' => $request->input('name'),
                 'password' => ''
             ];
         }

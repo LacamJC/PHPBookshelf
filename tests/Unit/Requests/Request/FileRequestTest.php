@@ -29,8 +29,9 @@ test('cria uma instancia com arquivos', function() {
                 ->toBe('capa_livro.jpg');
 });
 
-test('Se estiver vazio lança uma exceção de argumento inválido', function() {
+test('Se estiver vazio retorna nulo', function() {
     $request = new Request(method: 'GET', data: []);
-    $this->expectException(\InvalidArgumentException::class);
-    $request->file('arquivo_inexistente');
+    // $this->expectException(\InvalidArgumentException::class);
+    expect($request->file('arquivo_inexistente'))
+        ->toBeNull();
 });

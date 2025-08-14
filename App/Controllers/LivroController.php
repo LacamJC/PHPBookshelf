@@ -35,9 +35,10 @@ class LivroController
             AuthMiddleware::handle();
 
             $request = new LivroStoreRequest();
+      
             $file = $request->file('capa_path');
-
             $livro = LivroDTO::fromRequest($request)->toModel();
+            // die();
 
             if (isset($file) && $file->error == 0) {
                 $pasta = 'uploads/';

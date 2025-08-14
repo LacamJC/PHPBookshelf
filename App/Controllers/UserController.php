@@ -40,7 +40,7 @@ class UserController
         try {
             $request = new Request();
             AuthMiddleware::token($request->input('edit_token'));
-            $this->auth->setForm($request->data());
+            $this->auth->setForm($request);
             $this->service->verify($request->input('email'), $request->input('password'));
             LoggerTXT::log("{$_SESSION['user']->nome} fez login", 'Login');
             return Response::redirect('home');

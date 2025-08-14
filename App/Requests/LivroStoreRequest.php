@@ -40,7 +40,7 @@ class LivroStoreRequest extends Request
     $campos = [];
     foreach ($props as $prop) {
         $prop->setAccessible(true); // garante que podemos acessar mesmo se for protegido
-        if(!in_array($prop->getName(), ['id', 'nome_usuario', 'descricao', 'data']))
+        if(!in_array($prop->getName(), ['id', 'nome_usuario', 'descricao', 'data', 'capa_atual']))
         {
             $campos[] = $prop->getName();
         }

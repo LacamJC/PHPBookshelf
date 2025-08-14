@@ -45,8 +45,14 @@ class Request
 
     public function file(string $name): ?stdClass
     {
+        // echo "<pre>";
+        // print_r($this->files);
+        // print_r($this);
         if (!isset($this->files[$name])) {
-            throw new \InvalidArgumentException("Informações sobre o arquivo '$name' não encontradas");
+            // echo $this->files[$name];
+            // die($name);
+            return null;
+            // throw new \InvalidArgumentException("Informações sobre o arquivo '$name' não encontradas");
         }
 
         $fileArray = $this->files[$name];
@@ -72,7 +78,7 @@ class Request
     {
     }
 
-    protected function transfer()
+    protected function transfer(): void
     {
         foreach($this->data as $key => $value){
             $this->$key = $value;

@@ -95,7 +95,9 @@ class PageController
     public function cadastro(): Response
     {
         try{
-            return Response::view('cadastro');
+            return Response::view('cadastro', [
+                'pageTitle' => 'Cadastro'
+            ]);
         }catch(InvalidArgumentException $e){
             LoggerTXT::log('PageController@cadastro: ' . $e->getMessage(), 'error');
             return Response::redirect('login', 'Desculpe tivemos um erro ao acessar está página', 'danger');

@@ -23,7 +23,6 @@ class Request
         $this->method = $method;
         $this->data = $data;
 
-        $this->validate();
     }
 
     public function input(string $key): string | array | null{
@@ -85,7 +84,7 @@ class Request
     protected function required(array $campos): void
     {
         foreach($campos as $campo){
-            if(!isset($this->data[$campo])){
+            if(is_null($this->input($campo))){
                 throw new \InvalidArgumentException("Campo <strong>$campo</strong> é obrigatório");
             }
 
